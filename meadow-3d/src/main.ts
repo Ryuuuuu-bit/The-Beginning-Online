@@ -5,6 +5,7 @@ import {isBiomeMap,BIOME_SCENES} from './biome-scenes';
 import {THORN_NEST} from '@the-beginning-online/shared/maps';
 import { mountWorldMap } from './world-map-ui';
 import {mountTitles} from './titles-ui';
+import {mountMailbox} from './mailbox-ui';
 import {loadUIFonts,UI_FONT_FAMILY} from './fonts';
 import {monsterSpecies,SPECIES_HIT_COLOUR} from './monster-animation';
 import {overlaps,type Rect} from './world-labels';
@@ -84,11 +85,12 @@ const feelLabel=document.createElement('label');feelLabel.innerHTML='<input type
 document.addEventListener('click',e=>{if(e.target instanceof Element&&e.target.closest('button:not(:disabled)'))sound.play('ui_click');},true);
 let titles:ReturnType<typeof mountTitles>|undefined;
 let levelUp:ReturnType<typeof mountLevelUp>|undefined;
+let mailbox:ReturnType<typeof mountMailbox>|undefined;
 let trade:ReturnType<typeof mountTrade>|undefined,social:ReturnType<typeof mountSocial>|undefined,quests:ReturnType<typeof mountQuests>|undefined;
 let sceneReady=false,netOverlay=false;const net=new GameSocket({message(message){
  // Job 2 skills borrow a Job 1 skill's motion, VFX and sound until they get their own art; keep the real id as learnedSkill.
  if(message.t==='ev')message.list=message.list.map(preferOwnArt);
-  if(titles?.receive(message)||trade?.receive(message)||social?.receive(message)||quests?.receive(message))return;
+  if(mailbox?.receive(message)||titles?.receive(message)||trade?.receive(message)||social?.receive(message)||quests?.receive(message))return;
  audioUI.receive(message);autoPotionUI.receive(message);inventoryUI.receive(message);autoUI.receive(message);if(message.t==='uiSettings')pendingUI=message;qol?.receive(message);
  if(message.t==='ev')for(const e of message.list)if(e.playerId===net.you){if(e.type==='stats')game.p.stats=e.derived;audioUI.receive(e);autoPotionUI.receive(e);}
  if(message.t==='snap'){worldState.receive(message,net.you,performance.now());if(message.mapId!==activeMap)void switchMap(message.mapId);}
@@ -389,6 +391,7 @@ levelUp=mountLevelUp({stats:()=>({maxHp:game.p.maxHp,maxMp:game.p.maxMp}),hero:(
 quests=mountQuests({send:m=>net.send(m),player:()=>game.p,map:()=>activeMap,navigate:p=>{if(!started||paused||game.p.dead||!net.connected)return;qol?.goToMap(p);},notice:tell});
 qol=mountHUDQOL({send:m=>net.send(m),map:()=>activeMap,player:()=>game.p,notice,stop:()=>{clearInput();stopAuto();},release:()=>clearInput(),arrived:name=>notice(`✦ ถึง${name}แล้ว`),settings:()=>settingsUI?.open(),party:()=>social?.openParty(),talk:kind=>{if(kind==='angel'){$('#angel-talk').click();return;}if(nearNpc&&nearNpc.kind===kind){npcTalk.click();return;}if(['market','forge','storage'].includes(kind))inventoryUI.shop(kind);}});settingsUI=mountSettingsWindow({onOpen:()=>clearInput(),keysChanged:()=>skillsUI.drawKeys()});launcher.adopt($('#qol-controls'));mountMenuAccount(selected.account);
 worldMap=mountWorldMap({map:()=>activeMap,level:()=>game.p.level,points:()=>qol!.points(),goTo:p=>qol!.goTo(p),travelTo:m=>qol!.travelTo(m),goal:()=>qol?.goal??null,notice,onOpen:()=>clearInput(),toggleMinimap:()=>qol?.toggleMap()});
+mailbox=mountMailbox({send:m=>net.send(m),onOpen:()=>clearInput(),you:()=>net.you});
 titles=mountTitles({send:m=>net.send(m),onOpen:()=>clearInput(),notice,you:()=>net.you,profile:()=>({name:selected.character.name,level:game.p.level??1,kills:(game.p as any).kills??0})});
 
 guide=mountTutorialGuide({characterId:selected.character.id,started:()=>started&&!paused,map:()=>activeMap,game:()=>game,autoPotionOn:()=>autoPotionUI.settings.hp.on||autoPotionUI.settings.mp.on,quests:()=>quests?.state,project:(x,z,y)=>renderer.screen(x,z,y)});

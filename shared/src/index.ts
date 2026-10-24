@@ -40,3 +40,5 @@ export {isYokaiEnemy} from './game/yokai-combat.js';
 export * from './game/progression.js';
 
 export {resolveAutomaticSkill,automaticCause} from './game/mastery-automatic.js';
+
+export * from './level-rewards.js';

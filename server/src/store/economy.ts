@@ -8,11 +8,13 @@ import {
 	type LedgerEntry,
 	type TradeOffer,
 	applyTrade,
+	validateRewardLevels,
 } from "@the-beginning-online/shared";
 import { randomUUID } from "node:crypto";
 import type { Character, Progress } from './types.js';
 export type QuestProgress = Pick<Progress, 'level' | 'xp' | 'jobLevel' | 'jobExp' | 'skillPoints' | 'statPoints' | 'baseStats' | 'autoAllocCursor' | 'quests'>;
 export interface EconomyResult {
+	claimedLevelRewards?: number[];
 	inventory: Inventory;
 	gold: number;
 	effect?: { kind: string; amount: number };
@@ -49,6 +51,12 @@ export interface EconomyStore {
 export interface TradeParty { accountId: string; id: string; offer: TradeOffer; profile: CharacterInput }
 export interface TradeResult { a: EconomyResult; b: EconomyResult; error?: string; side?: number }
 export const economyData = loadGameData();
+export function levelRewardClaims(character:Character,op:InventoryOp){
+ if(op.op!=='levelReward')return;
+ const levels=validateRewardLevels(op.levels,character.level,economyData.stats.maxLevel),claimed=character.claimedLevelRewards??[];
+ if(levels.some(level=>claimed.includes(level)))throw Error('รับรางวัลเลเวลนี้แล้ว');
+ return [...claimed,...levels].sort((a,b)=>a-b);
+}
 export { applyInventory, starterInventory, randomUUID, applyTrade };
 export type { Inventory, InventoryOp, LedgerEntry };
 export function questProgress(character: Character, context: EconomyContext): QuestProgress | undefined {

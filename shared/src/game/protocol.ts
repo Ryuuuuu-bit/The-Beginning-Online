@@ -14,6 +14,7 @@ export const IntentSchema = z.discriminatedUnion("t", [
  z.object({t:z.literal('uiSettings'),settings:UISettingsSchema}).strict(),
  z.object({t:z.literal('autoSettings'),settings:AutoSettingsSchema}).strict(),
   z.object({t:z.literal('returnCity')}).strict(),
+ z.object({t:z.literal('mailbox'),op:z.enum(['list','claim']),req:z.uuid().optional(),level:z.number().int().min(2).max(100).optional()}).strict(),
  z.object({t:z.literal('quest'),op:z.enum(['accept','turnIn','abandon']),id:z.string().regex(/^[a-z_]{1,40}$/)}).strict(),
  z.object({t:z.literal('chat'),ch:z.enum(['map','party','whisper']),text:z.string().min(1).max(160),to:z.string().min(1).max(24).optional()}).strict(),
  z.object({t:z.literal('trade'),op:z.enum(['request','accept','decline','offer','lock','confirm','cancel']),name:z.string().min(1).max(24).optional(),id:z.string().max(40).optional(),items:z.array(z.object({id:z.string().min(1).max(80),qty:z.number().int().min(1).max(9999)}).strict()).max(10).optional(),gold:z.number().int().min(0).max(2147483647).optional()}).strict(),

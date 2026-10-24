@@ -140,6 +140,7 @@ export interface Enemy extends Vec {
 }
 export type AutoState = "seek" | "fight" | "retreat" | "idle";
 export interface Player extends Vec, JobProgress {
+ claimedLevelRewards?:number[];
  gender?:'male'|'female';
  summon?:Summon;wisp?:Wisp;decoy?:Summon;
  healingOverTime?:{casterId:string;mapId:Game['mapId'];level:number;next:number;until:number;ticksLeft:number;amount:number;automatic?:boolean;budget?:number};

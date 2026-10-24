@@ -1,4 +1,5 @@
 import { deriveStats } from "./derive.js";
+import {levelReward,validateRewardLevels} from './level-rewards.js';
 import type { CharacterInput, GameData, Monster } from "./schema.js";
 import { refineModifiers, refineQuote } from './refine.js';
 import { requiredEquipmentLevel, rolledModifiers, rollEquipment, validateItemRoll, starterUnique, isRolledTemplate, STARTER_CARD_TEXT, type ItemRoll, type LootItem } from './item-rolls.js';
@@ -50,7 +51,10 @@ export interface InventoryOp {
 		| "admin"
 		| "card"
 		| "socket"
-		| "refine";
+		| "refine"
+		| "levelReward";
+	/** Server-only level-mail delivery; clients cannot submit inventory operations of this kind. */
+	levels?: number[];
 	template?: string;
 	id?: string;
 	/** Physical destination; item templates keep accessory1 for either ring slot. */
@@ -275,7 +279,7 @@ export function applyInventory(
 			throw Error("ไอเทมนี้ไม่ใช่ของคุณ");
 		return i;
 	};
-	const add = (id: string, qty: number, source: string, roll?:ItemRoll) => {
+	const add = (id: string, qty: number, source: string, roll?:ItemRoll, bound=false) => {
 		const t = template(id);
 		if(isRolledTemplate(id)&&!roll)throw Error('อุปกรณ์ชุดนี้ต้องมีค่าสุ่มจากแหล่งดรอป');
 		if(roll){validateItemRoll(id,roll,data);if(qty!==1||t.stackable)throw Error('อุปกรณ์สุ่มออฟต้องเป็นรายชิ้น');}
@@ -295,7 +299,7 @@ export function applyInventory(
 					slot: null,
 					refine: 0,
 					cards: [],
-					bound: t.bind === "account",
+					bound: bound || t.bind === "account",
 					source,
 					...(roll?{roll:structuredClone(roll)}:{}),
 				});
@@ -481,13 +485,18 @@ export function applyInventory(
 		ledger.push({ kind: "quest", qty: 0, goldDelta: gold });
 	}
 	if (op.op === "settings") inv.autoPickup = !!op.on;
+	if(op.op==='levelReward')for(const level of validateRewardLevels(op.levels,profile.level,data.stats.maxLevel)){
+	 const reward=levelReward(level,data);
+	 for(const item of reward.items){add(item.template,item.qty,'level_reward',undefined,!!template(item.template).slot);ledger.push({kind:'level_reward',template:item.template,qty:item.qty,goldDelta:0});}
+	 next.gold+=reward.gold;ledger.push({kind:'level_reward',qty:0,goldDelta:reward.gold});
+	}
 	if (
 		!Number.isSafeInteger(next.gold) ||
 		next.gold < 0 ||
 		next.gold > 2147483647
 	)
 		throw Error("ทองเกินขีดจำกัด");
-	if (["buy", "pickup", "equip", "unequip", "retrieve", "quest"].includes(op.op)) {
+	if (["buy", "pickup", "equip", "unequip", "retrieve", "quest", "levelReward"].includes(op.op)) {
 		if (inventorySlots(inv, data) > data.economy.inventorySlots)
 			throw Error("กระเป๋าเต็ม");
 		const max = deriveStats(

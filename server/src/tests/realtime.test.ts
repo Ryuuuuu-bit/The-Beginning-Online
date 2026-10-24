@@ -8,6 +8,7 @@ import { createApp } from "../app.js";
 import { MemoryStore } from "../store/memory.js";
 import { mountRealtime } from "../realtime/index.js";
 import { connect } from 'node:net';
+import {randomUUID} from 'node:crypto';
 const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
 async function fixture(t: any, sharedRooms = false, extra: Record<string, unknown> = {}) {
 	const store = new MemoryStore(),
@@ -606,4 +607,22 @@ test('joining a mage uses persisted staff equipment before deriving initial stat
  const peer=f.open(user.cookie);await peer.until(m=>m.t==='welcome');peer.send({t:'spawnReady'});await peer.until(m=>m.t==='snap');
  const p=[...f.rt.rooms.values()][0].game.players.get(c.id)!;
  assert.equal(p.jobId,'mage');assert.deepEqual(p.profile.equipment,['wood_staff']);assert.ok(p.stats.matk>25);assert.ok(p.stats.castMul<1);
+});
+
+test('level mailbox delivers retroactive rewards over WebSocket once, unlocks new levels and survives reconnect',async t=>{
+ const f=await fixture(t),user=await f.make('MailboxWs'),c=user.character;
+ await f.store.saveProgress(c.accountId,c.id,{...c,level:20});
+ const peer=f.open(user.cookie);await peer.until(m=>m.t==='welcome');peer.send({t:'spawnReady'});
+ const initial=await peer.until(m=>m.t==='mailbox');assert.equal(initial.level,20);assert.deepEqual(initial.claimed,[]);
+ peer.messages.length=0;const req=randomUUID();peer.send({t:'mailbox',op:'claim',req});peer.send({t:'mailbox',op:'claim',req:randomUUID()});
+ const received=await peer.until(m=>m.t==='mailbox'&&m.claimed?.length===19);assert.equal(received.error,undefined);
+ const inv=await peer.until(m=>m.t==='inv'&&m.gold===727);assert.equal(inv.inventory.items.find((i:any)=>i.template==='iron_amulet').bound,true);
+ assert.equal((await f.store.inventory(c.accountId,c.id)).gold,727);
+ peer.messages.length=0;peer.send({t:'mailbox',op:'claim',level:5,req:randomUUID()});await peer.until(m=>m.t==='mailbox'&&m.error);assert.equal((await f.store.inventory(c.accountId,c.id)).gold,727);
+ peer.ws.close();await wait(350);
+ const again=f.open(user.cookie);await again.until(m=>m.t==='welcome');again.send({t:'spawnReady'});
+ assert.equal((await again.until(m=>m.t==='mailbox')).claimed.length,19);
+ const room=[...f.rt.rooms.values()].find(r=>r.game.players.has(c.id))!,p=room.game.players.get(c.id)!;p.level=21;p.profile.level=21;
+ again.messages.length=0;again.send({t:'mailbox',op:'claim',level:21,req:randomUUID()});await again.until(m=>m.t==='mailbox'&&m.claimed?.includes(21));assert.equal((await f.store.inventory(c.accountId,c.id)).gold,790);
+ again.messages.length=0;again.send({t:'mailbox',op:'claim',level:100,req:randomUUID()});await again.until(m=>m.t==='mailbox'&&m.error);assert.equal((await f.store.inventory(c.accountId,c.id)).gold,790);
 });

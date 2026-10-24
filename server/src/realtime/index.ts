@@ -250,7 +250,7 @@ export function mountRealtime(server: Server, options: RealtimeOptions) {
   const operation=room.saveQueue.then(async()=>{
    const result=await store.inventoryOp(peer.accountId,p.id,req,op,{quest,leaseOwner:peer.leaseOwner,bossLoot:op.op==='pickup'?(g.drops.find(d=>String(d.id)===op.id&&d.boss)?.bossId??(g.drops.some(d=>String(d.id)===op.id&&d.boss)?'king_jelly':undefined)):undefined,profile:structuredClone(p.profile),room:room.key,tick:room.tick});
    const latest=result.duplicate?await store.inventory(peer.accountId,p.id):result;
-   p.inventory=latest.inventory;p.gold=latest.gold;refreshStats(g,p);
+   p.inventory=latest.inventory;p.gold=latest.gold;if(latest.claimedLevelRewards)p.claimedLevelRewards=[...latest.claimedLevelRewards];refreshStats(g,p);
    if(result.error){if(op.op==='pickup')room.dropRequests?.delete(op.id!);throw Error(result.error);}
    if(result.effect&&!result.duplicate){if(result.effect.kind==='arcane'&&sunTarget!==undefined)castSunScroll(g,p,result.effect.amount,sunTarget,usedTemplate?.arcaneElement);applyPotionEffect(g,p,result.effect.kind,result.effect.amount);}
       done();if(op.op==='store'&&p.quests&&recordStore(p.quests,data).length)sendQuests(peer,p);if(op.op==='pickup')void save(room,p.id);sendStats(peer,p);send(peer.ws,{t:'inv',req,inventory:p.inventory,gold:p.gold});
@@ -259,11 +259,21 @@ export function mountRealtime(server: Server, options: RealtimeOptions) {
   });
     const settled=operation;
   room.saveQueue=operation.catch(e=>{
+   if(op.op==='levelReward')mailboxState(peer,p,(e as Error).message);
    if(quest)send(peer.ws,{t:'questError',id:quest.id,text:'ส่งเควสต์ไม่สำเร็จ กรุณาลองใหม่'});
    const d=g.drops.find(d=>String(d.id)===op.id);if(op.op==='pickup'&&d){d.pending=false;d.noticeAt=g.time;d.blocked=true;}
    send(peer.ws,{t:'inv',req,error:(e as Error).message});send(peer.ws,{t:'ev',list:[{type:'notice',playerId:p.id,text:(e as Error).message}]});
   }).finally(()=>{if(quest)questBusy.delete(p.id);peer.busy!--;while(!peer.busy&&peer.deferred?.length&&live.get(peer.id)===peer&&!closing)intent(peer,peer.deferred.shift()!,true);});
   return settled;
+ }
+ function mailboxState(peer:Peer,p:Player,error?:string){send(peer.ws,{t:'mailbox',level:p.level,claimed:p.claimedLevelRewards??[],error});}
+ function mailboxIntent(peer:Peer,p:Player,message:{op:'list'|'claim';level?:number;req?:string}){
+  if(message.op==='list'){mailboxState(peer,p);return;}
+  if(peer.busy){mailboxState(peer,p,'กำลังบันทึก กรุณารอสักครู่');return;}
+  const levels=message.level===undefined?Array.from({length:Math.max(0,p.level-1)},(_,i)=>i+2).filter(level=>!p.claimedLevelRewards?.includes(level)):[message.level];
+  if(!levels.length){mailboxState(peer,p,'รับรางวัลที่ปลดล็อกครบแล้ว');return;}
+  save(peer.room,p.id);
+  void economy(peer,p,{op:'levelReward',levels},message.req??randomUUID(),()=>mailboxState(peer,p))?.catch(()=>{});
  }
  function sendQuests(peer:Peer,p:Player){send(peer.ws,{t:'quests',state:p.quests??{active:{},done:{}}});}
  const questBusy=new Set<string>();
@@ -482,7 +492,7 @@ export function mountRealtime(server: Server, options: RealtimeOptions) {
 			send(peer.ws, snapshotFrame(room, peer));
 			sendStats(peer, g.players.get(peer.id)!);
 						social.ready(peer);void gm.ready(peer);
-			{const qp=g.players.get(peer.id);if(qp)sendQuests(peer,qp);}
+			{const qp=g.players.get(peer.id);if(qp){sendQuests(peer,qp);mailboxState(peer,qp);}}
 			return;
 		}
 		if (!peer.ready) return;
@@ -494,6 +504,7 @@ export function mountRealtime(server: Server, options: RealtimeOptions) {
 		if (message.t === "chat") { social.chat(peer, message); return; }
 				if (message.t === "party") { social.party(peer, message); return; }
 				if (message.t === "trade") { trades.handle(peer, message); return; }
+        if(message.t==='mailbox'){const p=g.players.get(peer.id);if(p)mailboxIntent(peer,p,message);return;}
 		if (message.t === "quest") { const qp=g.players.get(peer.id);if(qp)questIntent(peer,qp,message); return; }
 		if (!queued && "seq" in message) {
 			if (message.seq <= peer.ack) return;
@@ -824,7 +835,7 @@ export function mountRealtime(server: Server, options: RealtimeOptions) {
                     p.audioSettings = character.audioSettings;
                     p.autoPotion = normalizeAutoPotion(character.autoPotion);
                  p.titleId=character.titleId??null;p.unlockedTitles=character.unlockedTitles??[];p.titleRecords=normalizeTitleRecords(character.titleRecords);
- p.quests=normalizeQuests(character.quests,data);p.bossReadyAt=character.bossReadyAt||0;p.bossCooldowns={...(character.bossCooldowns??{})};p.returnReadyAt=character.returnReadyAt||0;p.healerReadyAt=character.healerReadyAt||0;p.autoSeconds=character.autoSeconds||0;
+ p.claimedLevelRewards=[...(character.claimedLevelRewards??[])];p.quests=normalizeQuests(character.quests,data);p.bossReadyAt=character.bossReadyAt||0;p.bossCooldowns={...(character.bossCooldowns??{})};p.returnReadyAt=character.returnReadyAt||0;p.healerReadyAt=character.healerReadyAt||0;p.autoSeconds=character.autoSeconds||0;
 					p.profile.classId = p.jobId;
 					p.name = character.name;p.gender=character.gender??'male';
 					p.xp = character.xp;
