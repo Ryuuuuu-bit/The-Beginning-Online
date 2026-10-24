@@ -31,14 +31,14 @@ export function mountHUDQOL(o:{send:(m:any)=>void;map:()=>MapId;player:()=>any;t
  $('#skills-more').textContent=matchMedia('(max-width:650px)').matches?'เพิ่มเติม':'▲';
  const extra=document.createElement('section');extra.id='qol-controls';extra.innerHTML='<button id="return-city">กลับเมือง H</button>';$('.combat-ui .legacy-actions').append(extra);
  const cast=document.createElement('div');cast.id='return-cast';cast.hidden=true;cast.innerHTML='<span></span><progress max="5"></progress>';$('#ui').append(cast);
- const menu=document.createElement('dialog');menu.id='game-menu-window';// Mobile-game style launcher: icon tiles with a label underneath, in three groups.
+ const menu=document.createElement('dialog');menu.id='game-menu-window';menu.setAttribute('aria-labelledby','game-menu-title');
  const tile=(icon:string,label:string,tint:string,attrs='',key='')=>`<button type="button" class="menu-tile" data-icon="${icon}" style="--tint:${tint}" ${attrs}><i></i><span>${label}</span>${key?`<kbd>${key}</kbd>`:''}</button>`;
- menu.innerHTML='<button class="close" aria-label="ปิดเมนู">×</button><h2>เมนู</h2>'
+ menu.innerHTML='<button class="close" aria-label="ปิดเมนู">×</button><p class="menu-eyebrow">THE BEGINNING ONLINE</p><h2 id="game-menu-title">เมนูผจญภัย</h2>'
   +'<section class="menu-group"><p class="caption">ตัวละคร</p><div class="menu-grid">'
    +tile('character','สเตตัส','#e8a35f','data-go="#stats-button"','C')+tile('skills','สกิล','#c495f2','data-go="#skills-button"','K')+tile('bag','กระเป๋า','#e6c98f','data-go="#inventory-button"','I')+tile('quest','เควส','#8fd18a','data-go="#quest-button"')
    +tile('auto','ตั้งค่า AUTO','#5fb6e8','data-go="#auto-settings-button"')+'</div></section>'
   +'<section class="menu-group"><p class="caption">เกม</p><div class="menu-grid menu-play">'+tile('party','ปาร์ตี้','#9bcba5','id="menu-party"')+tile('settings','ตั้งค่า','#9fb3c8','id="menu-settings"','Esc')+'</div></section>'
-  +'<section class="menu-group"><div class="menu-grid"><a class="menu-tile danger" data-icon="exit" style="--tint:#e8656a" href="/characters.html"><i></i><span>ออกจากเกม</span></a></div></section>';document.body.append(menu);
+  +'<section class="menu-group menu-exit"><div class="menu-grid"><a class="menu-tile danger" data-icon="exit" style="--tint:#e8656a" href="/characters.html"><i></i><span>ออกจากเกม</span></a></div><p class="menu-key-hint"><kbd>Esc</kbd> กลับสู่การผจญภัย</p></section>';document.body.append(menu);
  // Quality and help live in Settings; character actions stay in this launcher.
  menu.addEventListener('click',e=>{const go=(e.target as HTMLElement).closest<HTMLElement>('[data-go]');if(!go)return;menu.close();document.querySelector<HTMLElement>(go.dataset.go!)?.click();});
  menu.querySelector<HTMLAnchorElement>('a[href="/characters.html"]')!.onclick=e=>{const p=o.player();if((p.attack>0||p.hurt>0||p.target!=null)&&!confirm('ออกจากเกม?'))e.preventDefault();};

@@ -3,7 +3,7 @@ import './mailbox.css';
 
 export function mountMailbox(o:{send:(message:unknown)=>void;onOpen:()=>void;you:()=>string}){
  const data=loadGameData(),menu=document.querySelector<HTMLDialogElement>('#game-menu-window')!,menuButton=document.querySelector<HTMLButtonElement>('#game-menu')!;
- const button=document.createElement('button');button.id='mailbox-button';button.type='button';button.className='menu-tile';button.innerHTML='<i aria-hidden="true">✉</i><span>กล่องจดหมาย</span><b class="mail-count"></b>';menu.querySelector('.menu-grid')!.append(button);
+ const button=document.createElement('button');button.id='mailbox-button';button.type='button';button.className='menu-tile';button.dataset.icon='mail';button.innerHTML='<i aria-hidden="true"></i><span>กล่องจดหมาย</span><b class="mail-count"></b>';menu.querySelector('.menu-grid')!.append(button);
  const panel=document.createElement('dialog');panel.id='mailbox-window';panel.setAttribute('aria-labelledby','mailbox-title');
  panel.innerHTML='<header><div><small>MAILBOX</small><h2 id="mailbox-title">รางวัลเลเวล</h2></div><button type="button" aria-label="ปิดกล่องจดหมาย">×</button></header><p>รางวัล Lv.1–100 · ขนาดยาตามเลเวลผู้เล่นตอนรับ · รับครั้งเดียว · ไม่หมดอายุ</p><nav aria-label="กรองรางวัล"><button type="button" data-filter="ready">รับได้</button><button type="button" data-filter="all">ทั้งหมด</button><button type="button" id="mailbox-claim-all">รับทั้งหมด</button></nav><p class="mailbox-status" role="status"></p><div class="mailbox-list"></div>';
  document.body.append(panel);

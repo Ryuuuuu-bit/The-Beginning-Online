@@ -45,6 +45,7 @@ import './hud-qol.css';
 import './ui-glass.css';
 import './ui-windows.css';
 import './ui-theme.css';
+import './game-menu.css';
 import './combat-bar.css';
 import {mountTutorialGuide} from './tutorial-guide';
 let guide:ReturnType<typeof mountTutorialGuide>|undefined;
