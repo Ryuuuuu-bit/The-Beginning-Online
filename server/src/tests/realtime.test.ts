@@ -634,5 +634,8 @@ test('level mailbox delivers retroactive rewards over WebSocket once, unlocks ne
  assert.equal((await again.until(m=>m.t==='mailbox')).claimed.length,20);
  const room=[...f.rt.rooms.values()].find(r=>r.game.players.has(c.id))!,p=room.game.players.get(c.id)!;assert.equal(p.consumableBuffs!.exp!.until,expiry);p.level=21;p.profile.level=21;
  again.messages.length=0;again.send({t:'mailbox',op:'claim',level:21,req:randomUUID()});await again.until(m=>m.t==='mailbox'&&m.claimed?.includes(21));assert.equal((await f.store.inventory(c.accountId,c.id)).gold,20000);
+ p.level=60;p.profile.level=60;again.messages.length=0;
+ again.send({t:'mailbox',op:'claim',level:22,req:randomUUID()});await again.until(m=>m.t==='mailbox'&&m.claimed?.includes(22));
+ const late=await f.store.inventory(c.accountId,c.id);for(const template of ['red_supreme','blue_supreme'])assert.equal(late.inventory.items.find(i=>i.template===template)!.qty,50);
  again.messages.length=0;again.send({t:'mailbox',op:'claim',level:100,req:randomUUID()});await again.until(m=>m.t==='mailbox'&&m.error);assert.equal((await f.store.inventory(c.accountId,c.id)).gold,20000);
 });

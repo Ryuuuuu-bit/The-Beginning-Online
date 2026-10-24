@@ -104,7 +104,7 @@ export class PostgresStore implements Store {
    const inv=await this.loadInventory(c,id);let result:EconomyResult;
    let out:ReturnType<typeof applyInventory>|undefined;
    let progress:ReturnType<typeof questProgress>,claimed:number[]|undefined,buffs:Character['consumableBuffs'];
-   try{claimed=levelRewardClaims(row<Character>(character)!,op);buffs=consumedBuffs(row<Character>(character)!,op,inv);progress=questProgress(row<Character>(character)!,context);out=applyInventory({gold:character.gold,inventory:inv},{...op,legacyLevels:character.claimed_level_rewards??[]},context.profile,economyData,randomUUID);}catch(e){result={inventory:inv,gold:character.gold,claimedLevelRewards:character.upgraded_level_rewards??[],legacyLevelRewards:character.claimed_level_rewards??[],consumableBuffs:character.consumable_buffs??{},error:(e as Error).message};}
+   try{claimed=levelRewardClaims(row<Character>(character)!,op);buffs=consumedBuffs(row<Character>(character)!,op,inv);progress=questProgress(row<Character>(character)!,context);out=applyInventory({gold:character.gold,inventory:inv},{...op,legacyLevels:character.claimed_level_rewards??[]},op.op==='levelReward'?{...context.profile,level:character.level}:context.profile,economyData,randomUUID);}catch(e){result={inventory:inv,gold:character.gold,claimedLevelRewards:character.upgraded_level_rewards??[],legacyLevelRewards:character.claimed_level_rewards??[],consumableBuffs:character.consumable_buffs??{},error:(e as Error).message};}
    if(out){
     if(claimed)await c.query('UPDATE tn2_characters SET upgraded_level_rewards=$2 WHERE id=$1',[id,claimed]);
     if(buffs)await c.query('UPDATE tn2_characters SET consumable_buffs=$2 WHERE id=$1',[id,JSON.stringify(buffs)]);

@@ -40,6 +40,23 @@ test('mailbox protocol rejects forged rewards and inventory delivery from a clie
  for(const message of [{t:'mailbox',op:'claim',level:100,gold:100000},{t:'mailbox',op:'claim',level:0},{t:'inv',op:'levelReward',req:randomUUID(),levels:[2]}])assert.equal(IntentSchema.safeParse(message).success,false);
 });
 
+for(const backend of ['memory','postgres'] as const)test(`${backend}: potion delivery uses the locked character level at claim time, ignoring stale or forged profiles`,{skip:backend==='postgres'&&!process.env.PG_TEST_URL},async()=>{
+ const store=backend==='memory'?new MemoryStore():new PostgresStore(process.env.PG_TEST_URL!);
+ try{
+  await store.init();const account=await store.createGuest(randomUUID()),name='Tier'+randomUUID().slice(0,8),c=await store.createCharacter(account.id,name,name.toLowerCase());
+  await store.saveProgress(account.id,c.id,{...c,level:20});
+  const early=await store.inventoryOp(account.id,c.id,randomUUID(),{op:'levelReward',levels:[2]},{profile:{...profile,level:100}});
+  assert.equal(early.error,undefined);assert.equal(early.inventory.items.find(i=>i.template==='red_large')!.qty,50);assert.ok(!early.inventory.items.some(i=>i.template==='red_supreme'));
+  await store.saveProgress(account.id,c.id,{...c,level:60});
+  const req=randomUUID(),late=await store.inventoryOp(account.id,c.id,req,{op:'levelReward',levels:[5]},{profile});
+  assert.equal(late.error,undefined);assert.equal(late.inventory.items.find(i=>i.template==='red_supreme')!.qty,100);assert.equal(late.inventory.items.find(i=>i.template==='blue_supreme')!.qty,100);
+  assert.equal(late.gold,5000);assert.ok(late.inventory.items.find(i=>i.template==='iron_amulet')!.bound);
+  assert.ok((await store.inventoryOp(account.id,c.id,req,{op:'levelReward',levels:[5]},{profile})).duplicate);
+  assert.ok((await store.inventoryOp(account.id,c.id,randomUUID(),{op:'levelReward',levels:[61]},{profile:{...profile,level:100}})).error);
+  const after=await store.inventory(account.id,c.id);assert.deepEqual(after.inventory.items.slice().sort((a,b)=>a.id.localeCompare(b.id)),late.inventory.items.slice().sort((a,b)=>a.id.localeCompare(b.id)));assert.equal(after.gold,late.gold);assert.deepEqual(after.claimedLevelRewards,[2,5]);
+ }finally{await store.close();}
+});
+
 for(const backend of ['memory','postgres'] as const)test(`${backend}: legacy top-ups and buff consumption are permanent, atomic and deduplicated`,{skip:backend==='postgres'&&!process.env.PG_TEST_URL},async()=>{
  const store=backend==='memory'?new MemoryStore():new PostgresStore(process.env.PG_TEST_URL!);
  try{
@@ -49,7 +66,7 @@ for(const backend of ['memory','postgres'] as const)test(`${backend}: legacy top
   else await (store as any).pool.query('UPDATE tn2_characters SET claimed_level_rewards=$2 WHERE id=$1',[character.id,[5]]);
   const run=(op:any,req=randomUUID())=>store.inventoryOp(account.id,character.id,req,op,{profile});
   const reward=await run({op:'levelReward',levels:[1,5],legacyLevels:[]});assert.equal(reward.error,undefined);assert.equal(reward.gold,4975);
-  assert.equal(reward.inventory.items.find(i=>i.template==='red_small')!.qty,97+5);
+  assert.equal(reward.inventory.items.find(i=>i.template==='red_large')!.qty,97);
   assert.ok(!reward.inventory.items.some(i=>i.template==='iron_amulet'));
   const id=reward.inventory.items.find(i=>i.template==='exp_boost_scroll')!.id,req=randomUUID(),before=Date.now();
   const used=await run({op:'use',id},req);assert.equal(used.error,undefined);assert.ok(used.consumableBuffs!.exp!.until>=before+3600000);

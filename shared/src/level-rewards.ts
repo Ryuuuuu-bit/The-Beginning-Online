@@ -1,11 +1,14 @@
 import type {GameData} from './schema.js';
 
+function potionTemplates(level:number){
+ return {hp:level<=5?'red_small':level<=10?'red_medium':level<=20?'red_large':level<50?'red_greater':'red_supreme',sp:level<=10?'blue_potion':level<=30?'blue_large':level<60?'blue_greater':'blue_supreme'};
+}
+
 function rewardBundle(level:number,data:GameData,large:boolean){
  if(!Number.isInteger(level)||level<1||level>data.stats.maxLevel)throw Error('ระดับรางวัลไม่ถูกต้อง');
  if(level===1)return {level,special:false,gold:0,items:large?['exp_boost_scroll','drop_boost_scroll'].map(template=>({template,qty:1})):[]};
  const special=level%5===0;
- const hp=level<=5?'red_small':level<=10?'red_medium':level<=20?'red_large':level<50?'red_greater':'red_supreme';
- const sp=level<=10?'blue_potion':level<=30?'blue_large':level<60?'blue_greater':'blue_supreme';
+ const {hp,sp}=potionTemplates(level);
  const items=[{template:hp,qty:large?(special?100:50):(special?3:1)}];
  if(large||level%2===0||special)items.push({template:sp,qty:large?(special?100:50):1});
  const gear=special?data.items.items.find(i=>i.slot==='accessory2'&&i.level===(level===100?99:level)&&data.economy.shops.forge[i.id]!==undefined):undefined;
@@ -16,11 +19,16 @@ function rewardBundle(level:number,data:GameData,large:boolean){
 }
 
 /** Old receipts get only the added contents; previous gold and equipment are kept. */
-export function levelReward(level:number,data:GameData,previouslyClaimed=false){
+export function levelReward(level:number,data:GameData,previouslyClaimed=false,playerLevel=level){
+ if(!Number.isInteger(playerLevel)||playerLevel<level||playerLevel>data.stats.maxLevel)throw Error('ระดับผู้รับรางวัลไม่ถูกต้อง');
  const reward=rewardBundle(level,data,true);
- if(!previouslyClaimed)return reward;
- const previous=rewardBundle(level,data,false);
- return {...reward,gold:Math.max(0,reward.gold-previous.gold),items:reward.items.map(item=>({...item,qty:item.qty-(previous.items.find(i=>i.template===item.template)?.qty??0)})).filter(i=>i.qty>0)};
+ if(previouslyClaimed){
+  const previous=rewardBundle(level,data,false);
+  reward.gold=Math.max(0,reward.gold-previous.gold);
+  reward.items=reward.items.map(item=>({...item,qty:item.qty-(previous.items.find(i=>i.template===item.template)?.qty??0)})).filter(i=>i.qty>0);
+ }
+ const potions=potionTemplates(playerLevel);
+ return {...reward,items:reward.items.map(item=>{const effect=data.items.items.find(t=>t.id===item.template)?.effect;return effect==='hp'||effect==='sp'?{...item,template:potions[effect]}:item;})};
 }
 
 export function validateRewardLevels(levels:number[]|undefined,level:number,maxLevel=100){

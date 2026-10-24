@@ -488,7 +488,7 @@ export function applyInventory(
 	}
 	if (op.op === "settings") inv.autoPickup = !!op.on;
 	if(op.op==='levelReward')for(const level of validateRewardLevels(op.levels,profile.level,data.stats.maxLevel)){
-	 const reward=levelReward(level,data,op.legacyLevels?.includes(level));
+ const reward=levelReward(level,data,op.legacyLevels?.includes(level),profile.level);
 	 for(const item of reward.items){add(item.template,item.qty,'level_reward',undefined,!!template(item.template).slot);ledger.push({kind:'level_reward',template:item.template,qty:item.qty,goldDelta:0});}
 	 next.gold+=reward.gold;ledger.push({kind:'level_reward',qty:0,goldDelta:reward.gold});
 	}

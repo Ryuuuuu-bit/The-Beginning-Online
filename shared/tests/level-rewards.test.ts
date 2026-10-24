@@ -34,3 +34,16 @@ test('mail delivery rolls back the whole bundle when the bag is full or gold ove
  assert.throws(()=>applyInventory(state,{op:'levelReward',levels:[2,3,4,5]},{...data.stats.defaultBuild,level:5},data,randomUUID),/กระเป๋าเต็ม|น้ำหนักเกิน/);assert.deepEqual(state,before);
  assert.throws(()=>applyInventory({gold:2147483647,inventory:starterInventory(0,randomUUID)},{op:'levelReward',levels:[5]},{...data.stats.defaultBuild,level:5},data,randomUUID),/ทองเกิน/);
 });
+
+test('claim-time player level selects potions while box gold, counts, scrolls and gear stay fixed',()=>{
+ const fresh=levelReward(5,data,false,60),topup=levelReward(5,data,true,60);
+ assert.equal(fresh.gold,5000);assert.equal(topup.gold,4975);
+ assert.deepEqual(fresh.items.filter(i=>i.template.startsWith('red_')||i.template.startsWith('blue_')),[{template:'red_supreme',qty:100},{template:'blue_supreme',qty:100}]);
+ assert.deepEqual(topup.items.filter(i=>i.template.startsWith('red_')||i.template.startsWith('blue_')),[{template:'red_supreme',qty:97},{template:'blue_supreme',qty:99}]);
+ assert.ok(fresh.items.some(i=>i.template==='iron_amulet'));assert.ok(!topup.items.some(i=>i.template==='iron_amulet'));
+ assert.ok(!fresh.items.some(i=>i.template==='exp_boost_scroll'));
+ assert.deepEqual(levelReward(1,data,false,60).items,[{template:'exp_boost_scroll',qty:1},{template:'drop_boost_scroll',qty:1}]);
+ const out=applyInventory({gold:0,inventory:starterInventory(0,randomUUID)},{op:'levelReward',levels:[2,5]},{...data.stats.defaultBuild,level:60},data,randomUUID);
+ for(const template of ['red_supreme','blue_supreme'])assert.equal(out.state.inventory.items.find(i=>i.template===template)!.qty,150);
+ for(const playerLevel of [0,4,101,NaN,60.5])assert.throws(()=>levelReward(5,data,false,playerLevel));
+});
