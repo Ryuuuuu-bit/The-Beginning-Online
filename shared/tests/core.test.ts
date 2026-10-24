@@ -163,8 +163,8 @@ test("equipment flat values precede summed percentages and cards respect slots",
 		},
 		data,
 	);
-	assert.equal(a.maxHp, (120 * 1.06 + 50) * 1.2);
-	assert.equal(a.stats.vit, 6);
+	assert.equal(a.maxHp, (120 * 1.08 + 150) * 1.28);
+	assert.equal(a.stats.vit, 8);
 	assert.throws(
 		() =>
 			deriveStats(

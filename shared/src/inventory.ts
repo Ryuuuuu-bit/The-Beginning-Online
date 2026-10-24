@@ -138,7 +138,8 @@ export function inventoryProfile(profile:CharacterInput,inv:Inventory,data:GameD
    if(STARTER_CARD_TEXT[id]&&seen.has(id))return [];seen.add(id);return card.modifiers;
   })];
  });
- return {...profile,equipment:equipped(inv),cards:[],modifiers:[...(profile.modifiers??[]),...modifiers]};
+ const weapon=inv.items.find(i=>i.location==='equip'&&knownTemplate(data,i.template)?.type==='weapon');
+ return {...profile,weaponRefine:weapon?.refine??0,equipment:equipped(inv),cards:[],modifiers:[...(profile.modifiers??[]),...modifiers]};
 }
 /** Why `card` cannot go into `target`, or null. Cards stay in the item for good (no removal yet). */
 export function cardProblem(card: OwnedItem, target: OwnedItem, data: GameData): string | null {

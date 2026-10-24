@@ -3474,7 +3474,22 @@
         {
           "kind": "percent",
           "stat": "spRegen",
-          "value": 0.05
+          "value": 0.2
+        },
+        {
+          "kind": "stat",
+          "stat": "vit",
+          "value": 3
+        },
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.1
+        },
+        {
+          "kind": "percent",
+          "stat": "maxSp",
+          "value": 0.1
         }
       ],
       "icon": "unique_tide_crown"
@@ -3497,6 +3512,21 @@
           "kind": "flat",
           "stat": "atk",
           "value": 3
+        },
+        {
+          "kind": "stat",
+          "stat": "dex",
+          "value": 5
+        },
+        {
+          "kind": "percent",
+          "stat": "atk",
+          "value": 0.1
+        },
+        {
+          "kind": "percent",
+          "stat": "aspd",
+          "value": 0.08
         }
       ],
       "icon": "unique_mist_weaver"
@@ -4414,7 +4444,17 @@
         {
           "kind": "percent",
           "stat": "matk",
-          "value": 0.03
+          "value": 0.12
+        },
+        {
+          "kind": "percent",
+          "stat": "maxSp",
+          "value": 0.15
+        },
+        {
+          "kind": "percent",
+          "stat": "castMul",
+          "value": -0.08
         }
       ],
       "icon": "unique_himmapan_relic"
@@ -4734,6 +4774,21 @@
           "kind": "flat",
           "stat": "matk",
           "value": 6
+        },
+        {
+          "kind": "percent",
+          "stat": "atk",
+          "value": 0.1
+        },
+        {
+          "kind": "percent",
+          "stat": "matk",
+          "value": 0.1
+        },
+        {
+          "kind": "stat",
+          "stat": "dex",
+          "value": 5
         }
       ],
       "icon": "unique_desert_relic"
@@ -5029,7 +5084,22 @@
         {
           "kind": "flat",
           "stat": "hardMdef",
-          "value": 5
+          "value": 15
+        },
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.15
+        },
+        {
+          "kind": "flat",
+          "stat": "hardDef",
+          "value": 15
+        },
+        {
+          "kind": "elementResist",
+          "target": "water",
+          "value": 0.15
         }
       ],
       "icon": "unique_frost_relic"
@@ -5307,7 +5377,17 @@
         {
           "kind": "percent",
           "stat": "aspd",
-          "value": 0.03
+          "value": 0.12
+        },
+        {
+          "kind": "flat",
+          "stat": "crit",
+          "value": 0.05
+        },
+        {
+          "kind": "flat",
+          "stat": "flee",
+          "value": 15
         }
       ],
       "icon": "unique_yokai_relic"
@@ -6719,7 +6799,17 @@
         {
           "kind": "percent",
           "stat": "spRegen",
-          "value": 0.08
+          "value": 0.25
+        },
+        {
+          "kind": "percent",
+          "stat": "maxSp",
+          "value": 0.15
+        },
+        {
+          "kind": "percent",
+          "stat": "castMul",
+          "value": -0.1
         }
       ],
       "icon": "unique_dragon_relic"
@@ -7003,6 +7093,26 @@
           "kind": "flat",
           "stat": "matk",
           "value": 8
+        },
+        {
+          "kind": "percent",
+          "stat": "atk",
+          "value": 0.12
+        },
+        {
+          "kind": "percent",
+          "stat": "matk",
+          "value": 0.12
+        },
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.1
+        },
+        {
+          "kind": "elementResist",
+          "target": "fire",
+          "value": 0.15
         }
       ],
       "icon": "unique_volcano_relic"
@@ -7280,7 +7390,17 @@
         {
           "kind": "percent",
           "stat": "castMul",
-          "value": -0.03
+          "value": -0.12
+        },
+        {
+          "kind": "percent",
+          "stat": "matk",
+          "value": 0.1
+        },
+        {
+          "kind": "percent",
+          "stat": "maxSp",
+          "value": 0.15
         }
       ],
       "icon": "unique_fae_relic"
@@ -7558,7 +7678,17 @@
         {
           "kind": "flat",
           "stat": "hit",
-          "value": 10
+          "value": 25
+        },
+        {
+          "kind": "flat",
+          "stat": "hardDef",
+          "value": 15
+        },
+        {
+          "kind": "sizeBonus",
+          "target": "large",
+          "value": 0.15
         }
       ],
       "icon": "unique_ocean_relic"
@@ -7836,7 +7966,17 @@
         {
           "kind": "percent",
           "stat": "matk",
-          "value": 0.03
+          "value": 0.15
+        },
+        {
+          "kind": "percent",
+          "stat": "maxSp",
+          "value": 0.2
+        },
+        {
+          "kind": "elementBonus",
+          "target": "dark",
+          "value": 0.15
         }
       ],
       "icon": "unique_astral_relic"
@@ -8114,7 +8254,17 @@
         {
           "kind": "percent",
           "stat": "atk",
-          "value": 0.03
+          "value": 0.15
+        },
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.15
+        },
+        {
+          "kind": "raceBonus",
+          "target": "dragon",
+          "value": 0.15
         }
       ],
       "icon": "unique_abyss_relic"
@@ -8264,7 +8414,27 @@
         {
           "kind": "percent",
           "stat": "maxSp",
-          "value": 0.04
+          "value": 0.2
+        },
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.2
+        },
+        {
+          "kind": "percent",
+          "stat": "atk",
+          "value": 0.1
+        },
+        {
+          "kind": "percent",
+          "stat": "matk",
+          "value": 0.1
+        },
+        {
+          "kind": "percent",
+          "stat": "spRegen",
+          "value": 0.2
         }
       ],
       "icon": "unique_confluence_relic"
@@ -14153,12 +14323,17 @@
         {
           "kind": "flat",
           "stat": "hardDef",
-          "value": 5
+          "value": 12
         },
         {
           "kind": "percent",
           "stat": "maxHp",
-          "value": 0.04
+          "value": 0.12
+        },
+        {
+          "kind": "percent",
+          "stat": "atk",
+          "value": 0.12
         }
       ],
       "slots": 0,
@@ -14184,7 +14359,17 @@
         {
           "kind": "flat",
           "stat": "crit",
-          "value": 0.03
+          "value": 0.07
+        },
+        {
+          "kind": "percent",
+          "stat": "atk",
+          "value": 0.1
+        },
+        {
+          "kind": "flat",
+          "stat": "hit",
+          "value": 20
         }
       ],
       "slots": 0,
@@ -14224,7 +14409,17 @@
         {
           "kind": "percent",
           "stat": "castMul",
-          "value": -0.07
+          "value": -0.12
+        },
+        {
+          "kind": "percent",
+          "stat": "matk",
+          "value": 0.12
+        },
+        {
+          "kind": "percent",
+          "stat": "maxSp",
+          "value": 0.15
         }
       ],
       "slots": 0,
@@ -14251,7 +14446,22 @@
         {
           "kind": "percent",
           "stat": "spRegen",
-          "value": 0.18
+          "value": 0.3
+        },
+        {
+          "kind": "percent",
+          "stat": "maxSp",
+          "value": 0.2
+        },
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.1
+        },
+        {
+          "kind": "stat",
+          "stat": "int",
+          "value": 5
         }
       ],
       "slots": 0,
@@ -14293,7 +14503,22 @@
         {
           "kind": "percent",
           "stat": "maxHp",
-          "value": 0.04
+          "value": 0.12
+        },
+        {
+          "kind": "percent",
+          "stat": "matk",
+          "value": 0.1
+        },
+        {
+          "kind": "percent",
+          "stat": "maxSp",
+          "value": 0.12
+        },
+        {
+          "kind": "stat",
+          "stat": "int",
+          "value": 5
         }
       ],
       "slots": 0,
@@ -14315,12 +14540,22 @@
         {
           "kind": "flat",
           "stat": "flee",
-          "value": 5
+          "value": 15
         },
         {
           "kind": "flat",
           "stat": "crit",
-          "value": 0.03
+          "value": 0.07
+        },
+        {
+          "kind": "percent",
+          "stat": "atk",
+          "value": 0.1
+        },
+        {
+          "kind": "percent",
+          "stat": "aspd",
+          "value": 0.1
         }
       ],
       "slots": 0,
@@ -14351,7 +14586,22 @@
         {
           "kind": "percent",
           "stat": "spRegen",
-          "value": 0.1
+          "value": 0.2
+        },
+        {
+          "kind": "percent",
+          "stat": "atk",
+          "value": 0.12
+        },
+        {
+          "kind": "percent",
+          "stat": "aspd",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "maxSp",
+          "value": 0.15
         }
       ],
       "slots": 0,

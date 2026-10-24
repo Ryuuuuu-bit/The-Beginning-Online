@@ -2,7 +2,7 @@ import {canEquipWeapon} from '@the-beginning-online/shared';
 import {
 	loadGameData,consumableBuffText,
 	rarityColors,
-	ownedRarity, itemRollLines, requiredEquipmentLevel, refineMilestones, refineBase, refineBonusValue,
+	ownedRarity, itemRollLines, requiredEquipmentLevel, refineMilestones, refineCapLines, refineBase, refineBonusValue,
 		inventoryWeight,
 		inventorySlots,
 	storageSlots,
@@ -146,15 +146,16 @@ export function mountInventory(send: (m: any) => void, onOpen: () => void) {
 		else if (t.type === "consumable") request("use", { id: i.id });
 	}
 	function cell(i: OwnedItem, mode = "bag") {
-		const t = template(i),
+		const t = template(i),name=`${i.refine?`+${i.refine} `:''}${t.nameTh}`,
 			b = document.createElement("button");
 		b.className = "inv-cell";
 		b.style.setProperty("--rarity", rarityColors[ownedRarity(i,t.rarity)]);
 		b.dataset.item = i.template;
 		b.dataset.id = i.id;
-		b.setAttribute("aria-label", `${t.nameTh} ×${i.qty}`);
+		b.setAttribute("aria-label", `${name} ×${i.qty}`);
 		hoverTip(b, () => ({ t, i, mode }));
 		b.append(itemIcon(t));
+		if(i.refine){const badge=document.createElement('span');badge.className='inv-refine';badge.textContent=`+${i.refine}`;badge.setAttribute('aria-hidden','true');b.append(badge);}
 		const count = document.createElement("b");
 		count.textContent = i.qty > 1 ? String(i.qty) : i.bound ? "◆" : "";
 		b.append(count);
@@ -162,8 +163,8 @@ export function mountInventory(send: (m: any) => void, onOpen: () => void) {
         if(mode==='buy'||mode==='sell'){b.classList.add('shop-cell');const caption=document.createElement('span');caption.className='shop-caption';caption.textContent=t.nameTh;const price=document.createElement('small');price.textContent=`${mode==='buy'?data.economy.shops[shop!][t.id]:Math.floor(t.npcPrice*data.economy.sellMultiplier)} ทอง`;b.append(caption,price);}
         if(mode==='bag'&&isNew(i)){const dot=document.createElement('span');dot.className='inv-new';dot.title='ของใหม่';b.append(dot);}
         if(mode==='bag'&&i.location==='bag'&&t.slot){
-            if(!wearable(t,i)){const no=document.createElement('span');no.className='inv-no';no.setAttribute('aria-hidden','true');b.append(no);b.setAttribute('aria-label',`${t.nameTh} · ใส่ไม่ได้ตอนนี้`);}
-            else if(betterThanWorn(t,i)){const up=document.createElement('span');up.className='inv-up';up.textContent='▲';b.append(up);b.setAttribute('aria-label',`${t.nameTh} · ดีกว่าที่ใส่`);}
+            if(!wearable(t,i)){const no=document.createElement('span');no.className='inv-no';no.setAttribute('aria-hidden','true');b.append(no);b.setAttribute('aria-label',`${name} · ใส่ไม่ได้ตอนนี้`);}
+            else if(betterThanWorn(t,i)){const up=document.createElement('span');up.className='inv-up';up.textContent='▲';b.append(up);b.setAttribute('aria-label',`${name} · ดีกว่าที่ใส่`);}
         }
         else if(incompatible){const note=document.createElement('small');note.textContent='อาชีพนี้ใช้ไม่ได้';b.append(note);}
 		if (multi.has(i.id)) b.classList.add("inv-selected");
@@ -234,7 +235,7 @@ export function mountInventory(send: (m: any) => void, onOpen: () => void) {
 		const text = document.createElement("div");
 		text.className = "strip-text";
 		const name = document.createElement("b");
-		name.textContent = i.qty > 1 ? `${t.nameTh} ×${i.qty}` : t.nameTh;
+		name.textContent = `${i.refine?`+${i.refine} `:''}${t.nameTh}${i.qty>1?` ×${i.qty}`:''}`;
 		const sub = document.createElement("small");
 		const btns = document.createElement("div");
 		btns.className = "strip-actions";
@@ -305,7 +306,7 @@ export function mountInventory(send: (m: any) => void, onOpen: () => void) {
 		const t = template(i);
 		detail.replaceChildren();
 		const title = document.createElement("h3");
-		title.textContent = t.nameTh;
+		title.textContent = `${i.refine?`+${i.refine} `:''}${t.nameTh}`;
 		title.style.color = rarityColors[ownedRarity(i,t.rarity)];
 		detail.append(title);
 		const text = document.createElement("p");
@@ -508,6 +509,7 @@ export function mountInventory(send: (m: any) => void, onOpen: () => void) {
   const group=document.createElement('section');group.className='tip-milestones';
   const head=document.createElement('h4');head.textContent='ออฟพิเศษตีบวก';group.append(head);
   for(const m of milestones){const line=document.createElement('p');line.className=level>=m.level?'active':'locked';line.textContent=`+${m.level} · ${modifierText(m.modifier)} · ${level>=m.level?'ปลดล็อกแล้ว':'ยังไม่ปลดล็อก'}`;group.append(line);}
+  for(const text of refineCapLines(t,level,data)){const line=document.createElement('p');line.className='active';line.textContent='ขณะสวม · '+text;group.append(line);}
   parent.append(group);
  }
  function openInspect(i:OwnedItem){

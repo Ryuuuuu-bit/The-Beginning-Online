@@ -8,12 +8,22 @@
         {
           "kind": "stat",
           "stat": "vit",
-          "value": 1
+          "value": 3
         },
         {
           "kind": "flat",
           "stat": "maxHp",
-          "value": 50
+          "value": 150
+        },
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.08
+        },
+        {
+          "kind": "elementResist",
+          "target": "neutral",
+          "value": 0.1
         }
       ]
     },
@@ -25,6 +35,16 @@
           "kind": "raceBonus",
           "target": "formless",
           "value": 0.2
+        },
+        {
+          "kind": "percent",
+          "stat": "atk",
+          "value": 0.1
+        },
+        {
+          "kind": "stat",
+          "stat": "dex",
+          "value": 5
         }
       ]
     },
@@ -41,6 +61,11 @@
           "kind": "percent",
           "stat": "maxHp",
           "value": 0.05
+        },
+        {
+          "kind": "flat",
+          "stat": "flee",
+          "value": 15
         }
       ]
     },
@@ -57,6 +82,26 @@
           "kind": "stat",
           "stat": "dex",
           "value": 2
+        },
+        {
+          "kind": "percent",
+          "stat": "atk",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "matk",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.1
+        },
+        {
+          "kind": "percent",
+          "stat": "maxSp",
+          "value": 0.1
         }
       ]
     },
@@ -73,6 +118,21 @@
           "kind": "flat",
           "stat": "maxHp",
           "value": 200
+        },
+        {
+          "kind": "raceResist",
+          "target": "plant",
+          "value": 0.2
+        },
+        {
+          "kind": "flat",
+          "stat": "hardDef",
+          "value": 15
+        },
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.1
         }
       ]
     },
@@ -89,6 +149,21 @@
           "kind": "flat",
           "stat": "maxHp",
           "value": 200
+        },
+        {
+          "kind": "raceResist",
+          "target": "plant",
+          "value": 0.2
+        },
+        {
+          "kind": "flat",
+          "stat": "hardDef",
+          "value": 15
+        },
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.1
         }
       ]
     },
@@ -105,88 +180,394 @@
           "kind": "flat",
           "stat": "maxHp",
           "value": 200
+        },
+        {
+          "kind": "raceResist",
+          "target": "formless",
+          "value": 0.2
+        },
+        {
+          "kind": "flat",
+          "stat": "hardDef",
+          "value": 15
+        },
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.1
         }
       ]
     },
     {
       "id": "card_bud_shroom",
       "slot": "accessory",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "stat",
+          "stat": "str",
+          "value": 4
+        },
+        {
+          "kind": "stat",
+          "stat": "dex",
+          "value": 3
+        },
+        {
+          "kind": "percent",
+          "stat": "aspd",
+          "value": 0.05
+        },
+        {
+          "kind": "stat",
+          "stat": "int",
+          "value": 4
+        },
+        {
+          "kind": "percent",
+          "stat": "maxSp",
+          "value": 0.12
+        },
+        {
+          "kind": "percent",
+          "stat": "spRegen",
+          "value": 0.2
+        }
+      ]
     },
     {
       "id": "card_clay_puff",
       "slot": "armour",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.08
+        },
+        {
+          "kind": "stat",
+          "stat": "vit",
+          "value": 3
+        },
+        {
+          "kind": "elementResist",
+          "target": "neutral",
+          "value": 0.1
+        }
+      ]
     },
     {
       "id": "card_pebble_puff",
       "slot": "weapon",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "atk",
+          "value": 0.06
+        },
+        {
+          "kind": "stat",
+          "stat": "dex",
+          "value": 3
+        },
+        {
+          "kind": "raceBonus",
+          "target": "formless",
+          "value": 0.2
+        }
+      ]
     },
     {
       "id": "card_shade_wolf",
       "slot": "accessory",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "stat",
+          "stat": "str",
+          "value": 4
+        },
+        {
+          "kind": "stat",
+          "stat": "dex",
+          "value": 3
+        },
+        {
+          "kind": "percent",
+          "stat": "aspd",
+          "value": 0.06
+        },
+        {
+          "kind": "flat",
+          "stat": "crit",
+          "value": 0.05
+        }
+      ]
     },
     {
       "id": "card_lotus_rabbit",
       "slot": "footgear",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "maxSp",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "spRegen",
+          "value": 0.15
+        },
+        {
+          "kind": "percent",
+          "stat": "moveSpeed",
+          "value": 0.05
+        }
+      ]
     },
     {
       "id": "card_dew_beetle",
       "slot": "shield",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "raceResist",
+          "target": "insect",
+          "value": 0.15
+        },
+        {
+          "kind": "flat",
+          "stat": "hardDef",
+          "value": 8
+        },
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.05
+        }
+      ]
     },
     {
       "id": "card_dewdrop_moth",
       "slot": "weapon",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "matk",
+          "value": 0.06
+        },
+        {
+          "kind": "stat",
+          "stat": "int",
+          "value": 3
+        },
+        {
+          "kind": "elementBonus",
+          "target": "earth",
+          "value": 0.2
+        }
+      ]
     },
     {
       "id": "card_pine_hedgehog",
       "slot": "garment",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "elementResist",
+          "target": "earth",
+          "value": 0.15
+        },
+        {
+          "kind": "flat",
+          "stat": "flee",
+          "value": 10
+        }
+      ]
     },
     {
       "id": "card_tile_sparrow",
       "slot": "weapon",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "matk",
+          "value": 0.06
+        },
+        {
+          "kind": "stat",
+          "stat": "int",
+          "value": 3
+        },
+        {
+          "kind": "elementBonus",
+          "target": "earth",
+          "value": 0.2
+        }
+      ]
     },
     {
       "id": "card_clay_pot_doll",
       "slot": "shield",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "raceResist",
+          "target": "formless",
+          "value": 0.15
+        },
+        {
+          "kind": "flat",
+          "stat": "hardDef",
+          "value": 8
+        },
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.05
+        }
+      ]
     },
     {
       "id": "card_oretail_lizard",
       "slot": "footgear",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "maxSp",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "spRegen",
+          "value": 0.15
+        }
+      ]
     },
     {
       "id": "card_iron_pincer_crab",
       "slot": "weapon",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "atk",
+          "value": 0.06
+        },
+        {
+          "kind": "stat",
+          "stat": "dex",
+          "value": 3
+        },
+        {
+          "kind": "raceBonus",
+          "target": "brute",
+          "value": 0.2
+        }
+      ]
     },
     {
       "id": "card_mist_shroom",
       "slot": "armour",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.08
+        },
+        {
+          "kind": "stat",
+          "stat": "vit",
+          "value": 3
+        },
+        {
+          "kind": "elementResist",
+          "target": "earth",
+          "value": 0.1
+        }
+      ]
     },
     {
       "id": "card_root_boar",
       "slot": "weapon",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "atk",
+          "value": 0.06
+        },
+        {
+          "kind": "stat",
+          "stat": "dex",
+          "value": 3
+        },
+        {
+          "kind": "raceBonus",
+          "target": "brute",
+          "value": 0.2
+        }
+      ]
     },
     {
       "id": "card_mist_weaver",
       "slot": "footgear",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "maxSp",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "spRegen",
+          "value": 0.15
+        },
+        {
+          "kind": "flat",
+          "stat": "flee",
+          "value": 12
+        },
+        {
+          "kind": "percent",
+          "stat": "aspd",
+          "value": 0.06
+        }
+      ]
     },
     {
       "id": "card_thorn_nest_mother",
       "slot": "accessory",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "atk",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "matk",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.1
+        },
+        {
+          "kind": "percent",
+          "stat": "maxSp",
+          "value": 0.1
+        }
+      ]
     },
     {
       "id": "card_greek_satyr",
@@ -196,6 +577,21 @@
           "kind": "flat",
           "stat": "spRegen",
           "value": 0.2
+        },
+        {
+          "kind": "stat",
+          "stat": "str",
+          "value": 4
+        },
+        {
+          "kind": "stat",
+          "stat": "dex",
+          "value": 3
+        },
+        {
+          "kind": "percent",
+          "stat": "aspd",
+          "value": 0.05
         }
       ]
     },
@@ -206,14 +602,40 @@
         {
           "kind": "elementResist",
           "target": "wind",
-          "value": 0.1
+          "value": 0.15
+        },
+        {
+          "kind": "flat",
+          "stat": "flee",
+          "value": 10
         }
       ]
     },
     {
       "id": "card_greek_gorgon",
       "slot": "shield",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "raceResist",
+          "target": "demon",
+          "value": 0.15
+        },
+        {
+          "kind": "flat",
+          "stat": "hardDef",
+          "value": 8
+        },
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.05
+        },
+        {
+          "kind": "statusResist",
+          "target": "stun",
+          "value": 0.2
+        }
+      ]
     },
     {
       "id": "card_greek_minotaur",
@@ -223,63 +645,264 @@
           "kind": "sizeBonus",
           "target": "large",
           "value": 0.1
+        },
+        {
+          "kind": "percent",
+          "stat": "atk",
+          "value": 0.1
+        },
+        {
+          "kind": "stat",
+          "stat": "dex",
+          "value": 5
+        },
+        {
+          "kind": "raceBonus",
+          "target": "brute",
+          "value": 0.2
         }
       ]
     },
     {
       "id": "card_himmapan_01",
       "slot": "accessory",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "stat",
+          "stat": "int",
+          "value": 4
+        },
+        {
+          "kind": "percent",
+          "stat": "maxSp",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "castMul",
+          "value": -0.05
+        }
+      ]
     },
     {
       "id": "card_himmapan_jade_turtle",
       "slot": "armour",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.08
+        },
+        {
+          "kind": "stat",
+          "stat": "vit",
+          "value": 3
+        },
+        {
+          "kind": "elementResist",
+          "target": "water",
+          "value": 0.1
+        },
+        {
+          "kind": "flat",
+          "stat": "hardDef",
+          "value": 12
+        },
+        {
+          "kind": "flat",
+          "stat": "hardMdef",
+          "value": 10
+        }
+      ]
     },
     {
       "id": "card_himmapan_03",
       "slot": "weapon",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "matk",
+          "value": 0.06
+        },
+        {
+          "kind": "stat",
+          "stat": "int",
+          "value": 3
+        },
+        {
+          "kind": "elementBonus",
+          "target": "water",
+          "value": 0.2
+        }
+      ]
     },
     {
       "id": "card_himmapan_blossom_deer",
       "slot": "footgear",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "maxSp",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "spRegen",
+          "value": 0.15
+        }
+      ]
     },
     {
       "id": "card_himmapan_golden_macaque",
       "slot": "garment",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "elementResist",
+          "target": "earth",
+          "value": 0.15
+        },
+        {
+          "kind": "flat",
+          "stat": "flee",
+          "value": 10
+        }
+      ]
     },
     {
       "id": "card_himmapan_06",
       "slot": "shield",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "raceResist",
+          "target": "brute",
+          "value": 0.15
+        },
+        {
+          "kind": "flat",
+          "stat": "hardDef",
+          "value": 8
+        },
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.05
+        }
+      ]
     },
     {
       "id": "card_himmapan_azure_garuda",
       "slot": "weapon",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "matk",
+          "value": 0.06
+        },
+        {
+          "kind": "stat",
+          "stat": "int",
+          "value": 3
+        },
+        {
+          "kind": "elementBonus",
+          "target": "wind",
+          "value": 0.2
+        }
+      ]
     },
     {
       "id": "card_himmapan_08",
       "slot": "accessory",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "atk",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "matk",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.1
+        },
+        {
+          "kind": "percent",
+          "stat": "maxSp",
+          "value": 0.1
+        }
+      ]
     },
     {
       "id": "card_desert_01",
       "slot": "accessory",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "stat",
+          "stat": "str",
+          "value": 4
+        },
+        {
+          "kind": "stat",
+          "stat": "dex",
+          "value": 3
+        },
+        {
+          "kind": "percent",
+          "stat": "aspd",
+          "value": 0.05
+        }
+      ]
     },
     {
       "id": "card_desert_oasis_hawk",
       "slot": "armour",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.08
+        },
+        {
+          "kind": "stat",
+          "stat": "vit",
+          "value": 3
+        },
+        {
+          "kind": "elementResist",
+          "target": "wind",
+          "value": 0.1
+        }
+      ]
     },
     {
       "id": "card_desert_03",
       "slot": "weapon",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "atk",
+          "value": 0.06
+        },
+        {
+          "kind": "stat",
+          "stat": "dex",
+          "value": 3
+        },
+        {
+          "kind": "raceBonus",
+          "target": "brute",
+          "value": 0.2
+        }
+      ]
     },
     {
       "id": "card_desert_sand_ushabti",
@@ -289,168 +912,705 @@
           "kind": "percent",
           "stat": "aspd",
           "value": -0.02
+        },
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "maxSp",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "spRegen",
+          "value": 0.15
         }
       ]
     },
     {
       "id": "card_desert_seal_mummy",
       "slot": "garment",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "elementResist",
+          "target": "dark",
+          "value": 0.15
+        },
+        {
+          "kind": "flat",
+          "stat": "flee",
+          "value": 10
+        },
+        {
+          "kind": "flat",
+          "stat": "hit",
+          "value": 15
+        }
+      ]
     },
     {
       "id": "card_desert_06",
       "slot": "shield",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "raceResist",
+          "target": "demihuman",
+          "value": 0.15
+        },
+        {
+          "kind": "flat",
+          "stat": "hardDef",
+          "value": 8
+        },
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.05
+        }
+      ]
     },
     {
       "id": "card_desert_glass_scorpion",
       "slot": "weapon",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "matk",
+          "value": 0.06
+        },
+        {
+          "kind": "stat",
+          "stat": "int",
+          "value": 3
+        },
+        {
+          "kind": "elementBonus",
+          "target": "fire",
+          "value": 0.2
+        }
+      ]
     },
     {
       "id": "card_desert_08",
       "slot": "accessory",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "atk",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "matk",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.1
+        },
+        {
+          "kind": "percent",
+          "stat": "maxSp",
+          "value": 0.1
+        }
+      ]
     },
     {
       "id": "card_frost_01",
       "slot": "accessory",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "stat",
+          "stat": "int",
+          "value": 4
+        },
+        {
+          "kind": "percent",
+          "stat": "maxSp",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "castMul",
+          "value": -0.05
+        }
+      ]
     },
     {
       "id": "card_frost_rune_raven",
       "slot": "armour",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.08
+        },
+        {
+          "kind": "stat",
+          "stat": "vit",
+          "value": 3
+        },
+        {
+          "kind": "elementResist",
+          "target": "wind",
+          "value": 0.1
+        }
+      ]
     },
     {
       "id": "card_frost_03",
       "slot": "weapon",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "atk",
+          "value": 0.06
+        },
+        {
+          "kind": "stat",
+          "stat": "dex",
+          "value": 3
+        },
+        {
+          "kind": "raceBonus",
+          "target": "brute",
+          "value": 0.2
+        }
+      ]
     },
     {
       "id": "card_frost_ice_lindworm",
       "slot": "footgear",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "maxSp",
+          "value": 0.12
+        },
+        {
+          "kind": "percent",
+          "stat": "spRegen",
+          "value": 0.2
+        }
+      ]
     },
     {
       "id": "card_frost_winter_wavehorse",
       "slot": "garment",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "elementResist",
+          "target": "water",
+          "value": 0.15
+        },
+        {
+          "kind": "flat",
+          "stat": "flee",
+          "value": 10
+        }
+      ]
     },
     {
       "id": "card_frost_06",
       "slot": "shield",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "raceResist",
+          "target": "brute",
+          "value": 0.15
+        },
+        {
+          "kind": "flat",
+          "stat": "hardDef",
+          "value": 8
+        },
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.05
+        }
+      ]
     },
     {
       "id": "card_frost_fractured_valkyrie",
       "slot": "weapon",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "matk",
+          "value": 0.06
+        },
+        {
+          "kind": "stat",
+          "stat": "int",
+          "value": 3
+        },
+        {
+          "kind": "elementBonus",
+          "target": "wind",
+          "value": 0.2
+        }
+      ]
     },
     {
       "id": "card_frost_08",
       "slot": "accessory",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "atk",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "matk",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.1
+        },
+        {
+          "kind": "percent",
+          "stat": "maxSp",
+          "value": 0.1
+        }
+      ]
     },
     {
       "id": "card_yokai_01",
       "slot": "accessory",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "stat",
+          "stat": "int",
+          "value": 4
+        },
+        {
+          "kind": "percent",
+          "stat": "maxSp",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "castMul",
+          "value": -0.05
+        }
+      ]
     },
     {
       "id": "card_yokai_rain_umbrella",
       "slot": "armour",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.08
+        },
+        {
+          "kind": "stat",
+          "stat": "vit",
+          "value": 3
+        },
+        {
+          "kind": "elementResist",
+          "target": "wind",
+          "value": 0.1
+        }
+      ]
     },
     {
       "id": "card_yokai_03",
       "slot": "weapon",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "atk",
+          "value": 0.06
+        },
+        {
+          "kind": "stat",
+          "stat": "dex",
+          "value": 3
+        },
+        {
+          "kind": "raceBonus",
+          "target": "demihuman",
+          "value": 0.2
+        }
+      ]
     },
     {
       "id": "card_yokai_bamboo_kodama",
       "slot": "footgear",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "maxSp",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "spRegen",
+          "value": 0.15
+        }
+      ]
     },
     {
       "id": "card_yokai_rain_nue",
       "slot": "garment",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "elementResist",
+          "target": "dark",
+          "value": 0.15
+        },
+        {
+          "kind": "flat",
+          "stat": "flee",
+          "value": 10
+        },
+        {
+          "kind": "flat",
+          "stat": "crit",
+          "value": 0.04
+        }
+      ]
     },
     {
       "id": "card_yokai_06",
       "slot": "shield",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "raceResist",
+          "target": "brute",
+          "value": 0.15
+        },
+        {
+          "kind": "flat",
+          "stat": "hardDef",
+          "value": 8
+        },
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.05
+        }
+      ]
     },
     {
       "id": "card_yokai_lantern_rokurokubi",
       "slot": "weapon",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "matk",
+          "value": 0.06
+        },
+        {
+          "kind": "stat",
+          "stat": "int",
+          "value": 3
+        },
+        {
+          "kind": "elementBonus",
+          "target": "dark",
+          "value": 0.2
+        }
+      ]
     },
     {
       "id": "card_yokai_08",
       "slot": "accessory",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "atk",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "matk",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.1
+        },
+        {
+          "kind": "percent",
+          "stat": "maxSp",
+          "value": 0.1
+        }
+      ]
     },
     {
       "id": "card_dragon_cloud_carp",
       "slot": "accessory",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "stat",
+          "stat": "int",
+          "value": 4
+        },
+        {
+          "kind": "percent",
+          "stat": "maxSp",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "castMul",
+          "value": -0.05
+        }
+      ]
     },
     {
       "id": "card_dragon_jade_crane",
       "slot": "armour",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.08
+        },
+        {
+          "kind": "stat",
+          "stat": "vit",
+          "value": 3
+        },
+        {
+          "kind": "elementResist",
+          "target": "wind",
+          "value": 0.1
+        }
+      ]
     },
     {
       "id": "card_dragon_stone_liondog",
       "slot": "weapon",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "atk",
+          "value": 0.06
+        },
+        {
+          "kind": "stat",
+          "stat": "dex",
+          "value": 3
+        },
+        {
+          "kind": "raceBonus",
+          "target": "formless",
+          "value": 0.2
+        }
+      ]
     },
     {
       "id": "card_dragon_sky_qilin",
       "slot": "footgear",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "maxSp",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "moveSpeed",
+          "value": 0.05
+        }
+      ]
     },
     {
       "id": "card_dragon_bell_drake",
       "slot": "garment",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "elementResist",
+          "target": "holy",
+          "value": 0.15
+        },
+        {
+          "kind": "flat",
+          "stat": "flee",
+          "value": 10
+        }
+      ]
     },
     {
       "id": "card_dragon_white_cloud_tiger",
       "slot": "shield",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "raceResist",
+          "target": "brute",
+          "value": 0.15
+        },
+        {
+          "kind": "flat",
+          "stat": "hardDef",
+          "value": 8
+        },
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.05
+        }
+      ]
     },
     {
       "id": "card_dragon_jade_gatekeeper",
       "slot": "weapon",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "matk",
+          "value": 0.06
+        },
+        {
+          "kind": "stat",
+          "stat": "int",
+          "value": 3
+        },
+        {
+          "kind": "elementBonus",
+          "target": "earth",
+          "value": 0.2
+        }
+      ]
     },
     {
       "id": "card_dragon_cloud_dragon_lord",
       "slot": "accessory",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "atk",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "matk",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.1
+        },
+        {
+          "kind": "percent",
+          "stat": "maxSp",
+          "value": 0.1
+        }
+      ]
     },
     {
       "id": "card_volcano_lava_glass_lizard",
       "slot": "accessory",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "stat",
+          "stat": "str",
+          "value": 4
+        },
+        {
+          "kind": "stat",
+          "stat": "dex",
+          "value": 3
+        },
+        {
+          "kind": "percent",
+          "stat": "aspd",
+          "value": 0.05
+        }
+      ]
     },
     {
       "id": "card_volcano_ash_boulder_beetle",
       "slot": "armour",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.08
+        },
+        {
+          "kind": "stat",
+          "stat": "vit",
+          "value": 3
+        },
+        {
+          "kind": "elementResist",
+          "target": "earth",
+          "value": 0.1
+        }
+      ]
     },
     {
       "id": "card_volcano_ash_spine_boar",
       "slot": "weapon",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "atk",
+          "value": 0.06
+        },
+        {
+          "kind": "stat",
+          "stat": "dex",
+          "value": 3
+        },
+        {
+          "kind": "raceBonus",
+          "target": "brute",
+          "value": 0.2
+        }
+      ]
     },
     {
       "id": "card_volcano_old_kiln_sprite",
       "slot": "footgear",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "maxSp",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "spRegen",
+          "value": 0.15
+        }
+      ]
     },
     {
       "id": "card_volcano_red_smoke_shroom",
@@ -460,33 +1620,128 @@
           "kind": "elementResist",
           "target": "fire",
           "value": 0.03
+        },
+        {
+          "kind": "elementResist",
+          "target": "earth",
+          "value": 0.15
+        },
+        {
+          "kind": "flat",
+          "stat": "flee",
+          "value": 10
         }
       ]
     },
     {
       "id": "card_volcano_azure_firebird",
       "slot": "shield",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "raceResist",
+          "target": "brute",
+          "value": 0.15
+        },
+        {
+          "kind": "flat",
+          "stat": "hardDef",
+          "value": 8
+        },
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.05
+        }
+      ]
     },
     {
       "id": "card_volcano_crater_hammer_ogre",
       "slot": "weapon",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "matk",
+          "value": 0.06
+        },
+        {
+          "kind": "stat",
+          "stat": "int",
+          "value": 3
+        },
+        {
+          "kind": "elementBonus",
+          "target": "earth",
+          "value": 0.2
+        }
+      ]
     },
     {
       "id": "card_volcano_golden_ash_zmey",
       "slot": "accessory",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "atk",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "matk",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.1
+        },
+        {
+          "kind": "percent",
+          "stat": "maxSp",
+          "value": 0.1
+        }
+      ]
     },
     {
       "id": "card_fae_puca_shadowhorse",
       "slot": "accessory",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "stat",
+          "stat": "str",
+          "value": 4
+        },
+        {
+          "kind": "stat",
+          "stat": "dex",
+          "value": 3
+        },
+        {
+          "kind": "percent",
+          "stat": "aspd",
+          "value": 0.05
+        }
+      ]
     },
     {
       "id": "card_fae_wandering_light_moth",
       "slot": "armour",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.08
+        },
+        {
+          "kind": "stat",
+          "stat": "vit",
+          "value": 3
+        },
+        {
+          "kind": "elementResist",
+          "target": "holy",
+          "value": 0.1
+        }
+      ]
     },
     {
       "id": "card_fae_false_garden_root",
@@ -496,133 +1751,563 @@
           "kind": "percent",
           "stat": "maxSp",
           "value": 0.02
+        },
+        {
+          "kind": "percent",
+          "stat": "matk",
+          "value": 0.06
+        },
+        {
+          "kind": "stat",
+          "stat": "int",
+          "value": 3
+        },
+        {
+          "kind": "elementBonus",
+          "target": "earth",
+          "value": 0.2
         }
       ]
     },
     {
       "id": "card_fae_moondrop_mirrorfae",
       "slot": "footgear",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "maxSp",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "spRegen",
+          "value": 0.15
+        }
+      ]
     },
     {
       "id": "card_fae_moonlichen_stag",
       "slot": "garment",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "elementResist",
+          "target": "wind",
+          "value": 0.15
+        },
+        {
+          "kind": "flat",
+          "stat": "flee",
+          "value": 10
+        }
+      ]
     },
     {
       "id": "card_fae_violet_banshee",
       "slot": "shield",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "raceResist",
+          "target": "undead",
+          "value": 0.15
+        },
+        {
+          "kind": "flat",
+          "stat": "hardDef",
+          "value": 8
+        },
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.05
+        },
+        {
+          "kind": "flat",
+          "stat": "hardMdef",
+          "value": 15
+        }
+      ]
     },
     {
       "id": "card_fae_silverchain_dullahan",
       "slot": "weapon",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "atk",
+          "value": 0.06
+        },
+        {
+          "kind": "stat",
+          "stat": "dex",
+          "value": 3
+        },
+        {
+          "kind": "raceBonus",
+          "target": "undead",
+          "value": 0.2
+        }
+      ]
     },
     {
       "id": "card_fae_twilight_antler_king",
       "slot": "accessory",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "atk",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "matk",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.1
+        },
+        {
+          "kind": "percent",
+          "stat": "maxSp",
+          "value": 0.1
+        }
+      ]
     },
     {
       "id": "card_ocean_storm_conch",
       "slot": "accessory",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "stat",
+          "stat": "int",
+          "value": 4
+        },
+        {
+          "kind": "percent",
+          "stat": "maxSp",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "castMul",
+          "value": -0.05
+        }
+      ]
     },
     {
       "id": "card_ocean_mast_crab",
       "slot": "armour",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.08
+        },
+        {
+          "kind": "stat",
+          "stat": "vit",
+          "value": 3
+        },
+        {
+          "kind": "elementResist",
+          "target": "earth",
+          "value": 0.1
+        }
+      ]
     },
     {
       "id": "card_ocean_whirlpool_lanternfish",
       "slot": "weapon",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "matk",
+          "value": 0.06
+        },
+        {
+          "kind": "stat",
+          "stat": "int",
+          "value": 3
+        },
+        {
+          "kind": "elementBonus",
+          "target": "water",
+          "value": 0.2
+        }
+      ]
     },
     {
       "id": "card_ocean_mist_isle_siren",
       "slot": "footgear",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "maxSp",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "moveSpeed",
+          "value": 0.05
+        },
+        {
+          "kind": "percent",
+          "stat": "spRegen",
+          "value": 0.2
+        }
+      ]
     },
     {
       "id": "card_ocean_sunken_coral_knight",
       "slot": "garment",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "elementResist",
+          "target": "water",
+          "value": 0.15
+        },
+        {
+          "kind": "flat",
+          "stat": "flee",
+          "value": 10
+        }
+      ]
     },
     {
       "id": "card_ocean_sixhead_reef_scylla",
       "slot": "shield",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "raceResist",
+          "target": "demon",
+          "value": 0.15
+        },
+        {
+          "kind": "flat",
+          "stat": "hardDef",
+          "value": 8
+        },
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.05
+        }
+      ]
     },
     {
       "id": "card_ocean_shipwreck_colossus",
       "slot": "weapon",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "atk",
+          "value": 0.06
+        },
+        {
+          "kind": "stat",
+          "stat": "dex",
+          "value": 3
+        },
+        {
+          "kind": "raceBonus",
+          "target": "formless",
+          "value": 0.2
+        }
+      ]
     },
     {
       "id": "card_ocean_stormcrown_kraken",
       "slot": "accessory",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "atk",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "matk",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.1
+        },
+        {
+          "kind": "percent",
+          "stat": "maxSp",
+          "value": 0.1
+        }
+      ]
     },
     {
       "id": "card_astral_stardust_jellyfish",
       "slot": "accessory",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "stat",
+          "stat": "int",
+          "value": 4
+        },
+        {
+          "kind": "percent",
+          "stat": "maxSp",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "castMul",
+          "value": -0.05
+        }
+      ]
     },
     {
       "id": "card_astral_orbital_ray",
       "slot": "armour",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.08
+        },
+        {
+          "kind": "stat",
+          "stat": "vit",
+          "value": 3
+        },
+        {
+          "kind": "elementResist",
+          "target": "wind",
+          "value": 0.1
+        },
+        {
+          "kind": "percent",
+          "stat": "castMul",
+          "value": -0.08
+        }
+      ]
     },
     {
       "id": "card_astral_meteor_ring_serpent",
       "slot": "weapon",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "atk",
+          "value": 0.06
+        },
+        {
+          "kind": "stat",
+          "stat": "dex",
+          "value": 3
+        },
+        {
+          "kind": "raceBonus",
+          "target": "brute",
+          "value": 0.2
+        }
+      ]
     },
     {
       "id": "card_astral_constellation_crane",
       "slot": "footgear",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "maxSp",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "spRegen",
+          "value": 0.15
+        }
+      ]
     },
     {
       "id": "card_astral_vacuum_bell_construct",
       "slot": "garment",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "elementResist",
+          "target": "dark",
+          "value": 0.15
+        },
+        {
+          "kind": "flat",
+          "stat": "flee",
+          "value": 10
+        }
+      ]
     },
     {
       "id": "card_astral_solarshadow_lion",
       "slot": "shield",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "raceResist",
+          "target": "brute",
+          "value": 0.15
+        },
+        {
+          "kind": "flat",
+          "stat": "hardDef",
+          "value": 8
+        },
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.05
+        }
+      ]
     },
     {
       "id": "card_astral_twelve_star_knight",
       "slot": "weapon",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "matk",
+          "value": 0.06
+        },
+        {
+          "kind": "stat",
+          "stat": "int",
+          "value": 3
+        },
+        {
+          "kind": "elementBonus",
+          "target": "holy",
+          "value": 0.2
+        }
+      ]
     },
     {
       "id": "card_astral_star_eating_eclipse",
       "slot": "accessory",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "atk",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "matk",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.1
+        },
+        {
+          "kind": "percent",
+          "stat": "maxSp",
+          "value": 0.1
+        }
+      ]
     },
     {
       "id": "card_abyss_black_salt_crab",
       "slot": "accessory",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "stat",
+          "stat": "str",
+          "value": 4
+        },
+        {
+          "kind": "stat",
+          "stat": "dex",
+          "value": 3
+        },
+        {
+          "kind": "percent",
+          "stat": "aspd",
+          "value": 0.05
+        }
+      ]
     },
     {
       "id": "card_abyss_silt_mudskipper",
       "slot": "armour",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.08
+        },
+        {
+          "kind": "stat",
+          "stat": "vit",
+          "value": 3
+        },
+        {
+          "kind": "elementResist",
+          "target": "earth",
+          "value": 0.1
+        }
+      ]
     },
     {
       "id": "card_abyss_ziggurat_clay_guard",
       "slot": "weapon",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "atk",
+          "value": 0.06
+        },
+        {
+          "kind": "stat",
+          "stat": "dex",
+          "value": 3
+        },
+        {
+          "kind": "raceBonus",
+          "target": "formless",
+          "value": 0.2
+        }
+      ]
     },
     {
       "id": "card_abyss_anzu_lionbird",
       "slot": "footgear",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "maxSp",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "moveSpeed",
+          "value": 0.05
+        }
+      ]
     },
     {
       "id": "card_abyss_mushhushshu_serpent",
@@ -632,43 +2317,185 @@
           "kind": "raceBonus",
           "target": "dragon",
           "value": 0.07
+        },
+        {
+          "kind": "elementResist",
+          "target": "earth",
+          "value": 0.15
+        },
+        {
+          "kind": "flat",
+          "stat": "flee",
+          "value": 10
         }
       ]
     },
     {
       "id": "card_abyss_night_border_scorpion",
       "slot": "shield",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "raceResist",
+          "target": "demon",
+          "value": 0.15
+        },
+        {
+          "kind": "flat",
+          "stat": "hardDef",
+          "value": 8
+        },
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.05
+        }
+      ]
     },
     {
       "id": "card_abyss_blackstone_lamassu",
       "slot": "weapon",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "matk",
+          "value": 0.06
+        },
+        {
+          "kind": "stat",
+          "stat": "int",
+          "value": 3
+        },
+        {
+          "kind": "elementBonus",
+          "target": "earth",
+          "value": 0.2
+        }
+      ]
     },
     {
       "id": "card_abyss_primordial_sea_dragon",
       "slot": "accessory",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "atk",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "matk",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.1
+        },
+        {
+          "kind": "percent",
+          "stat": "maxSp",
+          "value": 0.1
+        }
+      ]
     },
     {
       "id": "card_confluence_life_pillar_guard",
       "slot": "accessory",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "stat",
+          "stat": "str",
+          "value": 4
+        },
+        {
+          "kind": "stat",
+          "stat": "dex",
+          "value": 3
+        },
+        {
+          "kind": "percent",
+          "stat": "aspd",
+          "value": 0.05
+        }
+      ]
     },
     {
       "id": "card_confluence_thunder_pillar_guard",
       "slot": "armour",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.08
+        },
+        {
+          "kind": "stat",
+          "stat": "vit",
+          "value": 3
+        },
+        {
+          "kind": "elementResist",
+          "target": "wind",
+          "value": 0.1
+        }
+      ]
     },
     {
       "id": "card_confluence_starshadow_pillar_guard",
       "slot": "weapon",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "matk",
+          "value": 0.06
+        },
+        {
+          "kind": "stat",
+          "stat": "int",
+          "value": 3
+        },
+        {
+          "kind": "elementBonus",
+          "target": "dark",
+          "value": 0.2
+        }
+      ]
     },
     {
       "id": "card_confluence_worldcore_sovereign",
       "slot": "accessory",
-      "modifiers": []
+      "modifiers": [
+        {
+          "kind": "percent",
+          "stat": "atk",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "matk",
+          "value": 0.08
+        },
+        {
+          "kind": "percent",
+          "stat": "maxHp",
+          "value": 0.15
+        },
+        {
+          "kind": "percent",
+          "stat": "maxSp",
+          "value": 0.15
+        },
+        {
+          "kind": "stat",
+          "stat": "vit",
+          "value": 5
+        },
+        {
+          "kind": "stat",
+          "stat": "int",
+          "value": 5
+        }
+      ]
     }
   ]
 }

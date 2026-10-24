@@ -8,15 +8,15 @@ const owned={id:'test',template:t.id,qty:1,location:'bag',slot:null,refine:15,ca
 test('item totals include refine and rolled percentages without mixing units',()=>{
  const rows=itemStats(t,owned,data),get=key=>rows.find(r=>r.key===key);
  assert.equal(get('flat:atk').value,t.atk+8+refineBonusValue(t,15));
- assert.equal(get('percent:atk').value,.03);
- assert.equal(get('percent:aspd').value,.05);
- assert.equal(itemStatValue(get('flat:crit')),'4%');
- assert.equal(itemStatValue(get('percent:aspd')),'5%');
+ assert.equal(get('percent:atk').value,.2);
+ assert.equal(get('percent:aspd').value,.02);
+ assert.equal(itemStatValue(get('flat:crit')),'5%');
+ assert.equal(itemStatValue(get('percent:aspd')),'2%');
 });
 test('comparison includes lost stats, percentages and lower-is-better cast time',()=>{
  const mine=itemStats(t,{...owned,refine:0,roll:undefined},data),old=itemStats(t,owned,data);
  const rows=compareItemStats(mine,old);
- assert.equal(rows.find(r=>r.key==='percent:aspd').delta,-.05);
+ assert.equal(rows.find(r=>r.key==='percent:aspd').delta,-.02);
  assert.ok(rows.find(r=>r.key==='flat:atk').improvement<0);
  const magic={...t,modifiers:[{kind:'percent',stat:'castMul',value:-.03}]};
  assert.ok(compareItemStats(itemStats(magic,undefined,data),[]).find(r=>r.key==='percent:castMul').improvement>0);

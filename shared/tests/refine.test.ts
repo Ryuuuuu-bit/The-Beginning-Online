@@ -50,7 +50,7 @@ test("refine levels on worn gear raise ATK and hard DEF", () => {
 	const wear = (refine: number) => bag(item("training_sword", { location: "equip", slot: "weapon", refine }), item("traveler_clothes", { location: "equip", slot: "body", refine }));
 	const base = deriveStats(inventoryProfile(profile, wear(0), data), data), plus = deriveStats(inventoryProfile(profile, wear(7), data), data);
 	assert.ok(plus.atk >= base.atk + refineBonusValue(tpl("training_sword"), 7), "weapon refine adds ATK");
-	assert.equal(plus.hardDef - base.hardDef, refineBonusValue(tpl("traveler_clothes"), 7), "armour refine adds hard DEF");
+	assert.equal(plus.hardDef - base.hardDef, refineBonusValue(tpl("traveler_clothes"), 7)+5, "armour refine and the sword guard milestone add hard DEF");
 	assert.ok(refineBonusValue(tpl("traveler_clothes"), 3) >= 3, "every level is worth at least +1");
 });
 
@@ -79,7 +79,7 @@ test("clients ask for a refine but cannot choose its roll", async () => {
   const types=['weapon','armour','shield','garment','footgear'];
   for(const type of types){
    const t=data.items.items.find(t=>t.type===type&&t.slot)!;
-   assert.deepEqual(refineMilestones(t).map(m=>m.level),[5,10,15]);
+   assert.deepEqual([...new Set(refineMilestones(t).map(m=>m.level))],[5,10,15]);
    for(const level of [0,4,5,9,10,14,15]){
     const mods=refineModifiers({refine:level},t);
     assert.deepEqual(mods.slice(level?1:0),refineMilestones(t).filter(m=>level>=m.level).map(m=>m.modifier));
@@ -88,13 +88,13 @@ test("clients ask for a refine but cannot choose its roll", async () => {
   assert.deepEqual(refineMilestones(tpl('jade_ring')),[]);
   const magic=data.items.items.find(t=>t.type==='weapon'&&(t.matk??0)>(t.atk??0))!;
   assert.equal(refineMilestones(magic)[0].modifier.kind,'percent');
-  assert.deepEqual(refineMilestones(magic)[1].modifier,{kind:'percent',stat:'castMul',value:-.03});
+  assert.deepEqual(refineMilestones(magic).find(m=>m.modifier.kind==='percent'&&m.modifier.stat==='castMul')!.modifier,{kind:'percent',stat:'castMul',value:-.1});
  });
  test("milestones affect actual worn stats once, with downgrade and unequip removing the bonus",()=>{
   const sword=item('training_sword',{refine:10,location:'equip',slot:'weapon'});
   const at=(i:OwnedItem)=>deriveStats(inventoryProfile(profile,bag(i),data),data);
   const ten=at(sword),nine=at({...sword,refine:9});
-  assert.ok(Math.abs(ten.crit-nine.crit-.02)<1e-9);
+  assert.ok(Math.abs(ten.crit-nine.crit-.03)<1e-9);
   assert.deepEqual(at(sword),ten,'recalculation never stacks milestones');
   assert.deepEqual(at({...sword,location:'bag',slot:null}),deriveStats(inventoryProfile(profile,bag(),data),data));
   const armour=item('traveler_clothes',{refine:15,location:'equip',slot:'body'});

@@ -313,6 +313,7 @@ body #inventory-window[data-mode=bag] .inv-grid{grid-template-columns:repeat(10,
 body #inventory-window[data-mode=bag] .inv-grid .inv-cell,body #inventory-window[data-mode=bag] .inv-grid .inv-cell-empty{min-width:0;aspect-ratio:1;border-radius:10px}
 body #inventory-window[data-mode=bag] .inv-nomatch{grid-column:1/-1;text-align:center}
 body #inventory-window .inv-cell{position:relative}
+body #inventory-window .inv-cell .inv-refine{position:absolute;left:3px;bottom:3px;padding:1px 4px;border:1px solid #bc984e;border-radius:4px;background:#17252bea;color:#ffe09a;font:bold 13px/1.2 var(--font-ui);text-shadow:0 1px 2px #000;pointer-events:none;z-index:1}
 body #inventory-window .inv-cell .inv-up{position:absolute;left:4px;top:2px;font-size:10px;font-weight:800;color:#8fd18a;text-shadow:0 1px 2px #000}
 body #inventory-window .inv-cell .inv-no{position:absolute;inset:0;border-radius:inherit;background:rgba(120,20,20,.3);pointer-events:none}
 body #inventory-window .inv-cell .inv-no::after{content:"\2715";position:absolute;left:5px;top:2px;font-size:10px;font-weight:800;color:#ef8f86}

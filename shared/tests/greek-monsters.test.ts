@@ -29,7 +29,7 @@ test('Greek cards change their own stats or recover slow and stop affecting the 
  const {g}=fixture('greek_satyr'),p=g.p;
  const gear=[['field_ring','accessory1','card_greek_satyr'],['field_cloak','garment','card_greek_harpy'],['field_shield','shield','card_greek_gorgon'],['field_sword','weapon','card_greek_minotaur']];
  p.inventory={items:gear.map(([template,slot,card],i)=>({id:'greek-'+i,template,slot,cards:[],location:'equip',qty:1,refine:0,bound:false,source:'test'}))} as any;refreshStats(g,p);const before=structuredClone(p.stats);
- p.inventory!.items.forEach((item,i)=>item.cards=[gear[i][2]]);refreshStats(g,p);assert.ok(Math.abs(p.stats.spRegen-before.spRegen-.2)<1e-8);assert.ok(Math.abs(p.stats.elementResist.wind-before.elementResist.wind-.1)<1e-8);assert.ok(Math.abs((p.stats.sizeBonus.large??0)-(before.sizeBonus.large??0)-.1)<1e-8);
+ p.inventory!.items.forEach((item,i)=>item.cards=[gear[i][2]]);refreshStats(g,p);assert.ok(Math.abs(p.stats.spRegen-before.spRegen-.2)<1e-8);assert.ok(Math.abs(p.stats.elementResist.wind-before.elementResist.wind-.15)<1e-8);assert.ok(Math.abs((p.stats.sizeBonus.large??0)-(before.sizeBonus.large??0)-.1)<1e-8);
  p.statuses=[{id:'slow',sourceId:'test',remaining:3,value:.5}];tickPlayerLoot(g,p,1);assert.equal(p.statuses[0].remaining,2.75);
  p.inventory!.items.forEach(item=>item.cards=[]);refreshStats(g,p);assert.deepEqual(p.stats,before);tickPlayerLoot(g,p,1);assert.equal(p.statuses[0].remaining,2.75);
 });

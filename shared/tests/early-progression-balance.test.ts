@@ -5,13 +5,14 @@ import {runBalance} from '../sim/balance.js';
 
 const data=loadGameData();
 
-test('deeper early-map enemies reward more EXP per combat minute with the same build',()=>{
+test('deeper early-map enemies reward more EXP per combat minute with the same ordinary gear build',()=>{
  for(const classId of ['swordsman','archer','mage'])for(const [level,entry,deep] of [
   [10,'forest_young_1',['lantern_wisp','stump_guard']],
   [15,'ruins_young_1',['ruin_shroom','relic_hound','relic_wisp','ruin_guard']],
   [20,'canyon_young_1',['crag_slime','crag_wolf','dust_wisp','crag_guard']],
  ] as const){
-  const selected={...data,monsters:{...data.monsters,monsters:data.monsters.monsters.filter(m=>m.id===entry||deep.some(id=>id===m.id))}};
+  // Unique effects deliberately change skill/resource matchups; compare the ordinary progression baseline.
+  const selected={...data,items:{...data.items,items:data.items.items.filter(t=>!t.id.startsWith('unique_'))},monsters:{...data.monsters,monsters:data.monsters.monsters.filter(m=>m.id===entry||deep.some(id=>id===m.id))}};
   const {rows}=runBalance({levels:[level],classes:[classId],monster:'all',runs:100,seed:25,pvp:false},selected);
   const rim=rows.find(r=>r.opponent===entry)!;
   for(const row of rows.filter(r=>r.opponent!==entry))assert.ok(row.expPerMinute>rim.expPerMinute,`${classId}/${row.opponent}: ${row.expPerMinute} <= ${rim.expPerMinute}`);

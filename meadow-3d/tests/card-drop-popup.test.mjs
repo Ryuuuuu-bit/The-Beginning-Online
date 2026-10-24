@@ -42,7 +42,7 @@ test('card panel uses real art/effects, preserves consecutive drops, closes and 
  assert.match(art.children[0].style.backgroundImage, /card_jelly_pink/);
  assert.match(info.children[0].textContent, /×2$/);
  assert.match(info.children[1].textContent, /เกราะ/);
- assert.match(info.children[2].textContent, /VIT.*1.*HP.*50/);
+ assert.match(info.children[2].textContent, /VIT.*3.*HP.*150/);
  ui.show([{ template: 'card_king_jelly', qty: 1 }]);
  assert.equal(list.children.length, 2);
  assert.equal(timers.size, 1);

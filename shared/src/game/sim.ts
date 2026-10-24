@@ -1128,7 +1128,7 @@ function castMasteryAction(g: Game, id: string, allyId?: string,automatic=false,
  if(id==='boxer_03'&&combo<1)return false;
  const cost=automatic?skill.sp:passiveCost(g,skill,endgameSkillCost(p,lootSkillCost(p,skill.sp,offensive),id));
  if(p.mp<cost)return false;
- const castTime=skill.cast>0?Math.max(skill.cast*(1-g.data.stats.caps.maxCastReduction),endgameCast(p,skill.cast,g.data.stats.caps.maxCastReduction)*advancedCastMultiplier(g)*(automatic?1:passiveCastMultiplier(g,id))):0;
+ const castTime=skill.cast>0?Math.max(skill.cast*(1-(p.stats.statCaps?.maxCastReduction??g.data.stats.caps.maxCastReduction)),endgameCast(p,skill.cast,(p.stats.statCaps?.maxCastReduction??g.data.stats.caps.maxCastReduction))*advancedCastMultiplier(g)*(automatic?1:passiveCastMultiplier(g,id))):0;
  p.mp-=cost;p.cd[id]=skill.cooldown;if(!automatic)p.castRemaining=castTime;
  if(!automatic){passiveStart(g,skill,cost,combo);lootSkillSpent(g,p,skill.sp,skill.effect,offensive);endgameSkillSpent(g,p,skill);normalMasteryCast(g,id,target?.id);mixNormalCast(g,id);}else markAutomaticCast(g,castTime);
  let boxerBonus:number|undefined;
@@ -1378,7 +1378,7 @@ export function action(g: Game, a: Action, allyId?: string,point?:Vec) {
 		lootSkillSpent(g,p,skill.sp,skill.effect,skill.percent>0);endgameSkillSpent(g,p,skill);
 		p.cd[skill.id] = skill.cooldown;
 		if (skill.id === "whirlwind") p.cd.spin = skill.cooldown;
-		const castTime = skill.cast > 0 ? Math.max(skill.cast * (1 - g.data.stats.caps.maxCastReduction), endgameCast(p, skill.cast,g.data.stats.caps.maxCastReduction)) : 0;
+		const castTime = skill.cast > 0 ? Math.max(skill.cast * (1 - (p.stats.statCaps?.maxCastReduction??g.data.stats.caps.maxCastReduction)), endgameCast(p, skill.cast,(p.stats.statCaps?.maxCastReduction??g.data.stats.caps.maxCastReduction))) : 0;
 		const look = skill.visual ?? skill.id;
 		p.attack =
 			look === "whirlwind"

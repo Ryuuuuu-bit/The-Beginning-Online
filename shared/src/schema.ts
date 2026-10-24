@@ -139,6 +139,8 @@ export const CharacterSchema = z
 		level: z.number().int().min(1).max(100),
 		baseStats: BaseStatsSchema,
 		equipment: z.array(id),
+		/** Internal equipment projection; inventoryProfile overwrites it from the worn weapon. */
+		weaponRefine: z.number().int().min(0).max(15).optional(),
 		cards: z.array(id).default([]),
 		modifiers: z.array(ModifierSchema).default([]),
 		starterGrant: z.boolean().default(false),

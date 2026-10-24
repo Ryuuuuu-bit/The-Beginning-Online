@@ -43,7 +43,7 @@ export function computeDamage(
 	ctx: DamageContext,
 	data: GameData,
 ): DamageResult {
-	const caps = data.stats.caps,
+	const caps = a.statCaps??data.stats.caps,
 		pvp = a.isPlayer && d.isPlayer;
 	const percent =
 		ctx.comboThird && skill.comboThirdPercent !== undefined

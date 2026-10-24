@@ -1,4 +1,4 @@
-import { REFINE_MAX, refineMilestones, REFINE_TABLE, rarityColors, ownedRarity, refineBase, refineBonusValue, refineKind, refineQuote, type GameData, type Inventory, type OwnedItem } from "@the-beginning-online/shared";
+import { REFINE_MAX, refineMilestones, refineCapLines, REFINE_TABLE, rarityColors, ownedRarity, refineBase, refineBonusValue, refineKind, refineQuote, type GameData, type Inventory, type OwnedItem } from "@the-beginning-online/shared";
 import "./refine.css";
 import {modifierText} from "./card-text";
 
@@ -82,6 +82,7 @@ export function mountRefine(o: {
    const active=item.refine>=m.level,loses=typeof quote!=="string"&&quote.failTo<m.level&&active;
    milestones.append(el("p",active?"active":"locked",`+${m.level} · ${modifierText(m.modifier)} · ${active?'ปลดล็อกแล้ว':'ยังไม่ปลดล็อก'}${loses?' · พลาดแล้วโบนัสขั้นนี้จะหาย':''}`));
   }
+  for(const level of [5,10,15]){const lines=refineCapLines(t,level,data);if(lines.length)milestones.append(el('p',item.refine>=level?'active':'locked',`+${level} · ${lines.join(' · ')}`));}
   box.append(milestones);
 		if (typeof quote === "string") { box.append(el("p", "rf-empty", quote)); return box; }
 		const lvl = el("div", "rf-lvl"); lvl.append(el("span", "from", `+${item.refine}`), el("span", "arr", "→"), el("span", "to", `+${quote.next}`)); target.append(lvl);

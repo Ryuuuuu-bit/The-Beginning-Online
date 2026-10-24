@@ -49,7 +49,7 @@ test('real magic casts combine refine, DEX and one-use card reduction, with matc
 });
 test('cast reduction caps hold with DEX, refine and the ray card stacked',()=>{
  const{g,p}=spellFixture(15,true,10000);assert.ok(action(g,'fire_bolt'));
- close(p.castRemaining,resolveSkill(data,'fire_bolt',1).cast*(1-data.stats.caps.maxCastReduction));
+ close(p.castRemaining,resolveSkill(data,'fire_bolt',1).cast*.42);
 });
 test('every current cast-time skill uses derived casting speed and the same impact delay',()=>{
  for(const skill of data.skills.skills.filter(s=>!s.passive&&s.cast>0)){
@@ -60,9 +60,9 @@ test('every current cast-time skill uses derived casting speed and the same impa
  }
 });
 test('defence milestones add real protection even with zero base MDEF, and unequipping removes it',()=>{
- for(const [id,slot,threshold] of [['wood_shield','shield',15],['leaf_cloak','garment',10]] as const){
+ for(const [id,slot,threshold,mdef] of [['wood_shield','shield',15,20],['leaf_cloak','garment',10,15]] as const){
   const statAt=(level:number)=>deriveStats(inventoryProfile(profile,inventory(owned(id,level,{slot})),data),data);
-  const before=statAt(threshold-1),after=statAt(threshold);assert.equal(before.hardMdef,0);assert.equal(after.hardMdef,5);
+  const before=statAt(threshold-1),after=statAt(threshold);assert.equal(before.hardMdef,0);assert.equal(after.hardMdef,mdef);
   const magic=data.skills.skills.find(s=>s.type==='magic'&&s.percent>0)!;
   const attacker={...deriveStats(profile,data),matk:10000};
   assert.ok(computeDamage(attacker,after,magic,{rng:()=>.5},data).damage<computeDamage(attacker,before,magic,{rng:()=>.5},data).damage);

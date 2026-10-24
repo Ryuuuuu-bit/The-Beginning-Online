@@ -17,9 +17,11 @@ import {
 } from "./schema.js";
 import { autoAllocateStats } from "./allocation.js";
 import {masteryPassiveValue} from './mastery.js';
+import {refineStatCaps} from './refine.js';
 export const clamp = (n: number, min: number, max: number) =>
 	Math.min(max, Math.max(min, n));
 export interface Combatant {
+	statCaps?:ReturnType<typeof refineStatCaps>;
 	level: number;
 	jobId?: string;
 	skills?: Record<string, number>;
@@ -64,8 +66,7 @@ export interface Combatant {
 	noShallowSlow: boolean;
 }
 export function deriveStats(input: CharacterInput, data: GameData): Combatant {
-	const char = CharacterSchema.parse(input),
-		caps = data.stats.caps;
+	const char = CharacterSchema.parse(input);
 	const race = data.races.players.find((r) => r.id === char.race),
 		job = data.classes.classes.find((c) => c.id === char.classId);
 	if (!race || !job)
@@ -79,6 +80,7 @@ export function deriveStats(input: CharacterInput, data: GameData): Combatant {
 	});
 	const weapon = equipment.find((i) => i.type === "weapon"),
 		armour = equipment.find((i) => i.type === "armour");
+ const caps=refineStatCaps(weapon?.weaponType,char.weaponRefine??0,data);
  if(weapon?.weaponType==='sword2h'&&equipment.some(i=>i.type==='shield'))throw Error('ดาบสองมือใช้ร่วมกับโล่ไม่ได้');
 	if (!canEquipWeapon(char,weapon?.weaponType,data))
 		throw new Error(`${job.id} cannot equip ${weapon?.weaponType}`);
@@ -164,6 +166,7 @@ export function deriveStats(input: CharacterInput, data: GameData): Combatant {
 		interval = weapon?.interval || 1;
 	const ranged = weaponType === "bow";
 	const p: Combatant = {
+		statCaps:caps,
 		level,
 		jobId: char.classId === "novice_knight" ? "swordsman" : char.classId,
 		skills: char.skills,
@@ -321,7 +324,7 @@ export function deriveStats(input: CharacterInput, data: GameData): Combatant {
 	p.crit = clamp(p.crit, 0, caps.maxCrit);
 	p.critShield = clamp(p.critShield, 0, 1);
 	p.castMul = clamp(p.castMul, 1 - caps.maxCastReduction, 1);
-	p.aspd = clamp(p.aspd, 0, 2.2 / interval);
+	p.aspd = clamp(p.aspd, 0, caps.maxAspdMultiplier / interval);
 	p.moveSpeed = clamp(p.moveSpeed, 0, caps.maxMoveSpeed);
 	p.healReduction = clamp(p.healReduction, 0, caps.maxResist);
 	p.hpRegen = Math.max(0, p.hpRegen);
