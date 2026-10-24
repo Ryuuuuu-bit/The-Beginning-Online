@@ -81,6 +81,15 @@ async function fixture(t: any, sharedRooms = false, extra: Record<string, unknow
 	return { store, rt, call, make, open, base };
 }
 
+test('crafting and salvage cannot be invoked remotely from a hunting map',async t=>{
+ const f=await fixture(t),user=await f.make('RemoteForge',true),peer=f.open(user.cookie);
+ await peer.until(m=>m.t==='welcome');peer.send({t:'spawnReady'});await peer.until(m=>m.t==='snap');
+ for(const op of ['craft','salvage']){
+  const req=randomUUID();peer.send({t:'inv',op,req,template:'weapon_stone',id:randomUUID()});
+  const message=await peer.until(m=>m.t==='inv'&&m.req===req);assert.match(message.error,/ช่างตีเหล็ก/);
+ }
+});
+
 test('malformed upgrade URL rejects the socket and leaves HTTP and WebSockets healthy',async t=>{
  const f=await fixture(t);
  for(const [host,path] of [['[','/api/ws'],['localhost','http://[']]){

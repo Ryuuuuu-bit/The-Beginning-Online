@@ -1,5 +1,6 @@
 import { deriveStats } from "./derive.js";
 import {levelReward,validateRewardLevels} from './level-rewards.js';
+import {craftQuote,salvageQuote,FORGE_FRAGMENT} from './crafting.js';
 import type { CharacterInput, GameData, Monster } from "./schema.js";
 import { refineModifiers, refineQuote } from './refine.js';
 import { requiredEquipmentLevel, rolledModifiers, rollEquipment, validateItemRoll, starterUnique, isRolledTemplate, STARTER_CARD_TEXT, type ItemRoll, type LootItem } from './item-rolls.js';
@@ -52,6 +53,8 @@ export interface InventoryOp {
 		| "card"
 		| "socket"
 		| "refine"
+		| "craft"
+		| "salvage"
 		| "levelReward";
 	/** Server-only level-mail delivery; clients cannot submit inventory operations of this kind. */
 	levels?: number[];
@@ -488,6 +491,23 @@ export function applyInventory(
 		ledger.push({ kind: "quest", qty: 0, goldDelta: gold });
 	}
 	if (op.op === "settings") inv.autoPickup = !!op.on;
+	if(op.op==='salvage'){
+	 const item=owned(op.id),fragments=salvageQuote(item,data);
+	 if(typeof fragments==='string')throw Error(fragments);
+	 if(count!==1)throw Error('ย่อยอุปกรณ์ครั้งละ 1 ชิ้น');
+	 remove(item,1);log('salvage',item,-1);add(FORGE_FRAGMENT,fragments,'salvage');
+	 ledger.push({kind:'salvage',template:FORGE_FRAGMENT,qty:fragments,goldDelta:0});
+	}
+	if(op.op==='craft'){
+	 const recipe=craftQuote(op.template!);
+	 if(count!==1)throw Error('คราฟต์ครั้งละ 1 ชิ้น');
+	 if(next.gold<recipe.gold)throw Error('ทองไม่พอ');
+	 const fragments=inv.items.find(i=>i.location==='bag'&&i.template===FORGE_FRAGMENT);
+	 if(!fragments||fragments.qty<recipe.fragments)throw Error(`ต้องใช้เศษผลึกช่าง ×${recipe.fragments}`);
+	 remove(fragments,recipe.fragments);log('craft',fragments,-recipe.fragments);
+	 next.gold-=recipe.gold;add(recipe.template,1,'craft');
+	 ledger.push({kind:'craft',template:recipe.template,qty:1,goldDelta:-recipe.gold});
+	}
 	if(op.op==='levelReward')for(const level of validateRewardLevels(op.levels,profile.level,data.stats.maxLevel)){
  const reward=levelReward(level,data,op.legacyLevels?.includes(level),profile.level);
 	 for(const item of reward.items){add(item.template,item.qty,'level_reward',undefined,!!template(item.template).slot);ledger.push({kind:'level_reward',template:item.template,qty:item.qty,goldDelta:0});}
@@ -499,7 +519,7 @@ export function applyInventory(
 		next.gold > 2147483647
 	)
 		throw Error("ทองเกินขีดจำกัด");
-	if (["buy", "pickup", "equip", "unequip", "retrieve", "quest", "levelReward"].includes(op.op)) {
+	if (["buy", "pickup", "equip", "unequip", "retrieve", "quest", "levelReward", "craft", "salvage"].includes(op.op)) {
 		if (inventorySlots(inv, data) > data.economy.inventorySlots)
 			throw Error("กระเป๋าเต็ม");
 		const max = deriveStats(
