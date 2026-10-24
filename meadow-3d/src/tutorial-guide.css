@@ -46,3 +46,53 @@
 	#guide-nav .gn-skip{padding:6px 0}
 	#guide-step-toast{top:112px}
 }
+/* Desktop handbook and the compact current-goal card share the game's painted palette. */
+#ui #guide-nav{box-sizing:border-box;width:288px;max-height:calc(100dvh - 350px);overflow:auto;padding:14px;background:radial-gradient(ellipse at top left,#42604433,transparent 65%),linear-gradient(145deg,#152e28f5,#091d1bf5);border:1px solid #aa956166;border-left:3px solid #d9bc78;border-radius:4px 14px 14px 4px;box-shadow:0 10px 30px #0005,inset 0 1px #e5ddb615}
+#guide-nav .gn-badge{font-size:9px;letter-spacing:.08em;border-radius:3px;background:#d8bd80;color:#182b22}
+#guide-nav .gn-title{font-size:13px;color:#f0d8a3}
+#guide-nav .gn-text{font-size:12px;line-height:1.8;color:#d2dfd4;margin:10px 0}
+#guide-nav .gn-destination{font-size:11px;color:#9ed7bd;margin:4px 0 9px}
+#guide-nav .gn-destination:empty{display:none}
+#guide-nav .gn-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+#guide-nav .gn-actions button{flex:1;min-height:32px;padding:5px 9px;border:1px solid #bdad6e70;border-radius:5px;background:#36563e;color:#f0dfb4;font:600 11px var(--font-ui);cursor:pointer}
+#guide-nav .gn-actions button:hover{background:#496e4c}
+#guide-nav footer{justify-content:space-between;gap:8px;margin-top:10px}
+#guide-nav .gn-library{border:0;background:none;color:#c7b77e;font:500 11px var(--font-ui);padding:3px 0;cursor:pointer}
+#guide-nav.min :is(.gn-destination,.gn-actions){display:none}
+#guide-nav button:focus-visible,#adventure-guide button:focus-visible,#menu-guide:focus-visible{outline:2px solid #f0d99b;outline-offset:3px}
+#adventure-guide[open]{box-sizing:border-box;display:flex;flex-direction:column;width:min(800px,calc(100vw - 48px));max-height:calc(100dvh - 48px);padding:24px;border:1px solid #a28c5f;border-radius:18px;background:radial-gradient(ellipse at 0 0,#41603933,transparent 55%),linear-gradient(145deg,#142e27,#091a19);color:#dce7da;box-shadow:inset 0 0 0 5px #081b1744,0 24px 90px #000a;overflow:hidden;text-shadow:none}
+#adventure-guide::backdrop{background:#020c0bbd;backdrop-filter:blur(4px)}
+#adventure-guide>header{display:flex;justify-content:space-between;gap:20px;flex:none;padding-bottom:18px;border-bottom:1px solid #b5a46b33}
+#adventure-guide header small{font:600 9px var(--font-ui);letter-spacing:.2em;color:#9dbc9e}
+#adventure-guide #ag-title{margin:6px 0!important;color:#eed7a2;font-size:26px}
+#adventure-guide header p{margin:0;color:#98b5a5;font-size:12px}
+#adventure-guide .ag-close{flex:none;width:34px;height:34px;min-height:34px;padding:0;border:1px solid #b8a57555;border-radius:50%;background:#10251e;color:#d9d4b4;font:22px var(--font-ui);cursor:pointer}
+#adventure-guide .ag-layout{display:grid;grid-template-columns:minmax(150px,220px) minmax(0,1fr);gap:22px;min-height:0;overflow:auto;padding:20px 0}
+#adventure-guide nav{display:flex;flex-direction:column;gap:5px;padding:0 12px 0 0;border-right:1px solid #b5a46b33;overflow-y:auto;max-height:360px}
+#adventure-guide nav button{flex:none;display:flex;align-items:center;gap:9px;padding:10px;border:1px solid transparent;border-radius:7px;background:none;text-align:left;font:400 12px var(--font-ui);color:#a8beb0;cursor:pointer}
+#adventure-guide nav button>span{color:#7e9f8d;font-size:10px;font-variant-numeric:tabular-nums}
+#adventure-guide nav button>b{flex:1;font-weight:500}
+#adventure-guide nav button>small{color:#c5af73;font-size:9px;white-space:nowrap}
+#adventure-guide nav button[aria-current=step]{border-color:#a18e5966;background:linear-gradient(90deg,#38513a,#20352b);color:#f2dcaa}
+#adventure-guide nav button.ag-passed>span{color:#a2d6b5}
+#adventure-guide nav button:hover{background:#334b3866}
+#adventure-guide article{min-width:0;padding:10px 0}
+#adventure-guide .ag-chapter{color:#9bc5a9;font:500 10px var(--font-ui);letter-spacing:.06em}
+#adventure-guide h3{font-size:24px;color:#f0d8a3;margin:12px 0 16px}
+#adventure-guide .ag-copy{color:#d0dece;font-size:14px;line-height:1.9;margin:0 0 18px}
+#adventure-guide .ag-target{color:#a6d9c0;font-size:12px;padding:12px;border:1px solid #7b9f7a33;border-radius:7px;background:#081d1780}
+#adventure-guide .ag-actions{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0}
+#adventure-guide .ag-actions button,#adventure-guide .ag-resume{min-height:36px;padding:8px 12px;border:1px solid #b5a36677;border-radius:6px;background:#36533a;color:#ecddb4;font:500 12px var(--font-ui);cursor:pointer}
+#adventure-guide .ag-actions .ag-track{background:transparent;color:#b5c9b7;border-color:#78978044}
+#adventure-guide article>aside{font-size:11px;line-height:1.8;color:#8da895;border-top:1px solid #b5a46b22;padding-top:14px}
+#adventure-guide>footer{display:flex;align-items:center;justify-content:space-between;gap:12px;flex:none;border-top:1px solid #b5a46b33;padding-top:16px}
+#adventure-guide .ag-progress{font-size:11px;color:#9fb9a7}
+#game-menu-window #menu-guide{display:flex;align-items:center;gap:12px;width:100%;min-height:56px;padding:10px 14px;border:1px solid #ac985b66;border-radius:9px;background:linear-gradient(100deg,#314b32,#162f25);color:#e7d19b;cursor:pointer;text-align:left}
+#menu-guide>span:first-child{font-size:25px}#menu-guide>span:nth-child(2){flex:1}#menu-guide b{display:block;font:600 13px var(--font-ui)}#menu-guide small{display:block;margin-top:3px;font:400 10px var(--font-ui);color:#a1bda5}
+#ui #travel-status:not([hidden]){position:relative;gap:5px;margin-top:12px;padding:12px 12px 12px 38px;border:1px solid #8dc7aa55;border-radius:8px;background:linear-gradient(115deg,#294b38ee,#0d2620ee);box-shadow:0 5px 16px #0003}
+#travel-status::before{content:'↗';position:absolute;left:12px;top:12px;color:#dbc586;font-size:22px}
+#travel-status #travel-destination{color:#ead8a9;font-size:12px;line-height:1.6}
+#travel-status #travel-next{font-size:10px;line-height:1.7;color:#accbb7}
+#ui #travel-status button{min-height:28px;font-size:10px;padding:4px 10px;border-color:#799a7d66;color:#cad8c1;background:#102a22}
+@media(prefers-reduced-motion:reduce){#guide-nav,#guide-arrow i,.guide-focus,#guide-step-toast.show{animation:none}#guide-step-toast.show{opacity:1}#guide-nav .gn-track i{transition:none}}
+#adventure-guide nav{scrollbar-width:thin;scrollbar-color:#829575 #10251e}
