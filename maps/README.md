@@ -55,10 +55,10 @@ four-pose idle previews and QA reports are in `output/city-spritegen-v1/`.
 The player now draws at 2.1 m, close to these NPCs and the ambient residents;
 all hero motions share the same pixel scale and foot anchor.
 
-The western route now continues from canyon to `grove.tmj` (Lv.31–35), then
-`summit.tmj` (Lv.36–40). Both are playable local maps with reciprocal gates,
+The western route now continues from canyon to `grove.tmj` (Lv.20–25), then
+`summit.tmj` (Lv.25–30). Both are playable local maps with reciprocal gates,
 two monster habitats, three camps, and one boss arena. Entry-level combat tests
-use equipment available at Lv.31/36; group encounters and bosses still need tuning.
+cover map entrances; group encounters and bosses still need tuning.
 
 ## Edit and preview
 

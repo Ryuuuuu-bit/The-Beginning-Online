@@ -23,8 +23,8 @@ export const WAYPOINTS = CITY.empty?[]:[
 export const CITY_EXITS = [
   {id:'south',name:'ประตูทุ่งวุ้นจิ๋ว',destination:'ทุ่งวุ้นจิ๋ว',x:0,z:44,color:'#c7d98c'},
   {id:'east',name:'ประตูป่าหมอก',destination:'ป่าหมอก',x:44,z:0,color:'#8ecdd5'},
-  {id:'north',name:'ประตูซากนคร',destination:'ซากนครโบราณ · ชายเมือง Lv.1–3',x:0,z:-44,color:'#b6b3d8'},
-  {id:'west',name:'ประตูหุบเขา',destination:'หุบเขาหิน · ชายเมือง Lv.1–3',x:-44,z:0,color:'#deb797'},
+  {id:'north',name:'ประตูซากนคร',destination:'ซากนครโบราณ · Lv.10–15',x:0,z:-44,color:'#b6b3d8'},
+  {id:'west',name:'ประตูหุบเขา',destination:'หุบเขาหิน · Lv.15–20',x:-44,z:0,color:'#deb797'},
 ] as const;
 export function nearbyWaypoint(x:number,z:number){return WAYPOINTS.find(p=>Math.hypot(x-p.x,z-p.z)<2.8);}
 export function nearbyExit(x:number,z:number){return CITY_EXITS.find(p=>Math.hypot(x-p.x,z-p.z)<2.8);}

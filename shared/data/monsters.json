@@ -343,7 +343,7 @@
         "spit",
         "summon"
       ],
-      "exp": 200,
+      "exp": 700,
       "gold": [
         180,
         180
@@ -516,7 +516,7 @@
           "phase2Percent": 75
         }
       },
-      "jobExp": 150,
+      "jobExp": 525,
       "telegraphs": [
         {
           "id": "jelly_wave",
@@ -568,7 +568,7 @@
       "skills": [
         "basic"
       ],
-      "exp": 101,
+      "exp": 155,
       "gold": [
         13,
         24
@@ -581,20 +581,8 @@
           "max": 2
         },
         {
-          "item": "red_medium",
-          "rate": 0.08,
-          "min": 1,
-          "max": 1
-        },
-        {
           "item": "card_mist_shroom",
           "rate": 0.001,
-          "min": 1,
-          "max": 1
-        },
-        {
-          "item": "red_small",
-          "rate": 0.1,
           "min": 1,
           "max": 1
         },
@@ -621,9 +609,15 @@
           "rate": 0.00875,
           "min": 1,
           "max": 1
+        },
+        {
+          "item": "red_medium",
+          "rate": 0.18,
+          "min": 1,
+          "max": 1
         }
       ],
-      "jobExp": 72,
+      "jobExp": 110,
       "behavior": {
         "ai": "melee",
         "speed": 1.6,
@@ -665,7 +659,7 @@
       "skills": [
         "basic"
       ],
-      "exp": 79,
+      "exp": 200,
       "gold": [
         17,
         28
@@ -678,12 +672,6 @@
           "max": 2
         },
         {
-          "item": "red_medium",
-          "rate": 0.08,
-          "min": 1,
-          "max": 1
-        },
-        {
           "item": "shadow_fang",
           "rate": 0.65,
           "min": 1,
@@ -692,12 +680,6 @@
         {
           "item": "card_shade_wolf",
           "rate": 0.001,
-          "min": 1,
-          "max": 1
-        },
-        {
-          "item": "red_small",
-          "rate": 0.1,
           "min": 1,
           "max": 1
         },
@@ -724,9 +706,15 @@
           "rate": 0.00875,
           "min": 1,
           "max": 1
+        },
+        {
+          "item": "red_medium",
+          "rate": 0.18,
+          "min": 1,
+          "max": 1
         }
       ],
-      "jobExp": 55,
+      "jobExp": 139,
       "behavior": {
         "ai": "melee",
         "speed": 3.3,
@@ -767,7 +755,7 @@
       "skills": [
         "basic"
       ],
-      "exp": 37,
+      "exp": 260,
       "gold": [
         18,
         30
@@ -804,7 +792,7 @@
           "max": 1
         }
       ],
-      "jobExp": 20,
+      "jobExp": 141,
       "behavior": {
         "ai": "ranged",
         "speed": 1.8,
@@ -846,7 +834,7 @@
       "skills": [
         "basic"
       ],
-      "exp": 33,
+      "exp": 340,
       "gold": [
         20,
         34
@@ -889,7 +877,7 @@
           "max": 1
         }
       ],
-      "jobExp": 18,
+      "jobExp": 185,
       "behavior": {
         "ai": "melee",
         "speed": 1.2,
@@ -933,7 +921,7 @@
         "spit",
         "summon"
       ],
-      "exp": 523,
+      "exp": 3000,
       "gold": [
         450,
         675
@@ -1078,7 +1066,7 @@
           "max": 1
         }
       ],
-      "jobExp": 288,
+      "jobExp": 1652,
       "phase2": {
         "atk": 59,
         "element": "dark"
@@ -1151,7 +1139,7 @@
       "skills": [
         "basic"
       ],
-      "exp": 233,
+      "exp": 420,
       "gold": [
         29,
         43
@@ -1165,7 +1153,7 @@
         },
         {
           "item": "red_large",
-          "rate": 0.08,
+          "rate": 0.12,
           "min": 1,
           "max": 1
         },
@@ -1188,7 +1176,7 @@
           "max": 1
         }
       ],
-      "jobExp": 128,
+      "jobExp": 231,
       "behavior": {
         "ai": "melee",
         "speed": 1.6,
@@ -1227,7 +1215,7 @@
       "skills": [
         "basic"
       ],
-      "exp": 214,
+      "exp": 450,
       "gold": [
         30,
         45
@@ -1241,7 +1229,7 @@
         },
         {
           "item": "red_large",
-          "rate": 0.08,
+          "rate": 0.12,
           "min": 1,
           "max": 1
         },
@@ -1264,7 +1252,7 @@
           "max": 1
         }
       ],
-      "jobExp": 118,
+      "jobExp": 248,
       "behavior": {
         "ai": "melee",
         "speed": 3.3,
@@ -1304,7 +1292,7 @@
       "skills": [
         "basic"
       ],
-      "exp": 236,
+      "exp": 600,
       "gold": [
         32,
         48
@@ -1341,7 +1329,7 @@
           "max": 1
         }
       ],
-      "jobExp": 130,
+      "jobExp": 331,
       "behavior": {
         "ai": "ranged",
         "speed": 1.8,
@@ -1383,7 +1371,7 @@
       "skills": [
         "basic"
       ],
-      "exp": 227,
+      "exp": 650,
       "gold": [
         32,
         48
@@ -1403,7 +1391,7 @@
         },
         {
           "item": "red_large",
-          "rate": 0.06,
+          "rate": 0.12,
           "min": 1,
           "max": 1
         },
@@ -1426,7 +1414,7 @@
           "max": 1
         }
       ],
-      "jobExp": 125,
+      "jobExp": 358,
       "behavior": {
         "ai": "melee",
         "speed": 1.2,
@@ -1470,7 +1458,7 @@
         "spit",
         "summon"
       ],
-      "exp": 2630,
+      "exp": 6000,
       "gold": [
         652,
         1059
@@ -1615,7 +1603,7 @@
           "max": 1
         }
       ],
-      "jobExp": 1447,
+      "jobExp": 3301,
       "phase2": {
         "atk": 81,
         "element": "dark"
@@ -1688,7 +1676,7 @@
       "skills": [
         "basic"
       ],
-      "exp": 392,
+      "exp": 850,
       "gold": [
         39,
         59
@@ -1707,8 +1695,8 @@
           "max": 1
         },
         {
-          "item": "red_greater",
-          "rate": 0.06,
+          "item": "red_large",
+          "rate": 0.12,
           "min": 1,
           "max": 1
         },
@@ -1731,7 +1719,7 @@
           "max": 1
         }
       ],
-      "jobExp": 216
+      "jobExp": 468
     },
     {
       "id": "crag_wolf",
@@ -1761,7 +1749,7 @@
       "skills": [
         "basic"
       ],
-      "exp": 367,
+      "exp": 1000,
       "gold": [
         40,
         60
@@ -1774,8 +1762,8 @@
           "max": 2
         },
         {
-          "item": "red_greater",
-          "rate": 0.06,
+          "item": "red_large",
+          "rate": 0.12,
           "min": 1,
           "max": 1
         },
@@ -1798,7 +1786,7 @@
           "max": 1
         }
       ],
-      "jobExp": 202,
+      "jobExp": 550,
       "behavior": {
         "ai": "melee",
         "speed": 3.3,
@@ -1838,7 +1826,7 @@
       "skills": [
         "basic"
       ],
-      "exp": 346,
+      "exp": 1050,
       "gold": [
         41,
         61
@@ -1851,7 +1839,7 @@
           "max": 1
         },
         {
-          "item": "blue_greater",
+          "item": "blue_large",
           "rate": 0.06,
           "min": 1,
           "max": 1
@@ -1875,7 +1863,7 @@
           "max": 1
         }
       ],
-      "jobExp": 190,
+      "jobExp": 577,
       "behavior": {
         "ai": "ranged",
         "speed": 1.8,
@@ -1917,7 +1905,7 @@
       "skills": [
         "basic"
       ],
-      "exp": 374,
+      "exp": 1400,
       "gold": [
         43,
         64
@@ -1936,8 +1924,8 @@
           "max": 1
         },
         {
-          "item": "red_greater",
-          "rate": 0.045,
+          "item": "red_large",
+          "rate": 0.12,
           "min": 1,
           "max": 1
         },
@@ -1960,7 +1948,7 @@
           "max": 1
         }
       ],
-      "jobExp": 206,
+      "jobExp": 771,
       "behavior": {
         "ai": "melee",
         "speed": 1.2,
@@ -2004,7 +1992,7 @@
         "spit",
         "summon"
       ],
-      "exp": 4364,
+      "exp": 11000,
       "gold": [
         857,
         1393
@@ -2035,13 +2023,13 @@
           "max": 1
         },
         {
-          "item": "red_greater",
+          "item": "red_large",
           "rate": 0.4,
           "min": 2,
           "max": 3
         },
         {
-          "item": "blue_greater",
+          "item": "blue_large",
           "rate": 0.4,
           "min": 1,
           "max": 2
@@ -2179,7 +2167,7 @@
           "max": 1
         }
       ],
-      "jobExp": 2400,
+      "jobExp": 6049,
       "phase2": {
         "atk": 107,
         "element": "dark"
@@ -2251,7 +2239,7 @@
       "skills": [
         "basic"
       ],
-      "exp": 106,
+      "exp": 80,
       "gold": [
         12,
         23
@@ -2300,7 +2288,7 @@
           "max": 1
         }
       ],
-      "jobExp": 80,
+      "jobExp": 60,
       "artId": "bud_shroom",
       "visualScale": 0.68,
       "behavior": {
@@ -2340,14 +2328,14 @@
       "skills": [
         "basic"
       ],
-      "exp": 110,
+      "exp": 100,
       "gold": [
         14,
         25
       ],
       "drops": [
         {
-          "item": "red_small",
+          "item": "red_medium",
           "rate": 0.12,
           "min": 1,
           "max": 1
@@ -2371,7 +2359,7 @@
           "max": 1
         }
       ],
-      "jobExp": 83,
+      "jobExp": 75,
       "artId": "bud_shroom",
       "visualScale": 0.68,
       "behavior": {
@@ -2411,14 +2399,14 @@
       "skills": [
         "basic"
       ],
-      "exp": 680,
+      "exp": 200,
       "gold": [
         18,
         35
       ],
       "drops": [
         {
-          "item": "red_small",
+          "item": "red_medium",
           "rate": 0.12,
           "min": 1,
           "max": 1
@@ -2460,7 +2448,7 @@
           "max": 1
         }
       ],
-      "jobExp": 510,
+      "jobExp": 150,
       "artId": "clay_puff",
       "visualScale": 0.68,
       "behavior": {
@@ -2500,14 +2488,14 @@
       "skills": [
         "basic"
       ],
-      "exp": 486,
+      "exp": 200,
       "gold": [
         19,
         34
       ],
       "drops": [
         {
-          "item": "red_small",
+          "item": "red_medium",
           "rate": 0.12,
           "min": 1,
           "max": 1
@@ -2537,7 +2525,7 @@
           "max": 1
         }
       ],
-      "jobExp": 364,
+      "jobExp": 150,
       "artId": "clay_puff",
       "visualScale": 0.68,
       "behavior": {
@@ -2577,14 +2565,14 @@
       "skills": [
         "basic"
       ],
-      "exp": 955,
+      "exp": 300,
       "gold": [
         17,
         32
       ],
       "drops": [
         {
-          "item": "red_small",
+          "item": "red_large",
           "rate": 0.12,
           "min": 1,
           "max": 1
@@ -2614,7 +2602,7 @@
           "max": 1
         }
       ],
-      "jobExp": 682,
+      "jobExp": 214,
       "behavior": {
         "ai": "melee",
         "speed": 1.64,
@@ -2654,14 +2642,14 @@
       "skills": [
         "basic"
       ],
-      "exp": 438,
+      "exp": 350,
       "gold": [
         20,
         34
       ],
       "drops": [
         {
-          "item": "red_small",
+          "item": "red_large",
           "rate": 0.12,
           "min": 1,
           "max": 1
@@ -2691,7 +2679,7 @@
           "max": 1
         }
       ],
-      "jobExp": 305,
+      "jobExp": 244,
       "behavior": {
         "ai": "melee",
         "speed": 1.7599999999999998,
@@ -2731,14 +2719,14 @@
       "skills": [
         "basic"
       ],
-      "exp": 4524,
+      "exp": 400,
       "gold": [
         23,
         47
       ],
       "drops": [
         {
-          "item": "red_small",
+          "item": "red_large",
           "rate": 0.12,
           "min": 1,
           "max": 1
@@ -2780,7 +2768,7 @@
           "max": 1
         }
       ],
-      "jobExp": 3393,
+      "jobExp": 300,
       "artId": "pebble_puff",
       "visualScale": 0.68,
       "behavior": {
@@ -2820,14 +2808,14 @@
       "skills": [
         "basic"
       ],
-      "exp": 3231,
+      "exp": 400,
       "gold": [
         25,
         45
       ],
       "drops": [
         {
-          "item": "red_small",
+          "item": "red_large",
           "rate": 0.12,
           "min": 1,
           "max": 1
@@ -2851,7 +2839,7 @@
           "max": 1
         }
       ],
-      "jobExp": 2424,
+      "jobExp": 300,
       "artId": "pebble_puff",
       "visualScale": 0.68,
       "behavior": {
@@ -2891,14 +2879,14 @@
       "skills": [
         "basic"
       ],
-      "exp": 2427,
+      "exp": 600,
       "gold": [
         23,
         42
       ],
       "drops": [
         {
-          "item": "red_small",
+          "item": "red_large",
           "rate": 0.12,
           "min": 1,
           "max": 1
@@ -2922,7 +2910,7 @@
           "max": 1
         }
       ],
-      "jobExp": 1734,
+      "jobExp": 429,
       "behavior": {
         "ai": "melee",
         "speed": 1.64,
@@ -2962,14 +2950,14 @@
       "skills": [
         "basic"
       ],
-      "exp": 1057,
+      "exp": 650,
       "gold": [
         26,
         44
       ],
       "drops": [
         {
-          "item": "red_small",
+          "item": "red_large",
           "rate": 0.12,
           "min": 1,
           "max": 1
@@ -2993,7 +2981,7 @@
           "max": 1
         }
       ],
-      "jobExp": 735,
+      "jobExp": 452,
       "behavior": {
         "ai": "melee",
         "speed": 1.7599999999999998,
@@ -3033,14 +3021,14 @@
       "skills": [
         "basic"
       ],
-      "exp": 445,
+      "exp": 700,
       "gold": [
         35,
         53
       ],
       "drops": [
         {
-          "item": "red_small",
+          "item": "red_large",
           "rate": 0.12,
           "min": 1,
           "max": 1
@@ -3064,7 +3052,7 @@
           "max": 1
         }
       ],
-      "jobExp": 245,
+      "jobExp": 385,
       "behavior": {
         "ai": "melee",
         "speed": 1.88,
@@ -3104,14 +3092,14 @@
       "skills": [
         "basic"
       ],
-      "exp": 378,
+      "exp": 650,
       "gold": [
         33,
         50
       ],
       "drops": [
         {
-          "item": "red_small",
+          "item": "red_large",
           "rate": 0.12,
           "min": 1,
           "max": 1
@@ -3135,7 +3123,7 @@
           "max": 1
         }
       ],
-      "jobExp": 208,
+      "jobExp": 358,
       "behavior": {
         "ai": "melee",
         "speed": 2,
@@ -3189,8 +3177,8 @@
           "max": 2
         },
         {
-          "item": "red_greater",
-          "rate": 0.06,
+          "item": "red_large",
+          "rate": 0.12,
           "min": 1,
           "max": 1
         },
@@ -3947,7 +3935,7 @@
       "skills": [
         "basic"
       ],
-      "exp": 39,
+      "exp": 65,
       "gold": [
         9,
         15
@@ -3990,7 +3978,7 @@
           "max": 1
         }
       ],
-      "jobExp": 27,
+      "jobExp": 45,
       "behavior": {
         "ai": "melee",
         "speed": 1.6,
@@ -4032,7 +4020,7 @@
       "skills": [
         "basic"
       ],
-      "exp": 52,
+      "exp": 160,
       "gold": [
         12,
         20
@@ -4081,7 +4069,7 @@
           "max": 1
         }
       ],
-      "jobExp": 36,
+      "jobExp": 111,
       "behavior": {
         "ai": "melee",
         "speed": 1.6,
@@ -4123,7 +4111,7 @@
       "skills": [
         "basic"
       ],
-      "exp": 119,
+      "exp": 135,
       "gold": [
         12,
         21
@@ -4142,7 +4130,7 @@
           "max": 1
         },
         {
-          "item": "red_small",
+          "item": "red_medium",
           "rate": 0.1,
           "min": 1,
           "max": 1
@@ -4172,7 +4160,7 @@
           "max": 1
         }
       ],
-      "jobExp": 83,
+      "jobExp": 94,
       "behavior": {
         "ai": "ranged",
         "speed": 2.2,
@@ -4216,7 +4204,7 @@
       "skills": [
         "basic"
       ],
-      "exp": 109,
+      "exp": 250,
       "gold": [
         15,
         24
@@ -4235,7 +4223,7 @@
           "max": 1
         },
         {
-          "item": "red_small",
+          "item": "red_medium",
           "rate": 0.1,
           "min": 1,
           "max": 1
@@ -4265,7 +4253,7 @@
           "max": 1
         }
       ],
-      "jobExp": 76,
+      "jobExp": 174,
       "behavior": {
         "ai": "melee",
         "speed": 1.6,
@@ -4307,7 +4295,7 @@
       "skills": [
         "basic"
       ],
-      "exp": 526,
+      "exp": 330,
       "gold": [
         17,
         28
@@ -4326,7 +4314,7 @@
           "max": 1
         },
         {
-          "item": "red_small",
+          "item": "red_medium",
           "rate": 0.1,
           "min": 1,
           "max": 1
@@ -4356,7 +4344,7 @@
           "max": 1
         }
       ],
-      "jobExp": 364,
+      "jobExp": 228,
       "behavior": {
         "ai": "melee",
         "speed": 1.6,
@@ -4398,7 +4386,7 @@
       "skills": [
         "basic"
       ],
-      "exp": 1493,
+      "exp": 650,
       "gold": [
         21,
         36
@@ -4417,8 +4405,8 @@
           "max": 1
         },
         {
-          "item": "red_small",
-          "rate": 0.1,
+          "item": "red_large",
+          "rate": 0.12,
           "min": 1,
           "max": 1
         },
@@ -4441,7 +4429,7 @@
           "max": 1
         }
       ],
-      "jobExp": 1033,
+      "jobExp": 450,
       "behavior": {
         "ai": "melee",
         "speed": 1.3,
@@ -4483,7 +4471,7 @@
       "skills": [
         "basic"
       ],
-      "exp": 3501,
+      "exp": 650,
       "gold": [
         23,
         38
@@ -4502,8 +4490,8 @@
           "max": 1
         },
         {
-          "item": "red_small",
-          "rate": 0.1,
+          "item": "red_large",
+          "rate": 0.12,
           "min": 1,
           "max": 1
         },
@@ -4532,7 +4520,7 @@
           "max": 1
         }
       ],
-      "jobExp": 2424,
+      "jobExp": 450,
       "behavior": {
         "ai": "melee",
         "speed": 1.6,
@@ -4574,7 +4562,7 @@
       "skills": [
         "basic"
       ],
-      "exp": 3793,
+      "exp": 1300,
       "gold": [
         28,
         47
@@ -4593,8 +4581,8 @@
           "max": 1
         },
         {
-          "item": "red_small",
-          "rate": 0.1,
+          "item": "red_large",
+          "rate": 0.12,
           "min": 1,
           "max": 1
         },
@@ -4623,7 +4611,7 @@
           "max": 1
         }
       ],
-      "jobExp": 2626,
+      "jobExp": 900,
       "behavior": {
         "ai": "melee",
         "speed": 1.6,
@@ -4665,7 +4653,7 @@
       "skills": [
         "basic"
       ],
-      "exp": 91,
+      "exp": 150,
       "gold": [
         21,
         35
@@ -4684,7 +4672,7 @@
           "max": 1
         },
         {
-          "item": "red_small",
+          "item": "red_medium",
           "rate": 0.1,
           "min": 1,
           "max": 1
@@ -4714,7 +4702,7 @@
           "max": 1
         }
       ],
-      "jobExp": 63,
+      "jobExp": 104,
       "behavior": {
         "ai": "melee",
         "speed": 1.6,
@@ -4756,7 +4744,7 @@
       "skills": [
         "basic"
       ],
-      "exp": 81,
+      "exp": 320,
       "gold": [
         25,
         42
@@ -4775,7 +4763,7 @@
           "max": 1
         },
         {
-          "item": "red_small",
+          "item": "red_medium",
           "rate": 0.1,
           "min": 1,
           "max": 1
@@ -4805,7 +4793,7 @@
           "max": 1
         }
       ],
-      "jobExp": 56,
+      "jobExp": 221,
       "behavior": {
         "ai": "ranged",
         "speed": 2.2,
@@ -4853,7 +4841,7 @@
         "spit",
         "summon"
       ],
-      "exp": 1000,
+      "exp": 1600,
       "gold": [
         200,
         350
@@ -4872,7 +4860,7 @@
           "max": 1
         },
         {
-          "item": "red_small",
+          "item": "red_medium",
           "rate": 0.1,
           "min": 1,
           "max": 1
@@ -4986,7 +4974,7 @@
           "max": 1
         }
       ],
-      "jobExp": 600,
+      "jobExp": 960,
       "phase2": {
         "atk": 48,
         "element": "earth"
