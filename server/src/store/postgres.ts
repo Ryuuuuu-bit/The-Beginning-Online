@@ -104,7 +104,7 @@ export class PostgresStore implements Store {
    const inv=await this.loadInventory(c,id);let result:EconomyResult;
    let out:ReturnType<typeof applyInventory>|undefined;
    let progress:ReturnType<typeof questProgress>,claimed:number[]|undefined;
-   try{claimed=levelRewardClaims(row<Character>(character)!,op);progress=questProgress(row<Character>(character)!,context);out=applyInventory({gold:character.gold,inventory:inv},op,context.profile,economyData,randomUUID);}catch(e){result={inventory:inv,gold:character.gold,error:(e as Error).message};}
+   try{claimed=levelRewardClaims(row<Character>(character)!,op);progress=questProgress(row<Character>(character)!,context);out=applyInventory({gold:character.gold,inventory:inv},op,context.profile,economyData,randomUUID);}catch(e){result={inventory:inv,gold:character.gold,claimedLevelRewards:character.claimed_level_rewards??[],error:(e as Error).message};}
    if(out){
     if(claimed)await c.query('UPDATE tn2_characters SET claimed_level_rewards=$2 WHERE id=$1',[id,claimed]);
     if(progress)await c.query('UPDATE tn2_characters SET quests=$2,level=$3,xp=$4,job_level=$5,job_exp=$6,skill_points=$7,stat_points=$8,base_stats=$9,auto_alloc_cursor=$10 WHERE id=$1',[id,JSON.stringify(progress.quests),progress.level,progress.xp,progress.jobLevel,progress.jobExp,progress.skillPoints,progress.statPoints,JSON.stringify(progress.baseStats),progress.autoAllocCursor]);

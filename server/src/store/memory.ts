@@ -39,7 +39,7 @@ export class MemoryStore implements Store {
   if(previous&&Date.now()-previous.at<86400000)return {...structuredClone(previous.result),duplicate:true};
   let result:EconomyResult;
   try{const claimed=levelRewardClaims(c,op),progress=questProgress(c,context);const out=applyInventory({gold:c.gold,inventory:this.inventories.get(id)!},op,context.profile,economyData,randomUUID);if(progress)Object.assign(c,progress);if(claimed)c.claimedLevelRewards=claimed;this.inventories.set(id,out.state.inventory);c.gold=out.state.gold;if(context.bossLoot){if(context.bossLoot===true||context.bossLoot==='king_jelly')c.bossReadyAt=Date.now()+600000;else c.bossCooldowns={...c.bossCooldowns,[context.bossLoot]:Date.now()+600000};}this.ledger.push(...out.ledger.map(entry=>({character:id,entry})));result={...out.state,effect:out.effect,claimedLevelRewards:c.claimedLevelRewards??[]};}
-  catch(e){result={inventory:this.inventories.get(id)!,gold:c.gold,error:(e as Error).message};}
+  catch(e){result={inventory:this.inventories.get(id)!,gold:c.gold,claimedLevelRewards:c.claimedLevelRewards??[],error:(e as Error).message};}
   this.requests.set(key,{at:Date.now(),result:structuredClone(result)});
   for(const[k,r]of this.requests)if(Date.now()-r.at>86400000)this.requests.delete(k);
   return structuredClone(result);

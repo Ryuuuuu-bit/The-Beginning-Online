@@ -618,6 +618,10 @@ test('level mailbox delivers retroactive rewards over WebSocket once, unlocks ne
  const received=await peer.until(m=>m.t==='mailbox'&&m.claimed?.length===19);assert.equal(received.error,undefined);
  const inv=await peer.until(m=>m.t==='inv'&&m.gold===727);assert.equal(inv.inventory.items.find((i:any)=>i.template==='iron_amulet').bound,true);
  assert.equal((await f.store.inventory(c.accountId,c.id)).gold,727);
+ const active=[...f.rt.rooms.values()].find(r=>r.game.players.has(c.id))!.game.players.get(c.id)!;
+ active.claimedLevelRewards=[];peer.messages.length=0;peer.send({t:'mailbox',op:'list'});await peer.until(m=>m.t==='mailbox'&&m.claimed?.length===19);assert.equal(active.claimedLevelRewards.length,19);
+ active.claimedLevelRewards=[];peer.messages.length=0;
+ peer.send({t:'mailbox',op:'claim',level:2,req:randomUUID()});await peer.until(m=>m.t==='mailbox'&&m.error&&m.claimed?.length===19);
  peer.messages.length=0;peer.send({t:'mailbox',op:'claim',level:5,req:randomUUID()});await peer.until(m=>m.t==='mailbox'&&m.error);assert.equal((await f.store.inventory(c.accountId,c.id)).gold,727);
  peer.ws.close();await wait(350);
  const again=f.open(user.cookie);await again.until(m=>m.t==='welcome');again.send({t:'spawnReady'});

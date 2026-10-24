@@ -3,6 +3,15 @@ import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
 import { loadGameData } from '@the-beginning-online/shared';
 import { PostgresStore } from '../store/postgres.js';
+import {readFileSync} from 'node:fs';
+
+test('restart-safe ledger migrations retain both SQL dollar-quote delimiters',()=>{
+ for(const file of ['018_trade.sql','024_level_rewards.sql']){
+  const sql=readFileSync(new URL('../../sql/'+file,import.meta.url),'utf8');
+  assert.ok(sql.includes('DO $$BEGIN'),file);
+  assert.equal(sql.split('$$').length-1,2,file+' must close its DO block');
+ }
+});
 
 test('Postgres restart preserves trade ledger and its validated, append-only constraints',
   { skip: !process.env.PG_TEST_URL && 'PG_TEST_URL not set' }, async () => {

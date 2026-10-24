@@ -268,7 +268,11 @@ export function mountRealtime(server: Server, options: RealtimeOptions) {
  }
  function mailboxState(peer:Peer,p:Player,error?:string){send(peer.ws,{t:'mailbox',level:p.level,claimed:p.claimedLevelRewards??[],error});}
  function mailboxIntent(peer:Peer,p:Player,message:{op:'list'|'claim';level?:number;req?:string}){
-  if(message.op==='list'){mailboxState(peer,p);return;}
+  if(message.op==='list'){
+   const room=peer.room;
+   room.saveQueue=room.saveQueue.then(async()=>{const latest=await store.inventory(peer.accountId,p.id);p.claimedLevelRewards=[...(latest.claimedLevelRewards??[])];mailboxState(peer,p);}).catch(()=>mailboxState(peer,p,'โหลดกล่องจดหมายไม่สำเร็จ กรุณาเปิดใหม่อีกครั้ง'));
+   return;
+  }
   if(peer.busy){mailboxState(peer,p,'กำลังบันทึก กรุณารอสักครู่');return;}
   const levels=message.level===undefined?Array.from({length:Math.max(0,p.level-1)},(_,i)=>i+2).filter(level=>!p.claimedLevelRewards?.includes(level)):[message.level];
   if(!levels.length){mailboxState(peer,p,'รับรางวัลที่ปลดล็อกครบแล้ว');return;}
