@@ -40,3 +40,5 @@ export * from './game/progression.js';
 export {resolveAutomaticSkill,automaticCause} from './game/mastery-automatic.js';
 
 export * from './level-rewards.js';
+
+export * from './consumable-buffs.js';

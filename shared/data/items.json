@@ -363,7 +363,8 @@
       "bind": "none",
       "icon": "speed_potion",
       "effect": "speed",
-      "amount": 0.2
+      "amount": 0.2,
+      "duration": 3600
     },
     {
       "id": "jelly_slime",
@@ -14412,6 +14413,44 @@
       "atk": 5,
       "matk": 0,
       "interval": 0.44
+    },
+    {
+      "id": "exp_boost_scroll",
+      "nameTh": "ใบคูณ EXP ×2",
+      "type": "consumable",
+      "slot": null,
+      "level": 1,
+      "weight": 0.2,
+      "npcPrice": 0,
+      "rarity": "common",
+      "stackable": true,
+      "maxStack": 99,
+      "modifiers": [],
+      "slots": 0,
+      "bind": "none",
+      "icon": "astral_fire_scroll",
+      "effect": "boost_exp",
+      "amount": 2,
+      "duration": 3600
+    },
+    {
+      "id": "drop_boost_scroll",
+      "nameTh": "ใบคูณดรอป ×2",
+      "type": "consumable",
+      "slot": null,
+      "level": 1,
+      "weight": 0.2,
+      "npcPrice": 0,
+      "rarity": "common",
+      "stackable": true,
+      "maxStack": 99,
+      "modifiers": [],
+      "slots": 0,
+      "bind": "none",
+      "icon": "astral_water_scroll",
+      "effect": "boost_drop",
+      "amount": 2,
+      "duration": 3600
     }
   ]
 }

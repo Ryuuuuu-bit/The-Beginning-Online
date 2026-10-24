@@ -1,6 +1,6 @@
 import {canEquipWeapon} from '@the-beginning-online/shared';
 import {
-	loadGameData,
+	loadGameData,consumableBuffText,
 	rarityColors,
 	ownedRarity, itemRollLines, requiredEquipmentLevel, refineMilestones, refineBase, refineBonusValue,
 		inventoryWeight,
@@ -729,6 +729,7 @@ export function mountInventory(send: (m: any) => void, onOpen: () => void) {
 		return card;
 	}
 	function describe(t: (typeof templates)[number],i?:OwnedItem) {
+  const buff=consumableBuffText(t);if(buff)return buff;
 		const st = statsOf(t,i).map(r=>`${r.label} ${itemStatValue(r)}`).join(" · ");
 		return t.slot ? `Lv.${requiredEquipmentLevel(t.level,i)} · ${t.slot==='accessory1'?'แหวน':slotNames[t.slot]}${st ? " · " + st : ""}` : t.effect==='party_hp'?`ฮีลสมาชิกปาร์ตี้ใกล้สุดใน 6 เมตร ${fmtGold(t.amount!)} HP · ใช้คูลดาวน์ร่วมกับยา`:t.effect==='party_cleanse'?'ล้างสถานะลบให้สมาชิกปาร์ตี้ใกล้สุดใน 6 เมตร · ใช้คูลดาวน์ร่วมกับยา':t.effect==='arcane'?`ม้วนโจมตีธาตุ ${({fire:'ไฟ',water:'น้ำ',wind:'ลม',earth:'ดิน',holy:'ศักดิ์สิทธิ์',dark:'มืด',ghost:'วิญญาณ',poison:'พิษ',neutral:'ไร้ธาตุ',undead:'อมตะ'} as Record<string,string>)[t.arcaneElement!]??t.arcaneElement} · Lv.${t.level} · ระยะ 6 เมตร`:t.effect ? `ฟื้นฟู ${t.effect==='hp'?'HP':t.effect==='sp'?'SP':'ความเร็ว'} ${t.effect==='speed'?Math.round(t.amount!*100)+'%':fmtGold(t.amount!)}` : ({ consumable: "ของใช้", material: "วัตถุดิบ", refine: "หินตีบวก", card: "การ์ด" } as any)[t.type] || "";
 	}

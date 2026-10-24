@@ -1,3 +1,4 @@
+import {consumableBuffKey,extendConsumableBuff} from '../consumable-buffs.js';
 import {passiveValue,passiveHealAmount,passiveAfterHeal} from './mastery-passives.js';
 import {endgameTick,endgameAccuracy,endgameDamage,endgameEvade,endgameInterrupt,endgameGuard,endgameKill,endgamePotion,endgameHeal,endgameDot,type EndgameLootState} from './endgame-loot.js';
 import type {Skill,Element} from '../schema.js';
@@ -32,8 +33,10 @@ function heal(g:Game,p:Player,amount:number,caster?:Player,skill?:Skill,limit=In
 function proc(g:Game,p:Player,text:string){g.events.push({type:'item_proc',playerId:p.id,x:p.x,z:p.z,text});}
 
 /** Called only after the potion inventory transaction commits; duplicate requests never call this. */
-export function applyPotionEffect(g:Game,p:Player,kind:string,amount:number){
+export function applyPotionEffect(g:Game,p:Player,kind:string,amount:number,duration=3600){
  if(p.dead)return;
+ const buff=consumableBuffKey(kind);
+ if(buff){p.consumableBuffs=extendConsumableBuff(p.consumableBuffs,buff,amount,duration,g.wallTime||Date.now());p.cd.potion=g.data.skills.skills.find(s=>s.id==='potion')!.cooldown;g.events.push({type:'notice',playerId:p.id,x:p.x,z:p.z,text:(buff==='exp'?'EXP/Job EXP ×2':buff==='drop'?'อัตราดรอป ×2':'วิ่งเร็วขึ้น')+' · ต่อเวลา '+Math.ceil(duration/60)+' นาที'});return;}
  endgamePotion(g,p,kind);
  if(kind==='party_hp'||kind==='party_cleanse'){applyPartyAid(g,p,kind,amount);p.cd.potion=g.data.skills.skills.find(s=>s.id==='potion')!.cooldown;return;}
  if(kind==='hp'){
@@ -44,7 +47,7 @@ export function applyPotionEffect(g:Game,p:Player,kind:string,amount:number){
    g.events.push({type:'item_pool',playerId:p.id,x:p.x,z:p.z,r:2,duration:3});
   }
  }else if(kind==='sp'){p.mp=Math.min(p.maxMp,p.mp+amount*(hasLootCard(p,'card_bud_shroom')?1.15:1));if(hasLootCard(p,'card_himmapan_golden_macaque')&&ready(p,'macaque_card')){p.statuses=p.statuses.filter(v=>v.sourceId!=='card_himmapan_golden_macaque');p.statuses.push({id:'speed',sourceId:'card_himmapan_golden_macaque',remaining:2,value:.1});spend(p,'macaque_card',10);}}
- else if(kind==='speed')p.statuses.push({id:'speed',sourceId:p.id,remaining:60,value:amount});
+
  p.cd.potion=g.data.skills.skills.find(s=>s.id==='potion')!.cooldown+(worn(p,'unique_tide_crown')?2:0);
 }
 /** Direct basic hit only: no DOT/reflect/proc can feed the combo or trigger another item. */

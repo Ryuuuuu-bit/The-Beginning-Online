@@ -1,5 +1,5 @@
 import {canEnterConfluence} from '@the-beginning-online/shared';
-import {applyPotionEffect,partyAidTarget,sunScrollTarget,castSunScroll} from '@the-beginning-online/shared';
+import {consumableBuffValue,applyPotionEffect,partyAidTarget,sunScrollTarget,castSunScroll} from '@the-beginning-online/shared';
 import { createTrades } from './trade.js';
 import {TITLES,titleDefinition,normalizeTitleRecords,earnTitles,canWearTitle,titleProgress,type RankingCharacter} from '@the-beginning-online/shared';
 import {createRankings} from './rankings.js';
@@ -147,10 +147,10 @@ const publicKeys = ["gender","id","name","titleId","x","z","fx","fz","hp","maxHp
 const num = (v: unknown) => (typeof v === "number" ? round(v) : v);
 function ownEntry(p: Player, g: Game) {
 	return {
-		...Object.fromEntries(playerKeys.map((k) => [k, num(p[k])])),masteryFx:advancedMasterySnapshot(g,p),decoy:p.decoy??null,summon:p.summon??null,wisp:p.wisp??null,healingOverTime:p.healingOverTime??null,boxerCombo:p.boxerCombo??null,
+		...Object.fromEntries(playerKeys.map((k) => [k, num(p[k])])),consumableBuffs:p.consumableBuffs??{},masteryFx:advancedMasterySnapshot(g,p),decoy:p.decoy??null,summon:p.summon??null,wisp:p.wisp??null,healingOverTime:p.healingOverTime??null,boxerCombo:p.boxerCombo??null,
 		titleId:p.displayTitleId??null,
 		cd: Object.fromEntries(Object.entries(p.cd).map(([k, v]) => [k, round(v)])),
-		moveSpeed: p.stats.moveSpeed * (p.gmSpeed ?? 1) * (1 + Math.max(0, ...p.statuses.filter((s) => s.id === "speed").map((s) => s.value))) * (1 - Math.max(0, ...p.statuses.filter((s) => s.id === "slow").map((s) => s.value))),
+		moveSpeed: p.stats.moveSpeed * (p.gmSpeed ?? 1) * (1 + Math.max(consumableBuffValue(p,'speed',g.wallTime||Date.now())??0, ...p.statuses.filter((s) => s.id === "speed").map((s) => s.value))) * (1 - Math.max(0, ...p.statuses.filter((s) => s.id === "slow").map((s) => s.value))),
 	};
 }
 function publicEntry(p: Player, g: Game) {
@@ -252,7 +252,8 @@ export function mountRealtime(server: Server, options: RealtimeOptions) {
    const latest=result.duplicate?await store.inventory(peer.accountId,p.id):result;
    p.inventory=latest.inventory;p.gold=latest.gold;if(latest.claimedLevelRewards)p.claimedLevelRewards=[...latest.claimedLevelRewards];refreshStats(g,p);
    if(result.error){if(op.op==='pickup')room.dropRequests?.delete(op.id!);throw Error(result.error);}
-   if(result.effect&&!result.duplicate){if(result.effect.kind==='arcane'&&sunTarget!==undefined)castSunScroll(g,p,result.effect.amount,sunTarget,usedTemplate?.arcaneElement);applyPotionEffect(g,p,result.effect.kind,result.effect.amount);}
+   if(result.effect&&!result.duplicate){if(result.effect.kind==='arcane'&&sunTarget!==undefined)castSunScroll(g,p,result.effect.amount,sunTarget,usedTemplate?.arcaneElement);applyPotionEffect(g,p,result.effect.kind,result.effect.amount,result.effect.duration);}
+      if(latest.consumableBuffs)p.consumableBuffs=structuredClone(latest.consumableBuffs);if(latest.legacyLevelRewards)p.legacyLevelRewards=[...latest.legacyLevelRewards];
       done();if(op.op==='store'&&p.quests&&recordStore(p.quests,data).length)sendQuests(peer,p);if(op.op==='pickup')void save(room,p.id);sendStats(peer,p);send(peer.ws,{t:'inv',req,inventory:p.inventory,gold:p.gold});
    if(op.op==='pickup'){room.dropRequests?.delete(op.id!);}
    if(op.op==='pickup')send(peer.ws,{t:'ev',list:[{type:'itemPickup',playerId:p.id,loot:op.loot}]});
@@ -266,15 +267,15 @@ export function mountRealtime(server: Server, options: RealtimeOptions) {
   }).finally(()=>{if(quest)questBusy.delete(p.id);peer.busy!--;while(!peer.busy&&peer.deferred?.length&&live.get(peer.id)===peer&&!closing)intent(peer,peer.deferred.shift()!,true);});
   return settled;
  }
- function mailboxState(peer:Peer,p:Player,error?:string){send(peer.ws,{t:'mailbox',level:p.level,claimed:p.claimedLevelRewards??[],error});}
+ function mailboxState(peer:Peer,p:Player,error?:string){send(peer.ws,{t:'mailbox',level:p.level,claimed:p.claimedLevelRewards??[],legacy:p.legacyLevelRewards??[],error});}
  function mailboxIntent(peer:Peer,p:Player,message:{op:'list'|'claim';level?:number;req?:string}){
   if(message.op==='list'){
    const room=peer.room;
-   room.saveQueue=room.saveQueue.then(async()=>{const latest=await store.inventory(peer.accountId,p.id);p.claimedLevelRewards=[...(latest.claimedLevelRewards??[])];mailboxState(peer,p);}).catch(()=>mailboxState(peer,p,'โหลดกล่องจดหมายไม่สำเร็จ กรุณาเปิดใหม่อีกครั้ง'));
+   room.saveQueue=room.saveQueue.then(async()=>{const latest=await store.inventory(peer.accountId,p.id);p.claimedLevelRewards=[...(latest.claimedLevelRewards??[])];p.legacyLevelRewards=[...(latest.legacyLevelRewards??[])];mailboxState(peer,p);}).catch(()=>mailboxState(peer,p,'โหลดกล่องจดหมายไม่สำเร็จ กรุณาเปิดใหม่อีกครั้ง'));
    return;
   }
   if(peer.busy){mailboxState(peer,p,'กำลังบันทึก กรุณารอสักครู่');return;}
-  const levels=message.level===undefined?Array.from({length:Math.max(0,p.level-1)},(_,i)=>i+2).filter(level=>!p.claimedLevelRewards?.includes(level)):[message.level];
+  const levels=message.level===undefined?Array.from({length:Math.max(0,p.level)},(_,i)=>i+1).filter(level=>!p.claimedLevelRewards?.includes(level)):[message.level];
   if(!levels.length){mailboxState(peer,p,'รับรางวัลที่ปลดล็อกครบแล้ว');return;}
   save(peer.room,p.id);
   void economy(peer,p,{op:'levelReward',levels},message.req??randomUUID(),()=>mailboxState(peer,p))?.catch(()=>{});
@@ -839,7 +840,7 @@ export function mountRealtime(server: Server, options: RealtimeOptions) {
                     p.audioSettings = character.audioSettings;
                     p.autoPotion = normalizeAutoPotion(character.autoPotion);
                  p.titleId=character.titleId??null;p.unlockedTitles=character.unlockedTitles??[];p.titleRecords=normalizeTitleRecords(character.titleRecords);
- p.claimedLevelRewards=[...(character.claimedLevelRewards??[])];p.quests=normalizeQuests(character.quests,data);p.bossReadyAt=character.bossReadyAt||0;p.bossCooldowns={...(character.bossCooldowns??{})};p.returnReadyAt=character.returnReadyAt||0;p.healerReadyAt=character.healerReadyAt||0;p.autoSeconds=character.autoSeconds||0;
+ p.claimedLevelRewards=[...(character.upgradedLevelRewards??[])];p.legacyLevelRewards=[...(character.claimedLevelRewards??[])];p.consumableBuffs=structuredClone(character.consumableBuffs??{});p.quests=normalizeQuests(character.quests,data);p.bossReadyAt=character.bossReadyAt||0;p.bossCooldowns={...(character.bossCooldowns??{})};p.returnReadyAt=character.returnReadyAt||0;p.healerReadyAt=character.healerReadyAt||0;p.autoSeconds=character.autoSeconds||0;
 					p.profile.classId = p.jobId;
 					p.name = character.name;p.gender=character.gender??'male';
 					p.xp = character.xp;

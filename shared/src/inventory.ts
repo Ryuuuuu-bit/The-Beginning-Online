@@ -55,6 +55,8 @@ export interface InventoryOp {
 		| "levelReward";
 	/** Server-only level-mail delivery; clients cannot submit inventory operations of this kind. */
 	levels?: number[];
+	/** Filled from persisted receipts by the server, never accepted from a client. */
+	legacyLevels?: number[];
 	template?: string;
 	id?: string;
 	/** Physical destination; item templates keep accessory1 for either ring slot. */
@@ -380,7 +382,7 @@ export function applyInventory(
 		i.slot = null;
 		log("unequip", i, 1);
 	}
-	let effect: { kind: string; amount: number } | undefined;
+	let effect: { kind: string; amount: number; duration?:number } | undefined;
 	if (op.op === "socket") {
 		const target = owned(op.id), price = socketPrice(target, data);
 		if (typeof price === "string") throw Error(price);
@@ -424,7 +426,7 @@ export function applyInventory(
   if(t.effect==='arcane'&&profile.level<t.level)throw Error('ระดับไม่ถึงระดับไอเทม');
 		remove(i, 1);
 		log("use", i, 1);
-		effect = { kind: t.effect, amount: t.amount! };
+		effect = { kind: t.effect, amount: t.amount!, ...(t.duration?{duration:t.duration}:{}) };
 	}
 	if (op.op === "pickup" || op.op === "admin") {
 		for (const drop of op.loot ?? []) {
@@ -486,7 +488,7 @@ export function applyInventory(
 	}
 	if (op.op === "settings") inv.autoPickup = !!op.on;
 	if(op.op==='levelReward')for(const level of validateRewardLevels(op.levels,profile.level,data.stats.maxLevel)){
-	 const reward=levelReward(level,data);
+	 const reward=levelReward(level,data,op.legacyLevels?.includes(level));
 	 for(const item of reward.items){add(item.template,item.qty,'level_reward',undefined,!!template(item.template).slot);ledger.push({kind:'level_reward',template:item.template,qty:item.qty,goldDelta:0});}
 	 next.gold+=reward.gold;ledger.push({kind:'level_reward',qty:0,goldDelta:reward.gold});
 	}

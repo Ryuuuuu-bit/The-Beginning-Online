@@ -1,4 +1,4 @@
-import {resolveSkill,loadGameData,isMasteryAction,isMasteryPassive,MASTERY_SCHOOLS,masterySkillLock,masteryAutoRank,masteryTriggerSlots,resolveAutomaticSkill,automaticCause} from '@the-beginning-online/shared';
+import {consumableBuffText,resolveSkill,loadGameData,isMasteryAction,isMasteryPassive,MASTERY_SCHOOLS,masterySkillLock,masteryAutoRank,masteryTriggerSlots,resolveAutomaticSkill,automaticCause} from '@the-beginning-online/shared';
 import constellation from "./mastery-layout.json";
 import {masteryAncestors,masteryCurve} from "./mastery-paths";
 import {masteryCamera} from "./mastery-camera";
@@ -31,7 +31,7 @@ const barItems=itemTemplates.filter(t=>t.type==='consumable'&&t.effect);
 const POTION_CD=skills.find(s=>s.id==='potion')?.cooldown||1;
 const ELEMENT_TH=gameData.elements.names as Record<string,string>;
 const BASIC=skills.find(s=>s.id==='basic');
-const itemIconHTML=(template:string,extra='')=>{const c=itemIconCell(template);return `<span class="item-icon${c.v2?' item-icon-v2':''} ${extra}" style="background-position:${c.position}" aria-hidden="true"></span>`;};
+const itemIconHTML=(template:string,extra='')=>{const c=itemIconCell(template);return `<span class="item-icon${c.v2?' item-icon-v2':''} ${extra}" style="background-position:${c.position};${c.image?`background-image:url('${c.image}');background-size:contain`:''}" aria-hidden="true"></span>`;};
 /** How many of this template the bag holds (equipped or stored copies do not count). */
 export function bagCount(inventory:{items:{template:string;qty:number;location:string}[]}|undefined,template:string){return (inventory?.items||[]).filter(i=>i.template===template&&i.location==='bag').reduce((n,i)=>n+i.qty,0);}
 const $ = <T extends HTMLElement = HTMLElement>(s: string) =>
@@ -419,12 +419,12 @@ export function mountSkills(
 		if (viewJob === "items") {
 			grid.classList.add("sk-items", "pot-list");
 			const slotOf = (id: string) => (job?.hotbar || []).findIndex((h) => h.skill === id);
-			const potEffect = (t: (typeof barItems)[number]) => t.effect === "hp" ? `+${t.amount!.toLocaleString("en-US")} HP` : t.effect === "sp" ? `+${t.amount!.toLocaleString("en-US")} SP` : `เร็ว +${Math.round(t.amount! * 100)}% · 60 วิ`;
+			const potEffect = (t: (typeof barItems)[number]) => t.effect === "hp" ? `+${t.amount!.toLocaleString("en-US")} HP` : t.effect === "sp" ? `+${t.amount!.toLocaleString("en-US")} SP` : consumableBuffText(t)??'ใช้ไอเทม';
 			const cdNote = document.createElement("p");
 			cdNote.className = "pot-cd";
 			cdNote.innerHTML = `<i aria-hidden="true"></i>ยาทุกชนิดใช้ <b>คูลดาวน์ร่วม ${POTION_CD} วิ</b> · กดปุ่มลัดหรือดับเบิลคลิกการ์ดเพื่อดื่มทันที`;
 			grid.append(cdNote);
-			for (const [effect, label] of [["hp", "ฟื้นพลังชีวิต (HP)"], ["sp", "ฟื้นพลังสกิล (SP)"], ["speed", "เสริมพลัง"]] as const) {
+			for (const [effect, label] of [["hp", "ฟื้นพลังชีวิต (HP)"], ["sp", "ฟื้นพลังสกิล (SP)"], ["speed", "เสริมพลัง"], ["boost_exp", "เพิ่ม EXP"], ["boost_drop", "เพิ่มดรอป"]] as const) {
 				const group = barItems.filter((t) => t.effect === effect);
 				if (!group.length) continue;
 				const head = document.createElement("div");
@@ -456,7 +456,7 @@ export function mountSkills(
 			else {
 				const id = "item:" + chosen.id, at = slotOf(id), own = bagCount(inventory, chosen.id), bar = job!.hotbar;
 				const firstEmpty = bar.findIndex((h) => !h.skill);
-				detail.innerHTML = `<div class="pot-head pot-${chosen.effect}"><span class="pot-big">${itemIconHTML(chosen.id, "job-icon-item")}</span><div><h3></h3><small>${chosen.effect === "speed" ? "เร่งความเร็วชั่วคราว" : "ฟื้นฟูทันทีเมื่อดื่ม"}</small></div></div>
+				detail.innerHTML = `<div class="pot-head pot-${chosen.effect}"><span class="pot-big">${itemIconHTML(chosen.id, "job-icon-item")}</span><div><h3></h3><small>${consumableBuffText(chosen) ? "บัฟอย่างน้อย 1 ชั่วโมง · ใช้ซ้ำต่อเวลา" : "ฟื้นฟูทันทีเมื่อดื่ม"}</small></div></div>
 					<dl class="pot-kv"><dt>ผล</dt><dd class="pot-amt">${potEffect(chosen)}</dd><dt>มีในกระเป๋า</dt><dd>${own.toLocaleString("en-US")} ขวด</dd><dt>คูลดาวน์</dt><dd>${POTION_CD} วิ (ร่วมกับยาอื่น)</dd><dt>อยู่ในแถบ</dt><dd class="${at >= 0 ? "on" : ""}">${at >= 0 ? "ช่อง " + keyLabel(bar[at].key) : "ยังไม่ได้วาง"}</dd></dl>
 					<h4>ใส่ลงแถบ</h4><div class="pot-put"></div>
 					<p class="pot-auto">ดื่มอัตโนมัติเมื่อ HP/SP ต่ำ ตั้งได้ใน <button type="button" class="pot-auto-link">ตั้งค่า AUTO</button></p>`;

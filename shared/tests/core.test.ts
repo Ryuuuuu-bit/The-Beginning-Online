@@ -150,7 +150,7 @@ test("derived base formulas keep floats and apply armour only to hard DEF", () =
 	assert.equal(p.softMdef, 3);
 	assert.equal(p.hit, 155);
 	assert.equal(p.flee, 105);
-	assert.equal(p.weight, 2480);
+	assert.equal(p.weight, 10480);
 	assert.equal(p.hpRegen, 1.252);
 });
 test("equipment flat values precede summed percentages and cards respect slots", () => {

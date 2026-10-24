@@ -203,7 +203,7 @@ export function deriveStats(input: CharacterInput, data: GameData): Combatant {
 			1 / Math.max(interval / 2.2, interval * (1 - agi * 0.004 - dex * 0.001)),
 		castMul: Math.max(1 - caps.maxCastReduction, 1 - dex * 0.005),
 		moveSpeed: 1 + (race.passives.moveSpeed || 0),
-		weight: 2000 + str * 30 + (race.passives.weight || 0),
+		weight: 10000 + str * 30 + (race.passives.weight || 0),
 		hpRegen: 0,
 		spRegen: 0,
 		raceBonus: {},

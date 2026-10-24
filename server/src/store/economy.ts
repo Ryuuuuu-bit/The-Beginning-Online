@@ -8,16 +8,16 @@ import {
 	type LedgerEntry,
 	type TradeOffer,
 	applyTrade,
-	validateRewardLevels,
+	validateRewardLevels,consumableBuffKey,extendConsumableBuff,type ConsumableBuffs,
 } from "@the-beginning-online/shared";
 import { randomUUID } from "node:crypto";
 import type { Character, Progress } from './types.js';
 export type QuestProgress = Pick<Progress, 'level' | 'xp' | 'jobLevel' | 'jobExp' | 'skillPoints' | 'statPoints' | 'baseStats' | 'autoAllocCursor' | 'quests'>;
 export interface EconomyResult {
-	claimedLevelRewards?: number[];
+	claimedLevelRewards?: number[];legacyLevelRewards?:number[];consumableBuffs?:ConsumableBuffs;
 	inventory: Inventory;
 	gold: number;
-	effect?: { kind: string; amount: number };
+	effect?: { kind: string; amount: number; duration?:number };
 	error?: string;
 	duplicate?: boolean;
 }
@@ -53,9 +53,15 @@ export interface TradeResult { a: EconomyResult; b: EconomyResult; error?: strin
 export const economyData = loadGameData();
 export function levelRewardClaims(character:Character,op:InventoryOp){
  if(op.op!=='levelReward')return;
- const levels=validateRewardLevels(op.levels,character.level,economyData.stats.maxLevel),claimed=character.claimedLevelRewards??[];
+ const levels=validateRewardLevels(op.levels,character.level,economyData.stats.maxLevel),claimed=character.upgradedLevelRewards??[];
  if(levels.some(level=>claimed.includes(level)))throw Error('รับรางวัลเลเวลนี้แล้ว');
  return [...claimed,...levels].sort((a,b)=>a-b);
+}
+export function consumedBuffs(character:Character,op:InventoryOp,inv:Inventory,now=Date.now()){
+ if(op.op!=='use')return;
+ const item=inv.items.find(i=>i.id===op.id),template=economyData.items.items.find(t=>t.id===item?.template),key=consumableBuffKey(template?.effect??'');
+ if(!key)return;
+ return extendConsumableBuff(character.consumableBuffs,key,template!.amount!,template!.duration??3600,now);
 }
 export { applyInventory, starterInventory, randomUUID, applyTrade };
 export type { Inventory, InventoryOp, LedgerEntry };

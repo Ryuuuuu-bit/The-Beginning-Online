@@ -1,5 +1,5 @@
 import './loot-art-review.css';
-import {loadGameData,STARTER_UNIQUES} from '@the-beginning-online/shared';
+import {loadGameData,STARTER_UNIQUES,consumableBuffText} from '@the-beginning-online/shared';
 import {cardEffects,modifierText} from '../card-text';
 import {dropOwners} from './world-catalog';
 import {itemIconCell} from '../item-icon';
@@ -43,6 +43,7 @@ function showItem(id:string){
  const unique=STARTER_UNIQUES[id],effects=id.startsWith('card_')?[cardEffects(data,id)]:[...item.modifiers.map(modifierText).filter(Boolean),...(unique?[...unique.rolls.map(r=>`${r.name} ${r.min}–${r.max}`),...unique.lines]:[])];
  if(category(id)==='gear'&&id.startsWith('field_'))effects.unshift('อุปกรณ์ฐานสำหรับสุ่มออฟ · ค่าของจริงขึ้นกับระดับไอเทมและผลสุ่ม');
  if(item.atk)effects.push('พลังโจมตีฐาน '+item.atk);if(item.matk)effects.push('พลังเวทฐาน '+item.matk);
+ const buff=consumableBuffText(item);if(buff)effects.push(buff);
  if(item.effect==='hp'||item.effect==='sp')effects.push(`ฟื้น ${item.effect.toUpperCase()} ${item.amount?.toLocaleString('en-US')}`);
  const lines=document.createElement('ul');for(const effect of effects.filter(Boolean)){const line=document.createElement('li');line.textContent=effect;lines.append(line);}content.append(lines);
  const prices=document.createElement('p'),offers=Object.entries(data.economy.shops).filter(([,shop])=>shop[id]!==undefined);
@@ -51,7 +52,7 @@ function showItem(id:string){
  const heading=document.createElement('h3');heading.textContent='พบได้จาก';content.append(heading);
  const owners=dropOwners(id);
  for(const monster of owners){const a=document.createElement('a');a.href='/monsters.html#'+encodeURIComponent(monster.id);a.textContent=monster.nameTh+' · Lv.'+monster.level;a.className='item-drop-owner';content.append(a);}
- if(!owners.length){const note=document.createElement('p');note.textContent=offers.length?'ซื้อได้จากร้านในนครที่ถูกลืมเลือน':'ไม่มีรายชื่อมอนสเตอร์ที่ดรอปโดยตรงในข้อมูลปัจจุบัน';content.append(note);}
+ if(!owners.length){const note=document.createElement('p');note.textContent=['exp_boost_scroll','drop_boost_scroll'].includes(id)?'กล่องจดหมายรางวัล Lv.1, 30, 60 และ 90':offers.length?'ซื้อได้จากร้านในนครที่ถูกลืมเลือน':'ไม่มีรายชื่อมอนสเตอร์ที่ดรอปโดยตรงในข้อมูลปัจจุบัน';content.append(note);}
  dialog.querySelector<HTMLButtonElement>('.item-detail-close')!.onclick=()=>dialog.close();if(!dialog.open)dialog.showModal();
 }
 if(publicCatalog){

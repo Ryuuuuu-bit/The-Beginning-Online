@@ -1,4 +1,5 @@
 import {passiveValue,passiveCost,passiveCastMultiplier,passiveStart,passiveComplete,passiveEvent,passiveWalk,passiveTick,passiveIncoming,passiveAccuracy,passiveArmorIgnore,passiveDamage,passivePeriodicDamage,passivePetDamage,passiveBond,medicalBasic} from './mastery-passives.js';
+import {consumableBuffValue} from '../consumable-buffs.js';
 import {telegraphContains as inTelegraph} from './telegraph-area.js';
 export {inTelegraph};
 import {applyInventory,starterInventory,inventoryWeight,bestPotion,equipped,equippedCards,inventoryProfile,rollDrops,type Inventory,type InventoryOp} from "../inventory.js";
@@ -140,6 +141,7 @@ export interface Enemy extends Vec {
 }
 export type AutoState = "seek" | "fight" | "retreat" | "idle";
 export interface Player extends Vec, JobProgress {
+ legacyLevelRewards?:number[];consumableBuffs?:import('../consumable-buffs.js').ConsumableBuffs;
  claimedLevelRewards?:number[];
  gender?:'male'|'female';
  summon?:Summon;wisp?:Wisp;decoy?:Summon;
@@ -573,7 +575,8 @@ function reward(g: Game, e: Enemy) {
 	e.rewarded = true;
 	const spec = g.data.monsters.monsters.find((m) => m.id === e.dataId)!,
 		ownerId = topDamage(g, e);
-	const loot=rollDrops(spec,g.random,g.data,g.players.get(ownerId)?.autoSeconds||0,g.players.get(ownerId)?.stats.dropBonus||0,g.equipmentRandom);
+	const owner=g.players.get(ownerId),dropFactor=consumableBuffValue(owner,'drop',g.wallTime||Date.now())??1;
+ const loot=rollDrops(spec,g.random,g.data,owner?.autoSeconds||0,(1+(owner?.stats.dropBonus||0))*dropFactor-1,g.equipmentRandom);
 	g.drops.push({
 		ownerId,
   source:e.rewardSource,
@@ -1013,9 +1016,10 @@ function hurt(
 export function grantExp(g: Game, r: Player, baseXp: number, jobExp: number, extra: Record<string, unknown> = {}) {
 	const before = g.p;
 	g.p = r;
-	const jobLevels = gainJobExp(r, Math.round(jobExp * (g.jobExpMultiplier || 1)), g.data);
+	const boost=consumableBuffValue(r,'exp',g.wallTime||Date.now())??1;
+	const jobLevels = gainJobExp(r, Math.round(jobExp * (g.jobExpMultiplier || 1)*boost), g.data);
 	if (jobLevels) emit(g, "jobLevel", { jobLevel: r.jobLevel, skillPoints: r.skillPoints, granted: jobLevels });
-	const xp = Math.round(baseXp * (1 + r.stats.expBonus));
+	const xp = Math.round(baseXp * (1 + r.stats.expBonus)*boost);
 	r.xp += xp;
 	emit(g, "pickup", { gold: 0, ...extra, xp });
 	while (r.level < g.data.stats.maxLevel && r.xp >= r.nextXp) {
@@ -2430,7 +2434,7 @@ function playerStep(g: Game, dt: number, input: Vec) {
 				p.fz = iz;
 				const speed =
 					(p.auto && p.autoState === "idle" ? 1.8 : p.attack > 0 ? 1.6 : 4.5) *
-					p.stats.moveSpeed * lootMovementMultiplier(p) * (p.gmSpeed ?? 1) * (1+Math.max(0,...p.statuses.filter(s=>s.id==='speed').map(s=>s.value))) *
+					p.stats.moveSpeed * lootMovementMultiplier(p) * (p.gmSpeed ?? 1) * (1+Math.max(consumableBuffValue(p,'speed',g.wallTime||Date.now())??0,...p.statuses.filter(s=>s.id==='speed').map(s=>s.value))) *
 					slowMovementMultiplier(p);
 				const from={x:p.x,z:p.z};move(p, ix * speed * dt, iz * speed * dt);passiveWalk(g,from);
 			}

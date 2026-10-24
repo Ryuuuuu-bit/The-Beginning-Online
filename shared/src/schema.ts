@@ -498,7 +498,7 @@ export const ItemsSchema = z
                         slot: z.enum(["weapon","body","shield","garment","footgear","accessory1","accessory2"]).nullable(),
                         weight: nonnegative, npcPrice: nonnegative.int(), rarity: z.enum(["common","fine","rare","epic","legendary"]),
                         stackable: z.boolean(), maxStack: positive.int(), bind: z.enum(["none","equip","account"]), icon: id,
-                        effect: z.enum(["hp","sp","speed","party_hp","party_cleanse","arcane"]).optional(), amount: nonnegative.optional(), arcaneElement:ElementSchema.optional(),
+                        effect: z.enum(["hp","sp","speed","party_hp","party_cleanse","arcane","boost_exp","boost_drop"]).optional(), amount: nonnegative.optional(), duration: positive.int().min(3600).optional(), arcaneElement:ElementSchema.optional(),
 						weaponType: WeaponSchema.optional(),
 						level: positive.int(),
 						atk: nonnegative.optional(),
