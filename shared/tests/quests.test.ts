@@ -1,8 +1,33 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { loadGameData, emptyQuests, acceptQuest, questStatus, recordKill, completeQuest, normalizeQuests, objectiveProgress } from "../src/index.node.js";
+import { loadGameData, emptyQuests, acceptQuest, questStatus, questResetAt, recordKill, completeQuest, normalizeQuests, objectiveProgress } from "../src/index.node.js";
 const data = loadGameData();
 const q = (id: string) => data.quests.quests.find(q => q.id === id)!;
+
+test('daily and weekly bounties use Thai calendar boundaries, not a client timer',()=>{
+ const daily={...q('guard_first_hunt'),repeatPeriod:'daily' as const,maxLevel:4};
+ const weekly={...daily,repeatPeriod:'weekly' as const};
+ const sunday=Date.parse('2026-10-25T23:59:59+07:00'),monday=Date.parse('2026-10-26T00:00:00+07:00');
+ assert.equal(questResetAt(daily,sunday),monday);assert.equal(questResetAt(weekly,sunday),monday);
+ assert.equal(questResetAt(weekly,monday),Date.parse('2026-11-02T00:00:00+07:00'));
+ const state=emptyQuests();state.done[daily.id]=sunday;
+ assert.equal(questStatus(daily,state,4,monday-1),'cooldown');
+ assert.equal(questStatus(daily,state,4,monday),'available');
+ assert.equal(questStatus(daily,state,5,monday),'locked');
+ state.active[daily.id]={at:sunday,progress:[daily.objectives[0].count]};
+ assert.equal(questStatus(daily,state,5,monday),'ready');
+ assert.equal(normalizeQuests(state,data).active[daily.id].at,sunday);
+});
+
+test('every level has one daily and weekly bounty with real loot and modest gold',()=>{
+ for(let level=1;level<=100;level++)for(const period of ['daily','weekly']){
+  const available=data.quests.quests.filter(q=>q.repeatPeriod===period&&questStatus(q,emptyQuests(),level,Date.now())==='available');
+  assert.equal(available.length,1,`${period} Lv.${level}`);
+  const quest=available[0];assert.ok(quest.rewards.gold<=1300);assert.ok(quest.rewards.items.every(i=>i.template==='forge_fragment'));
+  for(const objective of quest.objectives)if(objective.kind==='kill')assert.ok(objective.monsters.every(id=>data.monsters.monsters.some(m=>m.id===id&&m.level>=quest.level-1&&m.level<=quest.level+5)));
+ }
+ assert.equal(data.items.items.find(i=>i.id==='forge_fragment')!.bind,'account');
+});
 test("quest chain: prerequisites and level gate, kill tracking caps at the goal", () => {
 	const s = emptyQuests(), now = 1e12;
 	assert.equal(questStatus(q("smith_slime"), s, 5, now), "locked");

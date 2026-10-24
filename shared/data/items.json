@@ -14701,6 +14701,22 @@
       "effect": "boost_drop",
       "amount": 2,
       "duration": 3600
+    },
+    {
+      "id": "forge_fragment",
+      "nameTh": "เศษผลึกช่าง (ผูกบัญชี)",
+      "type": "material",
+      "slot": null,
+      "level": 1,
+      "weight": 0.1,
+      "npcPrice": 0,
+      "rarity": "common",
+      "stackable": true,
+      "maxStack": 999,
+      "modifiers": [],
+      "slots": 0,
+      "bind": "account",
+      "icon": "rune_shard"
     }
   ]
 }

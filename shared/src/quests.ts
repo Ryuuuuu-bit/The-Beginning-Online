@@ -39,11 +39,20 @@ export function questStatus(q: Quest, state: QuestState, level: number, now: num
 	if (state.active[q.id]) return objectiveProgress(q, state, inv).every((n, i) => n >= q.objectives[i].count) ? "ready" : "active";
 	const done = state.done[q.id];
 	if (done !== undefined) {
-		if (!q.repeatHours) return "done";
-		if (now < done + q.repeatHours * 3600000) return "cooldown";
+		if (!q.repeatHours && !q.repeatPeriod) return "done";
+		if (now < questResetAt(q, done)) return "cooldown";
 	}
-	if (level < q.level || q.requires.some(r => state.done[r] === undefined)) return "locked";
+	if (level < q.level || level > (q.maxLevel ?? Infinity) || q.requires.some(r => state.done[r] === undefined)) return "locked";
 	return "available";
+}
+
+/** Calendar bounties reset at midnight in Thailand; active quests can still be finished after a reset or level-up. */
+export function questResetAt(q: Quest, completedAt: number): number {
+ if (!q.repeatPeriod) return q.repeatHours ? completedAt + q.repeatHours * 3600000 : Infinity;
+ const day = 86400000, offset = 7 * 3600000, localDay = Math.floor((completedAt + offset) / day);
+ if (q.repeatPeriod === 'daily') return (localDay + 1) * day - offset;
+ const weekday = ((localDay + 3) % 7 + 7) % 7;
+ return (localDay + 7 - weekday) * day - offset;
 }
 
 export function acceptQuest(state: QuestState, id: string, level: number, now: number, data: GameData) {

@@ -51,6 +51,7 @@ export function validateGameData(raw: Record<string, unknown>): GameData {
 		}
 	}
 	for (const q of data.quests.quests) {
+		if ((q.maxLevel??100)<q.level || (q.repeatHours&&q.repeatPeriod)) throw Error('quests.json: invalid level range or reset rule '+q.id);
 		for (const r of q.requires) if (!data.quests.quests.some(o => o.id === r)) throw Error("quests.json: unknown prerequisite " + r);
 		for (const o of q.objectives) {
 			if (o.kind === "kill") for (const m of o.monsters) if (!data.monsters.monsters.some(x => x.id === m)) throw Error("quests.json: unknown monster " + m);

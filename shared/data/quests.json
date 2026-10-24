@@ -647,6 +647,1802 @@
         "gold": 25000,
         "items": []
       }
+    },
+    {
+      "id": "daily_hunt_a",
+      "nameTh": "งานประจำวัน · วุ้นระลอกน้ำ",
+      "giver": "guard",
+      "level": 1,
+      "maxLevel": 4,
+      "requires": [],
+      "repeatPeriod": "daily",
+      "offer": "ช่วยดูแลพื้นที่ล่า Lv.1–4 ปราบวุ้นระลอกน้ำ · รีเซ็ตทุกวัน 00:00 น. เวลาไทย",
+      "complete": "ขอบใจสำหรับความช่วยเหลือ เก็บเศษผลึกไว้คราฟต์หินตีบวกที่ช่างตีเหล็กได้",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "jelly_pink"
+          ],
+          "count": 20,
+          "label": "ปราบวุ้นระลอกน้ำ"
+        }
+      ],
+      "rewards": {
+        "exp": 120,
+        "jobExp": 0,
+        "gold": 52,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "weekly_hunt_a",
+      "nameTh": "สัญญาประจำสัปดาห์ · วุ้นระลอกน้ำ",
+      "giver": "guard",
+      "level": 1,
+      "maxLevel": 4,
+      "requires": [],
+      "repeatPeriod": "weekly",
+      "offer": "ช่วยดูแลพื้นที่ล่า Lv.1–4 ปราบวุ้นระลอกน้ำและรวบรวมวัตถุดิบให้ช่าง · รีเซ็ตวันจันทร์ 00:00 น. เวลาไทย",
+      "complete": "ขอบใจสำหรับความช่วยเหลือ เก็บเศษผลึกไว้คราฟต์หินตีบวกที่ช่างตีเหล็กได้",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "jelly_pink"
+          ],
+          "count": 80,
+          "label": "ปราบวุ้นระลอกน้ำ"
+        },
+        {
+          "kind": "collect",
+          "item": "jelly_slime",
+          "count": 20,
+          "label": "เมือกระลอก"
+        }
+      ],
+      "rewards": {
+        "exp": 480,
+        "jobExp": 0,
+        "gold": 310,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "daily_hunt_b",
+      "nameTh": "งานประจำวัน · เห็ดตูมใบชา",
+      "giver": "guard",
+      "level": 5,
+      "maxLevel": 9,
+      "requires": [],
+      "repeatPeriod": "daily",
+      "offer": "ช่วยดูแลพื้นที่ล่า Lv.5–9 ปราบเห็ดตูมใบชา · รีเซ็ตทุกวัน 00:00 น. เวลาไทย",
+      "complete": "ขอบใจสำหรับความช่วยเหลือ เก็บเศษผลึกไว้คราฟต์หินตีบวกที่ช่างตีเหล็กได้",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "forest_young_1"
+          ],
+          "count": 20,
+          "label": "ปราบเห็ดตูมใบชา"
+        }
+      ],
+      "rewards": {
+        "exp": 400,
+        "jobExp": 0,
+        "gold": 60,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "weekly_hunt_b",
+      "nameTh": "สัญญาประจำสัปดาห์ · เห็ดตูมใบชา",
+      "giver": "guard",
+      "level": 5,
+      "maxLevel": 9,
+      "requires": [],
+      "repeatPeriod": "weekly",
+      "offer": "ช่วยดูแลพื้นที่ล่า Lv.5–9 ปราบเห็ดตูมใบชาและรวบรวมวัตถุดิบให้ช่าง · รีเซ็ตวันจันทร์ 00:00 น. เวลาไทย",
+      "complete": "ขอบใจสำหรับความช่วยเหลือ เก็บเศษผลึกไว้คราฟต์หินตีบวกที่ช่างตีเหล็กได้",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "forest_young_1"
+          ],
+          "count": 80,
+          "label": "ปราบเห็ดตูมใบชา"
+        },
+        {
+          "kind": "collect",
+          "item": "tea_spore_leaf",
+          "count": 20,
+          "label": "ใบชาสปอร์"
+        }
+      ],
+      "rewards": {
+        "exp": 1600,
+        "jobExp": 0,
+        "gold": 350,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "daily_hunt_c",
+      "nameTh": "งานประจำวัน · วุ้นดินปั้น",
+      "giver": "guard",
+      "level": 10,
+      "maxLevel": 14,
+      "requires": [],
+      "repeatPeriod": "daily",
+      "offer": "ช่วยดูแลพื้นที่ล่า Lv.10–14 ปราบวุ้นดินปั้น · รีเซ็ตทุกวัน 00:00 น. เวลาไทย",
+      "complete": "ขอบใจสำหรับความช่วยเหลือ เก็บเศษผลึกไว้คราฟต์หินตีบวกที่ช่างตีเหล็กได้",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "ruins_young_1"
+          ],
+          "count": 20,
+          "label": "ปราบวุ้นดินปั้น"
+        }
+      ],
+      "rewards": {
+        "exp": 1000,
+        "jobExp": 0,
+        "gold": 70,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "weekly_hunt_c",
+      "nameTh": "สัญญาประจำสัปดาห์ · วุ้นดินปั้น",
+      "giver": "guard",
+      "level": 10,
+      "maxLevel": 14,
+      "requires": [],
+      "repeatPeriod": "weekly",
+      "offer": "ช่วยดูแลพื้นที่ล่า Lv.10–14 ปราบวุ้นดินปั้นและรวบรวมวัตถุดิบให้ช่าง · รีเซ็ตวันจันทร์ 00:00 น. เวลาไทย",
+      "complete": "ขอบใจสำหรับความช่วยเหลือ เก็บเศษผลึกไว้คราฟต์หินตีบวกที่ช่างตีเหล็กได้",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "ruins_young_1"
+          ],
+          "count": 80,
+          "label": "ปราบวุ้นดินปั้น"
+        },
+        {
+          "kind": "collect",
+          "item": "living_clay",
+          "count": 20,
+          "label": "ดินคืนรูป"
+        }
+      ],
+      "rewards": {
+        "exp": 4000,
+        "jobExp": 0,
+        "gold": 400,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "journey_mid_c",
+      "nameTh": "บันทึกเส้นทาง · วุ้นดินปั้น",
+      "giver": "guard",
+      "level": 10,
+      "requires": [],
+      "offer": "สำรวจเส้นทาง Lv.10 ปราบวุ้นดินปั้นและนำวัตถุดิบประจำถิ่นกลับมา · กดนำทางในบันทึกการเดินทางได้",
+      "complete": "เส้นทางนี้ปลอดภัยขึ้นแล้ว นำเศษผลึกช่างไปคราฟต์หินตีบวกเพื่อเตรียมตัวก่อนออกล่าพื้นที่ถัดไป",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "ruins_young_1"
+          ],
+          "count": 10,
+          "label": "ปราบวุ้นดินปั้น"
+        },
+        {
+          "kind": "collect",
+          "item": "living_clay",
+          "count": 5,
+          "label": "ดินคืนรูป"
+        }
+      ],
+      "rewards": {
+        "exp": 1000,
+        "jobExp": 0,
+        "gold": 200,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "daily_hunt_d",
+      "nameTh": "งานประจำวัน · วุ้นกรวดผลึก",
+      "giver": "guard",
+      "level": 15,
+      "maxLevel": 19,
+      "requires": [],
+      "repeatPeriod": "daily",
+      "offer": "ช่วยดูแลพื้นที่ล่า Lv.15–19 ปราบวุ้นกรวดผลึก · รีเซ็ตทุกวัน 00:00 น. เวลาไทย",
+      "complete": "ขอบใจสำหรับความช่วยเหลือ เก็บเศษผลึกไว้คราฟต์หินตีบวกที่ช่างตีเหล็กได้",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "canyon_young_1"
+          ],
+          "count": 20,
+          "label": "ปราบวุ้นกรวดผลึก"
+        }
+      ],
+      "rewards": {
+        "exp": 2000,
+        "jobExp": 0,
+        "gold": 80,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "weekly_hunt_d",
+      "nameTh": "สัญญาประจำสัปดาห์ · วุ้นกรวดผลึก",
+      "giver": "guard",
+      "level": 15,
+      "maxLevel": 19,
+      "requires": [],
+      "repeatPeriod": "weekly",
+      "offer": "ช่วยดูแลพื้นที่ล่า Lv.15–19 ปราบวุ้นกรวดผลึกและรวบรวมวัตถุดิบให้ช่าง · รีเซ็ตวันจันทร์ 00:00 น. เวลาไทย",
+      "complete": "ขอบใจสำหรับความช่วยเหลือ เก็บเศษผลึกไว้คราฟต์หินตีบวกที่ช่างตีเหล็กได้",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "canyon_young_1"
+          ],
+          "count": 80,
+          "label": "ปราบวุ้นกรวดผลึก"
+        },
+        {
+          "kind": "collect",
+          "item": "clear_gravel",
+          "count": 20,
+          "label": "กรวดใส"
+        }
+      ],
+      "rewards": {
+        "exp": 8000,
+        "jobExp": 0,
+        "gold": 450,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "journey_mid_d",
+      "nameTh": "บันทึกเส้นทาง · วุ้นกรวดผลึก",
+      "giver": "guard",
+      "level": 15,
+      "requires": [],
+      "offer": "สำรวจเส้นทาง Lv.15 ปราบวุ้นกรวดผลึกและนำวัตถุดิบประจำถิ่นกลับมา · กดนำทางในบันทึกการเดินทางได้",
+      "complete": "เส้นทางนี้ปลอดภัยขึ้นแล้ว นำเศษผลึกช่างไปคราฟต์หินตีบวกเพื่อเตรียมตัวก่อนออกล่าพื้นที่ถัดไป",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "canyon_young_1"
+          ],
+          "count": 10,
+          "label": "ปราบวุ้นกรวดผลึก"
+        },
+        {
+          "kind": "collect",
+          "item": "clear_gravel",
+          "count": 5,
+          "label": "กรวดใส"
+        }
+      ],
+      "rewards": {
+        "exp": 2000,
+        "jobExp": 0,
+        "gold": 250,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "daily_hunt_e",
+      "nameTh": "งานประจำวัน · ตั๊กแตนอำพัน",
+      "giver": "guard",
+      "level": 20,
+      "maxLevel": 24,
+      "requires": [],
+      "repeatPeriod": "daily",
+      "offer": "ช่วยดูแลพื้นที่ล่า Lv.20–24 ปราบตั๊กแตนอำพัน · รีเซ็ตทุกวัน 00:00 น. เวลาไทย",
+      "complete": "ขอบใจสำหรับความช่วยเหลือ เก็บเศษผลึกไว้คราฟต์หินตีบวกที่ช่างตีเหล็กได้",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "amber_mantis"
+          ],
+          "count": 20,
+          "label": "ปราบตั๊กแตนอำพัน"
+        }
+      ],
+      "rewards": {
+        "exp": 1770,
+        "jobExp": 0,
+        "gold": 90,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "weekly_hunt_e",
+      "nameTh": "สัญญาประจำสัปดาห์ · ตั๊กแตนอำพัน",
+      "giver": "guard",
+      "level": 20,
+      "maxLevel": 24,
+      "requires": [],
+      "repeatPeriod": "weekly",
+      "offer": "ช่วยดูแลพื้นที่ล่า Lv.20–24 ปราบตั๊กแตนอำพันและรวบรวมวัตถุดิบให้ช่าง · รีเซ็ตวันจันทร์ 00:00 น. เวลาไทย",
+      "complete": "ขอบใจสำหรับความช่วยเหลือ เก็บเศษผลึกไว้คราฟต์หินตีบวกที่ช่างตีเหล็กได้",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "amber_mantis"
+          ],
+          "count": 80,
+          "label": "ปราบตั๊กแตนอำพัน"
+        },
+        {
+          "kind": "collect",
+          "item": "crag_fur",
+          "count": 20,
+          "label": "ขนหมาป่าสันผา"
+        }
+      ],
+      "rewards": {
+        "exp": 7080,
+        "jobExp": 0,
+        "gold": 500,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "journey_mid_e",
+      "nameTh": "บันทึกเส้นทาง · ตั๊กแตนอำพัน",
+      "giver": "guard",
+      "level": 20,
+      "requires": [],
+      "offer": "สำรวจเส้นทาง Lv.20 ปราบตั๊กแตนอำพันและนำวัตถุดิบประจำถิ่นกลับมา · กดนำทางในบันทึกการเดินทางได้",
+      "complete": "เส้นทางนี้ปลอดภัยขึ้นแล้ว นำเศษผลึกช่างไปคราฟต์หินตีบวกเพื่อเตรียมตัวก่อนออกล่าพื้นที่ถัดไป",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "amber_mantis"
+          ],
+          "count": 10,
+          "label": "ปราบตั๊กแตนอำพัน"
+        },
+        {
+          "kind": "collect",
+          "item": "crag_fur",
+          "count": 5,
+          "label": "ขนหมาป่าสันผา"
+        }
+      ],
+      "rewards": {
+        "exp": 1770,
+        "jobExp": 0,
+        "gold": 300,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "daily_hunt_f",
+      "nameTh": "งานประจำวัน · ปูผลึกจันทรา",
+      "giver": "guard",
+      "level": 25,
+      "maxLevel": 29,
+      "requires": [],
+      "repeatPeriod": "daily",
+      "offer": "ช่วยดูแลพื้นที่ล่า Lv.25–29 ปราบปูผลึกจันทรา · รีเซ็ตทุกวัน 00:00 น. เวลาไทย",
+      "complete": "ขอบใจสำหรับความช่วยเหลือ เก็บเศษผลึกไว้คราฟต์หินตีบวกที่ช่างตีเหล็กได้",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "moon_crab"
+          ],
+          "count": 20,
+          "label": "ปราบปูผลึกจันทรา"
+        }
+      ],
+      "rewards": {
+        "exp": 2855,
+        "jobExp": 0,
+        "gold": 100,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "weekly_hunt_f",
+      "nameTh": "สัญญาประจำสัปดาห์ · ปูผลึกจันทรา",
+      "giver": "guard",
+      "level": 25,
+      "maxLevel": 29,
+      "requires": [],
+      "repeatPeriod": "weekly",
+      "offer": "ช่วยดูแลพื้นที่ล่า Lv.25–29 ปราบปูผลึกจันทราและรวบรวมวัตถุดิบให้ช่าง · รีเซ็ตวันจันทร์ 00:00 น. เวลาไทย",
+      "complete": "ขอบใจสำหรับความช่วยเหลือ เก็บเศษผลึกไว้คราฟต์หินตีบวกที่ช่างตีเหล็กได้",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "moon_crab"
+          ],
+          "count": 80,
+          "label": "ปราบปูผลึกจันทรา"
+        },
+        {
+          "kind": "collect",
+          "item": "crag_root",
+          "count": 20,
+          "label": "รากผาหิน"
+        }
+      ],
+      "rewards": {
+        "exp": 11420,
+        "jobExp": 0,
+        "gold": 550,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "journey_mid_f",
+      "nameTh": "บันทึกเส้นทาง · ปูผลึกจันทรา",
+      "giver": "guard",
+      "level": 25,
+      "requires": [],
+      "offer": "สำรวจเส้นทาง Lv.25 ปราบปูผลึกจันทราและนำวัตถุดิบประจำถิ่นกลับมา · กดนำทางในบันทึกการเดินทางได้",
+      "complete": "เส้นทางนี้ปลอดภัยขึ้นแล้ว นำเศษผลึกช่างไปคราฟต์หินตีบวกเพื่อเตรียมตัวก่อนออกล่าพื้นที่ถัดไป",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "moon_crab"
+          ],
+          "count": 10,
+          "label": "ปราบปูผลึกจันทรา"
+        },
+        {
+          "kind": "collect",
+          "item": "crag_root",
+          "count": 5,
+          "label": "รากผาหิน"
+        }
+      ],
+      "rewards": {
+        "exp": 2855,
+        "jobExp": 0,
+        "gold": 350,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "daily_hunt_g",
+      "nameTh": "งานประจำวัน · ซาเทอร์ขลุ่ยกก",
+      "giver": "guard",
+      "level": 30,
+      "maxLevel": 34,
+      "requires": [],
+      "repeatPeriod": "daily",
+      "offer": "ช่วยดูแลพื้นที่ล่า Lv.30–34 ปราบซาเทอร์ขลุ่ยกก · รีเซ็ตทุกวัน 00:00 น. เวลาไทย",
+      "complete": "ขอบใจสำหรับความช่วยเหลือ เก็บเศษผลึกไว้คราฟต์หินตีบวกที่ช่างตีเหล็กได้",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "greek_satyr"
+          ],
+          "count": 20,
+          "label": "ปราบซาเทอร์ขลุ่ยกก"
+        }
+      ],
+      "rewards": {
+        "exp": 4320,
+        "jobExp": 0,
+        "gold": 110,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "weekly_hunt_g",
+      "nameTh": "สัญญาประจำสัปดาห์ · ซาเทอร์ขลุ่ยกก",
+      "giver": "guard",
+      "level": 30,
+      "maxLevel": 34,
+      "requires": [],
+      "repeatPeriod": "weekly",
+      "offer": "ช่วยดูแลพื้นที่ล่า Lv.30–34 ปราบซาเทอร์ขลุ่ยกกและรวบรวมวัตถุดิบให้ช่าง · รีเซ็ตวันจันทร์ 00:00 น. เวลาไทย",
+      "complete": "ขอบใจสำหรับความช่วยเหลือ เก็บเศษผลึกไว้คราฟต์หินตีบวกที่ช่างตีเหล็กได้",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "greek_satyr"
+          ],
+          "count": 80,
+          "label": "ปราบซาเทอร์ขลุ่ยกก"
+        },
+        {
+          "kind": "collect",
+          "item": "greek_reed",
+          "count": 20,
+          "label": "กกขลุ่ยโบราณ"
+        }
+      ],
+      "rewards": {
+        "exp": 17280,
+        "jobExp": 0,
+        "gold": 600,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "journey_mid_g",
+      "nameTh": "บันทึกเส้นทาง · ซาเทอร์ขลุ่ยกก",
+      "giver": "guard",
+      "level": 30,
+      "requires": [],
+      "offer": "สำรวจเส้นทาง Lv.30 ปราบซาเทอร์ขลุ่ยกกและนำวัตถุดิบประจำถิ่นกลับมา · กดนำทางในบันทึกการเดินทางได้",
+      "complete": "เส้นทางนี้ปลอดภัยขึ้นแล้ว นำเศษผลึกช่างไปคราฟต์หินตีบวกเพื่อเตรียมตัวก่อนออกล่าพื้นที่ถัดไป",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "greek_satyr"
+          ],
+          "count": 10,
+          "label": "ปราบซาเทอร์ขลุ่ยกก"
+        },
+        {
+          "kind": "collect",
+          "item": "greek_reed",
+          "count": 5,
+          "label": "กกขลุ่ยโบราณ"
+        }
+      ],
+      "rewards": {
+        "exp": 4320,
+        "jobExp": 0,
+        "gold": 400,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "daily_hunt_h",
+      "nameTh": "งานประจำวัน · กินรีเฝ้าบึง",
+      "giver": "guard",
+      "level": 35,
+      "maxLevel": 39,
+      "requires": [],
+      "repeatPeriod": "daily",
+      "offer": "ช่วยดูแลพื้นที่ล่า Lv.35–39 ปราบกินรีเฝ้าบึง · รีเซ็ตทุกวัน 00:00 น. เวลาไทย",
+      "complete": "ขอบใจสำหรับความช่วยเหลือ เก็บเศษผลึกไว้คราฟต์หินตีบวกที่ช่างตีเหล็กได้",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "himmapan_01"
+          ],
+          "count": 20,
+          "label": "ปราบกินรีเฝ้าบึง"
+        }
+      ],
+      "rewards": {
+        "exp": 5480,
+        "jobExp": 0,
+        "gold": 120,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "weekly_hunt_h",
+      "nameTh": "สัญญาประจำสัปดาห์ · กินรีเฝ้าบึง",
+      "giver": "guard",
+      "level": 35,
+      "maxLevel": 39,
+      "requires": [],
+      "repeatPeriod": "weekly",
+      "offer": "ช่วยดูแลพื้นที่ล่า Lv.35–39 ปราบกินรีเฝ้าบึงและรวบรวมวัตถุดิบให้ช่าง · รีเซ็ตวันจันทร์ 00:00 น. เวลาไทย",
+      "complete": "ขอบใจสำหรับความช่วยเหลือ เก็บเศษผลึกไว้คราฟต์หินตีบวกที่ช่างตีเหล็กได้",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "himmapan_01"
+          ],
+          "count": 80,
+          "label": "ปราบกินรีเฝ้าบึง"
+        },
+        {
+          "kind": "collect",
+          "item": "himmapan_01_material",
+          "count": 20,
+          "label": "ขนปีกบัว"
+        }
+      ],
+      "rewards": {
+        "exp": 21920,
+        "jobExp": 0,
+        "gold": 650,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "journey_mid_h",
+      "nameTh": "บันทึกเส้นทาง · กินรีเฝ้าบึง",
+      "giver": "guard",
+      "level": 35,
+      "requires": [],
+      "offer": "สำรวจเส้นทาง Lv.35 ปราบกินรีเฝ้าบึงและนำวัตถุดิบประจำถิ่นกลับมา · กดนำทางในบันทึกการเดินทางได้",
+      "complete": "เส้นทางนี้ปลอดภัยขึ้นแล้ว นำเศษผลึกช่างไปคราฟต์หินตีบวกเพื่อเตรียมตัวก่อนออกล่าพื้นที่ถัดไป",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "himmapan_01"
+          ],
+          "count": 10,
+          "label": "ปราบกินรีเฝ้าบึง"
+        },
+        {
+          "kind": "collect",
+          "item": "himmapan_01_material",
+          "count": 5,
+          "label": "ขนปีกบัว"
+        }
+      ],
+      "rewards": {
+        "exp": 5480,
+        "jobExp": 0,
+        "gold": 450,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "daily_hunt_i",
+      "nameTh": "งานประจำวัน · สคารับทรายแก้ว",
+      "giver": "guard",
+      "level": 40,
+      "maxLevel": 44,
+      "requires": [],
+      "repeatPeriod": "daily",
+      "offer": "ช่วยดูแลพื้นที่ล่า Lv.40–44 ปราบสคารับทรายแก้ว · รีเซ็ตทุกวัน 00:00 น. เวลาไทย",
+      "complete": "ขอบใจสำหรับความช่วยเหลือ เก็บเศษผลึกไว้คราฟต์หินตีบวกที่ช่างตีเหล็กได้",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "desert_01"
+          ],
+          "count": 20,
+          "label": "ปราบสคารับทรายแก้ว"
+        }
+      ],
+      "rewards": {
+        "exp": 7990,
+        "jobExp": 0,
+        "gold": 130,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "weekly_hunt_i",
+      "nameTh": "สัญญาประจำสัปดาห์ · สคารับทรายแก้ว",
+      "giver": "guard",
+      "level": 40,
+      "maxLevel": 44,
+      "requires": [],
+      "repeatPeriod": "weekly",
+      "offer": "ช่วยดูแลพื้นที่ล่า Lv.40–44 ปราบสคารับทรายแก้วและรวบรวมวัตถุดิบให้ช่าง · รีเซ็ตวันจันทร์ 00:00 น. เวลาไทย",
+      "complete": "ขอบใจสำหรับความช่วยเหลือ เก็บเศษผลึกไว้คราฟต์หินตีบวกที่ช่างตีเหล็กได้",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "desert_01"
+          ],
+          "count": 80,
+          "label": "ปราบสคารับทรายแก้ว"
+        },
+        {
+          "kind": "collect",
+          "item": "desert_01_material",
+          "count": 20,
+          "label": "กระดองแก้ว"
+        }
+      ],
+      "rewards": {
+        "exp": 31960,
+        "jobExp": 0,
+        "gold": 700,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "journey_mid_i",
+      "nameTh": "บันทึกเส้นทาง · สคารับทรายแก้ว",
+      "giver": "guard",
+      "level": 40,
+      "requires": [],
+      "offer": "สำรวจเส้นทาง Lv.40 ปราบสคารับทรายแก้วและนำวัตถุดิบประจำถิ่นกลับมา · กดนำทางในบันทึกการเดินทางได้",
+      "complete": "เส้นทางนี้ปลอดภัยขึ้นแล้ว นำเศษผลึกช่างไปคราฟต์หินตีบวกเพื่อเตรียมตัวก่อนออกล่าพื้นที่ถัดไป",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "desert_01"
+          ],
+          "count": 10,
+          "label": "ปราบสคารับทรายแก้ว"
+        },
+        {
+          "kind": "collect",
+          "item": "desert_01_material",
+          "count": 5,
+          "label": "กระดองแก้ว"
+        }
+      ],
+      "rewards": {
+        "exp": 7990,
+        "jobExp": 0,
+        "gold": 500,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "daily_hunt_j",
+      "nameTh": "งานประจำวัน · มัมมี่พันตรา",
+      "giver": "guard",
+      "level": 45,
+      "maxLevel": 49,
+      "requires": [],
+      "repeatPeriod": "daily",
+      "offer": "ช่วยดูแลพื้นที่ล่า Lv.45–49 ปราบมัมมี่พันตรา · รีเซ็ตทุกวัน 00:00 น. เวลาไทย",
+      "complete": "ขอบใจสำหรับความช่วยเหลือ เก็บเศษผลึกไว้คราฟต์หินตีบวกที่ช่างตีเหล็กได้",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "desert_seal_mummy"
+          ],
+          "count": 20,
+          "label": "ปราบมัมมี่พันตรา"
+        }
+      ],
+      "rewards": {
+        "exp": 10265,
+        "jobExp": 0,
+        "gold": 140,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "weekly_hunt_j",
+      "nameTh": "สัญญาประจำสัปดาห์ · มัมมี่พันตรา",
+      "giver": "guard",
+      "level": 45,
+      "maxLevel": 49,
+      "requires": [],
+      "repeatPeriod": "weekly",
+      "offer": "ช่วยดูแลพื้นที่ล่า Lv.45–49 ปราบมัมมี่พันตราและรวบรวมวัตถุดิบให้ช่าง · รีเซ็ตวันจันทร์ 00:00 น. เวลาไทย",
+      "complete": "ขอบใจสำหรับความช่วยเหลือ เก็บเศษผลึกไว้คราฟต์หินตีบวกที่ช่างตีเหล็กได้",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "desert_seal_mummy"
+          ],
+          "count": 80,
+          "label": "ปราบมัมมี่พันตรา"
+        },
+        {
+          "kind": "collect",
+          "item": "desert_seal_mummy_material",
+          "count": 20,
+          "label": "ผ้าพันตรา"
+        }
+      ],
+      "rewards": {
+        "exp": 41060,
+        "jobExp": 0,
+        "gold": 750,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "journey_mid_j",
+      "nameTh": "บันทึกเส้นทาง · มัมมี่พันตรา",
+      "giver": "guard",
+      "level": 45,
+      "requires": [],
+      "offer": "สำรวจเส้นทาง Lv.45 ปราบมัมมี่พันตราและนำวัตถุดิบประจำถิ่นกลับมา · กดนำทางในบันทึกการเดินทางได้",
+      "complete": "เส้นทางนี้ปลอดภัยขึ้นแล้ว นำเศษผลึกช่างไปคราฟต์หินตีบวกเพื่อเตรียมตัวก่อนออกล่าพื้นที่ถัดไป",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "desert_seal_mummy"
+          ],
+          "count": 10,
+          "label": "ปราบมัมมี่พันตรา"
+        },
+        {
+          "kind": "collect",
+          "item": "desert_seal_mummy_material",
+          "count": 5,
+          "label": "ผ้าพันตรา"
+        }
+      ],
+      "rewards": {
+        "exp": 10265,
+        "jobExp": 0,
+        "gold": 550,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "daily_hunt_k",
+      "nameTh": "งานประจำวัน · ดรอเกิร์เกราะเยือก",
+      "giver": "guard",
+      "level": 50,
+      "maxLevel": 54,
+      "requires": [],
+      "repeatPeriod": "daily",
+      "offer": "ช่วยดูแลพื้นที่ล่า Lv.50–54 ปราบดรอเกิร์เกราะเยือก · รีเซ็ตทุกวัน 00:00 น. เวลาไทย",
+      "complete": "ขอบใจสำหรับความช่วยเหลือ เก็บเศษผลึกไว้คราฟต์หินตีบวกที่ช่างตีเหล็กได้",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "frost_01"
+          ],
+          "count": 20,
+          "label": "ปราบดรอเกิร์เกราะเยือก"
+        }
+      ],
+      "rewards": {
+        "exp": 12835,
+        "jobExp": 0,
+        "gold": 150,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "weekly_hunt_k",
+      "nameTh": "สัญญาประจำสัปดาห์ · ดรอเกิร์เกราะเยือก",
+      "giver": "guard",
+      "level": 50,
+      "maxLevel": 54,
+      "requires": [],
+      "repeatPeriod": "weekly",
+      "offer": "ช่วยดูแลพื้นที่ล่า Lv.50–54 ปราบดรอเกิร์เกราะเยือกและรวบรวมวัตถุดิบให้ช่าง · รีเซ็ตวันจันทร์ 00:00 น. เวลาไทย",
+      "complete": "ขอบใจสำหรับความช่วยเหลือ เก็บเศษผลึกไว้คราฟต์หินตีบวกที่ช่างตีเหล็กได้",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "frost_01"
+          ],
+          "count": 80,
+          "label": "ปราบดรอเกิร์เกราะเยือก"
+        },
+        {
+          "kind": "collect",
+          "item": "frost_01_material",
+          "count": 20,
+          "label": "เหล็กเยือก"
+        }
+      ],
+      "rewards": {
+        "exp": 51340,
+        "jobExp": 0,
+        "gold": 800,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "journey_mid_k",
+      "nameTh": "บันทึกเส้นทาง · ดรอเกิร์เกราะเยือก",
+      "giver": "guard",
+      "level": 50,
+      "requires": [],
+      "offer": "สำรวจเส้นทาง Lv.50 ปราบดรอเกิร์เกราะเยือกและนำวัตถุดิบประจำถิ่นกลับมา · กดนำทางในบันทึกการเดินทางได้",
+      "complete": "เส้นทางนี้ปลอดภัยขึ้นแล้ว นำเศษผลึกช่างไปคราฟต์หินตีบวกเพื่อเตรียมตัวก่อนออกล่าพื้นที่ถัดไป",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "frost_01"
+          ],
+          "count": 10,
+          "label": "ปราบดรอเกิร์เกราะเยือก"
+        },
+        {
+          "kind": "collect",
+          "item": "frost_01_material",
+          "count": 5,
+          "label": "เหล็กเยือก"
+        }
+      ],
+      "rewards": {
+        "exp": 12835,
+        "jobExp": 0,
+        "gold": 600,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "daily_hunt_l",
+      "nameTh": "งานประจำวัน · ม้าคลื่นเหมันต์",
+      "giver": "guard",
+      "level": 55,
+      "maxLevel": 59,
+      "requires": [],
+      "repeatPeriod": "daily",
+      "offer": "ช่วยดูแลพื้นที่ล่า Lv.55–59 ปราบม้าคลื่นเหมันต์ · รีเซ็ตทุกวัน 00:00 น. เวลาไทย",
+      "complete": "ขอบใจสำหรับความช่วยเหลือ เก็บเศษผลึกไว้คราฟต์หินตีบวกที่ช่างตีเหล็กได้",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "frost_winter_wavehorse"
+          ],
+          "count": 20,
+          "label": "ปราบม้าคลื่นเหมันต์"
+        }
+      ],
+      "rewards": {
+        "exp": 15705,
+        "jobExp": 0,
+        "gold": 160,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "weekly_hunt_l",
+      "nameTh": "สัญญาประจำสัปดาห์ · ม้าคลื่นเหมันต์",
+      "giver": "guard",
+      "level": 55,
+      "maxLevel": 59,
+      "requires": [],
+      "repeatPeriod": "weekly",
+      "offer": "ช่วยดูแลพื้นที่ล่า Lv.55–59 ปราบม้าคลื่นเหมันต์และรวบรวมวัตถุดิบให้ช่าง · รีเซ็ตวันจันทร์ 00:00 น. เวลาไทย",
+      "complete": "ขอบใจสำหรับความช่วยเหลือ เก็บเศษผลึกไว้คราฟต์หินตีบวกที่ช่างตีเหล็กได้",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "frost_winter_wavehorse"
+          ],
+          "count": 80,
+          "label": "ปราบม้าคลื่นเหมันต์"
+        },
+        {
+          "kind": "collect",
+          "item": "frost_winter_wavehorse_material",
+          "count": 20,
+          "label": "แผงคอคลื่นเย็น"
+        }
+      ],
+      "rewards": {
+        "exp": 62820,
+        "jobExp": 0,
+        "gold": 850,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "journey_mid_l",
+      "nameTh": "บันทึกเส้นทาง · ม้าคลื่นเหมันต์",
+      "giver": "guard",
+      "level": 55,
+      "requires": [],
+      "offer": "สำรวจเส้นทาง Lv.55 ปราบม้าคลื่นเหมันต์และนำวัตถุดิบประจำถิ่นกลับมา · กดนำทางในบันทึกการเดินทางได้",
+      "complete": "เส้นทางนี้ปลอดภัยขึ้นแล้ว นำเศษผลึกช่างไปคราฟต์หินตีบวกเพื่อเตรียมตัวก่อนออกล่าพื้นที่ถัดไป",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "frost_winter_wavehorse"
+          ],
+          "count": 10,
+          "label": "ปราบม้าคลื่นเหมันต์"
+        },
+        {
+          "kind": "collect",
+          "item": "frost_winter_wavehorse_material",
+          "count": 5,
+          "label": "แผงคอคลื่นเย็น"
+        }
+      ],
+      "rewards": {
+        "exp": 15705,
+        "jobExp": 0,
+        "gold": 650,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "daily_hunt_m",
+      "nameTh": "งานประจำวัน · คัปปะลำธาร",
+      "giver": "guard",
+      "level": 60,
+      "maxLevel": 64,
+      "requires": [],
+      "repeatPeriod": "daily",
+      "offer": "ช่วยดูแลพื้นที่ล่า Lv.60–64 ปราบคัปปะลำธาร · รีเซ็ตทุกวัน 00:00 น. เวลาไทย",
+      "complete": "ขอบใจสำหรับความช่วยเหลือ เก็บเศษผลึกไว้คราฟต์หินตีบวกที่ช่างตีเหล็กได้",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "yokai_01"
+          ],
+          "count": 20,
+          "label": "ปราบคัปปะลำธาร"
+        }
+      ],
+      "rewards": {
+        "exp": 21700,
+        "jobExp": 0,
+        "gold": 170,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "weekly_hunt_m",
+      "nameTh": "สัญญาประจำสัปดาห์ · คัปปะลำธาร",
+      "giver": "guard",
+      "level": 60,
+      "maxLevel": 64,
+      "requires": [],
+      "repeatPeriod": "weekly",
+      "offer": "ช่วยดูแลพื้นที่ล่า Lv.60–64 ปราบคัปปะลำธารและรวบรวมวัตถุดิบให้ช่าง · รีเซ็ตวันจันทร์ 00:00 น. เวลาไทย",
+      "complete": "ขอบใจสำหรับความช่วยเหลือ เก็บเศษผลึกไว้คราฟต์หินตีบวกที่ช่างตีเหล็กได้",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "yokai_01"
+          ],
+          "count": 80,
+          "label": "ปราบคัปปะลำธาร"
+        },
+        {
+          "kind": "collect",
+          "item": "yokai_01_material",
+          "count": 20,
+          "label": "กระดองธาร"
+        }
+      ],
+      "rewards": {
+        "exp": 86800,
+        "jobExp": 0,
+        "gold": 900,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "journey_mid_m",
+      "nameTh": "บันทึกเส้นทาง · คัปปะลำธาร",
+      "giver": "guard",
+      "level": 60,
+      "requires": [],
+      "offer": "สำรวจเส้นทาง Lv.60 ปราบคัปปะลำธารและนำวัตถุดิบประจำถิ่นกลับมา · กดนำทางในบันทึกการเดินทางได้",
+      "complete": "เส้นทางนี้ปลอดภัยขึ้นแล้ว นำเศษผลึกช่างไปคราฟต์หินตีบวกเพื่อเตรียมตัวก่อนออกล่าพื้นที่ถัดไป",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "yokai_01"
+          ],
+          "count": 10,
+          "label": "ปราบคัปปะลำธาร"
+        },
+        {
+          "kind": "collect",
+          "item": "yokai_01_material",
+          "count": 5,
+          "label": "กระดองธาร"
+        }
+      ],
+      "rewards": {
+        "exp": 21700,
+        "jobExp": 0,
+        "gold": 700,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "daily_hunt_n",
+      "nameTh": "งานประจำวัน · นูเอเมฆฝน",
+      "giver": "guard",
+      "level": 65,
+      "maxLevel": 69,
+      "requires": [],
+      "repeatPeriod": "daily",
+      "offer": "ช่วยดูแลพื้นที่ล่า Lv.65–69 ปราบนูเอเมฆฝน · รีเซ็ตทุกวัน 00:00 น. เวลาไทย",
+      "complete": "ขอบใจสำหรับความช่วยเหลือ เก็บเศษผลึกไว้คราฟต์หินตีบวกที่ช่างตีเหล็กได้",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "yokai_rain_nue"
+          ],
+          "count": 20,
+          "label": "ปราบนูเอเมฆฝน"
+        }
+      ],
+      "rewards": {
+        "exp": 25450,
+        "jobExp": 0,
+        "gold": 180,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "weekly_hunt_n",
+      "nameTh": "สัญญาประจำสัปดาห์ · นูเอเมฆฝน",
+      "giver": "guard",
+      "level": 65,
+      "maxLevel": 69,
+      "requires": [],
+      "repeatPeriod": "weekly",
+      "offer": "ช่วยดูแลพื้นที่ล่า Lv.65–69 ปราบนูเอเมฆฝนและรวบรวมวัตถุดิบให้ช่าง · รีเซ็ตวันจันทร์ 00:00 น. เวลาไทย",
+      "complete": "ขอบใจสำหรับความช่วยเหลือ เก็บเศษผลึกไว้คราฟต์หินตีบวกที่ช่างตีเหล็กได้",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "yokai_rain_nue"
+          ],
+          "count": 80,
+          "label": "ปราบนูเอเมฆฝน"
+        },
+        {
+          "kind": "collect",
+          "item": "yokai_rain_nue_material",
+          "count": 20,
+          "label": "เขี้ยวเมฆฝน"
+        }
+      ],
+      "rewards": {
+        "exp": 101800,
+        "jobExp": 0,
+        "gold": 950,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "daily_hunt_o",
+      "nameTh": "งานประจำวัน · ปลามังกรเมฆา",
+      "giver": "guard",
+      "level": 70,
+      "maxLevel": 74,
+      "requires": [],
+      "repeatPeriod": "daily",
+      "offer": "ช่วยดูแลพื้นที่ล่า Lv.70–74 ปราบปลามังกรเมฆา · รีเซ็ตทุกวัน 00:00 น. เวลาไทย",
+      "complete": "ขอบใจสำหรับความช่วยเหลือ เก็บเศษผลึกไว้คราฟต์หินตีบวกที่ช่างตีเหล็กได้",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "dragon_cloud_carp"
+          ],
+          "count": 20,
+          "label": "ปราบปลามังกรเมฆา"
+        }
+      ],
+      "rewards": {
+        "exp": 29500,
+        "jobExp": 0,
+        "gold": 190,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "weekly_hunt_o",
+      "nameTh": "สัญญาประจำสัปดาห์ · ปลามังกรเมฆา",
+      "giver": "guard",
+      "level": 70,
+      "maxLevel": 74,
+      "requires": [],
+      "repeatPeriod": "weekly",
+      "offer": "ช่วยดูแลพื้นที่ล่า Lv.70–74 ปราบปลามังกรเมฆาและรวบรวมวัตถุดิบให้ช่าง · รีเซ็ตวันจันทร์ 00:00 น. เวลาไทย",
+      "complete": "ขอบใจสำหรับความช่วยเหลือ เก็บเศษผลึกไว้คราฟต์หินตีบวกที่ช่างตีเหล็กได้",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "dragon_cloud_carp"
+          ],
+          "count": 80,
+          "label": "ปราบปลามังกรเมฆา"
+        },
+        {
+          "kind": "collect",
+          "item": "dragon_cloud_carp_material",
+          "count": 20,
+          "label": "เกล็ดเมฆอ่อน"
+        }
+      ],
+      "rewards": {
+        "exp": 118000,
+        "jobExp": 0,
+        "gold": 1000,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "daily_hunt_p",
+      "nameTh": "งานประจำวัน · มังกรน้อยกระดิ่ง",
+      "giver": "guard",
+      "level": 75,
+      "maxLevel": 79,
+      "requires": [],
+      "repeatPeriod": "daily",
+      "offer": "ช่วยดูแลพื้นที่ล่า Lv.75–79 ปราบมังกรน้อยกระดิ่ง · รีเซ็ตทุกวัน 00:00 น. เวลาไทย",
+      "complete": "ขอบใจสำหรับความช่วยเหลือ เก็บเศษผลึกไว้คราฟต์หินตีบวกที่ช่างตีเหล็กได้",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "dragon_bell_drake"
+          ],
+          "count": 20,
+          "label": "ปราบมังกรน้อยกระดิ่ง"
+        }
+      ],
+      "rewards": {
+        "exp": 33850,
+        "jobExp": 0,
+        "gold": 200,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "weekly_hunt_p",
+      "nameTh": "สัญญาประจำสัปดาห์ · มังกรน้อยกระดิ่ง",
+      "giver": "guard",
+      "level": 75,
+      "maxLevel": 79,
+      "requires": [],
+      "repeatPeriod": "weekly",
+      "offer": "ช่วยดูแลพื้นที่ล่า Lv.75–79 ปราบมังกรน้อยกระดิ่งและรวบรวมวัตถุดิบให้ช่าง · รีเซ็ตวันจันทร์ 00:00 น. เวลาไทย",
+      "complete": "ขอบใจสำหรับความช่วยเหลือ เก็บเศษผลึกไว้คราฟต์หินตีบวกที่ช่างตีเหล็กได้",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "dragon_bell_drake"
+          ],
+          "count": 80,
+          "label": "ปราบมังกรน้อยกระดิ่ง"
+        },
+        {
+          "kind": "collect",
+          "item": "dragon_bell_drake_material",
+          "count": 20,
+          "label": "กระดิ่งเมฆร้าว"
+        }
+      ],
+      "rewards": {
+        "exp": 135400,
+        "jobExp": 0,
+        "gold": 1050,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "daily_hunt_q",
+      "nameTh": "งานประจำวัน · พูกาม้าเงา",
+      "giver": "guard",
+      "level": 80,
+      "maxLevel": 84,
+      "requires": [],
+      "repeatPeriod": "daily",
+      "offer": "ช่วยดูแลพื้นที่ล่า Lv.80–84 ปราบพูกาม้าเงา · รีเซ็ตทุกวัน 00:00 น. เวลาไทย",
+      "complete": "ขอบใจสำหรับความช่วยเหลือ เก็บเศษผลึกไว้คราฟต์หินตีบวกที่ช่างตีเหล็กได้",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "fae_puca_shadowhorse"
+          ],
+          "count": 20,
+          "label": "ปราบพูกาม้าเงา"
+        }
+      ],
+      "rewards": {
+        "exp": 38500,
+        "jobExp": 0,
+        "gold": 210,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "weekly_hunt_q",
+      "nameTh": "สัญญาประจำสัปดาห์ · พูกาม้าเงา",
+      "giver": "guard",
+      "level": 80,
+      "maxLevel": 84,
+      "requires": [],
+      "repeatPeriod": "weekly",
+      "offer": "ช่วยดูแลพื้นที่ล่า Lv.80–84 ปราบพูกาม้าเงาและรวบรวมวัตถุดิบให้ช่าง · รีเซ็ตวันจันทร์ 00:00 น. เวลาไทย",
+      "complete": "ขอบใจสำหรับความช่วยเหลือ เก็บเศษผลึกไว้คราฟต์หินตีบวกที่ช่างตีเหล็กได้",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "fae_puca_shadowhorse"
+          ],
+          "count": 80,
+          "label": "ปราบพูกาม้าเงา"
+        },
+        {
+          "kind": "collect",
+          "item": "fae_puca_shadowhorse_material",
+          "count": 20,
+          "label": "ขนพูกา"
+        }
+      ],
+      "rewards": {
+        "exp": 154000,
+        "jobExp": 0,
+        "gold": 1100,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "daily_hunt_r",
+      "nameTh": "งานประจำวัน · กวางตะไคร่จันทรา",
+      "giver": "guard",
+      "level": 85,
+      "maxLevel": 89,
+      "requires": [],
+      "repeatPeriod": "daily",
+      "offer": "ช่วยดูแลพื้นที่ล่า Lv.85–89 ปราบกวางตะไคร่จันทรา · รีเซ็ตทุกวัน 00:00 น. เวลาไทย",
+      "complete": "ขอบใจสำหรับความช่วยเหลือ เก็บเศษผลึกไว้คราฟต์หินตีบวกที่ช่างตีเหล็กได้",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "fae_moonlichen_stag"
+          ],
+          "count": 20,
+          "label": "ปราบกวางตะไคร่จันทรา"
+        }
+      ],
+      "rewards": {
+        "exp": 43450,
+        "jobExp": 0,
+        "gold": 220,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "weekly_hunt_r",
+      "nameTh": "สัญญาประจำสัปดาห์ · กวางตะไคร่จันทรา",
+      "giver": "guard",
+      "level": 85,
+      "maxLevel": 89,
+      "requires": [],
+      "repeatPeriod": "weekly",
+      "offer": "ช่วยดูแลพื้นที่ล่า Lv.85–89 ปราบกวางตะไคร่จันทราและรวบรวมวัตถุดิบให้ช่าง · รีเซ็ตวันจันทร์ 00:00 น. เวลาไทย",
+      "complete": "ขอบใจสำหรับความช่วยเหลือ เก็บเศษผลึกไว้คราฟต์หินตีบวกที่ช่างตีเหล็กได้",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "fae_moonlichen_stag"
+          ],
+          "count": 80,
+          "label": "ปราบกวางตะไคร่จันทรา"
+        },
+        {
+          "kind": "collect",
+          "item": "fae_moonlichen_stag_material",
+          "count": 20,
+          "label": "เขาตะไคร่จันทรา"
+        }
+      ],
+      "rewards": {
+        "exp": 173800,
+        "jobExp": 0,
+        "gold": 1150,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "daily_hunt_s",
+      "nameTh": "งานประจำวัน · แมงกะพรุนละอองดาว",
+      "giver": "guard",
+      "level": 90,
+      "maxLevel": 94,
+      "requires": [],
+      "repeatPeriod": "daily",
+      "offer": "ช่วยดูแลพื้นที่ล่า Lv.90–94 ปราบแมงกะพรุนละอองดาว · รีเซ็ตทุกวัน 00:00 น. เวลาไทย",
+      "complete": "ขอบใจสำหรับความช่วยเหลือ เก็บเศษผลึกไว้คราฟต์หินตีบวกที่ช่างตีเหล็กได้",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "astral_stardust_jellyfish"
+          ],
+          "count": 20,
+          "label": "ปราบแมงกะพรุนละอองดาว"
+        }
+      ],
+      "rewards": {
+        "exp": 48700,
+        "jobExp": 0,
+        "gold": 230,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "weekly_hunt_s",
+      "nameTh": "สัญญาประจำสัปดาห์ · แมงกะพรุนละอองดาว",
+      "giver": "guard",
+      "level": 90,
+      "maxLevel": 94,
+      "requires": [],
+      "repeatPeriod": "weekly",
+      "offer": "ช่วยดูแลพื้นที่ล่า Lv.90–94 ปราบแมงกะพรุนละอองดาวและรวบรวมวัตถุดิบให้ช่าง · รีเซ็ตวันจันทร์ 00:00 น. เวลาไทย",
+      "complete": "ขอบใจสำหรับความช่วยเหลือ เก็บเศษผลึกไว้คราฟต์หินตีบวกที่ช่างตีเหล็กได้",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "astral_stardust_jellyfish"
+          ],
+          "count": 80,
+          "label": "ปราบแมงกะพรุนละอองดาว"
+        },
+        {
+          "kind": "collect",
+          "item": "astral_stardust_jellyfish_material",
+          "count": 20,
+          "label": "ละอองดาวมีชีพ"
+        }
+      ],
+      "rewards": {
+        "exp": 194800,
+        "jobExp": 0,
+        "gold": 1200,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "daily_hunt_t",
+      "nameTh": "งานประจำวัน · หุ่นระฆังสุญญากาศ",
+      "giver": "guard",
+      "level": 95,
+      "maxLevel": 100,
+      "requires": [],
+      "repeatPeriod": "daily",
+      "offer": "ช่วยดูแลพื้นที่ล่า Lv.95–100 ปราบหุ่นระฆังสุญญากาศ · รีเซ็ตทุกวัน 00:00 น. เวลาไทย",
+      "complete": "ขอบใจสำหรับความช่วยเหลือ เก็บเศษผลึกไว้คราฟต์หินตีบวกที่ช่างตีเหล็กได้",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "astral_vacuum_bell_construct"
+          ],
+          "count": 20,
+          "label": "ปราบหุ่นระฆังสุญญากาศ"
+        }
+      ],
+      "rewards": {
+        "exp": 54250,
+        "jobExp": 0,
+        "gold": 240,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "weekly_hunt_t",
+      "nameTh": "สัญญาประจำสัปดาห์ · หุ่นระฆังสุญญากาศ",
+      "giver": "guard",
+      "level": 95,
+      "maxLevel": 100,
+      "requires": [],
+      "repeatPeriod": "weekly",
+      "offer": "ช่วยดูแลพื้นที่ล่า Lv.95–100 ปราบหุ่นระฆังสุญญากาศและรวบรวมวัตถุดิบให้ช่าง · รีเซ็ตวันจันทร์ 00:00 น. เวลาไทย",
+      "complete": "ขอบใจสำหรับความช่วยเหลือ เก็บเศษผลึกไว้คราฟต์หินตีบวกที่ช่างตีเหล็กได้",
+      "objectives": [
+        {
+          "kind": "kill",
+          "monsters": [
+            "astral_vacuum_bell_construct"
+          ],
+          "count": 80,
+          "label": "ปราบหุ่นระฆังสุญญากาศ"
+        },
+        {
+          "kind": "collect",
+          "item": "astral_vacuum_bell_construct_material",
+          "count": 20,
+          "label": "แกนระฆังดาว"
+        }
+      ],
+      "rewards": {
+        "exp": 217000,
+        "jobExp": 0,
+        "gold": 1250,
+        "items": [
+          {
+            "template": "forge_fragment",
+            "qty": 10
+          }
+        ]
+      }
     }
   ]
 }

@@ -572,6 +572,8 @@ export const QuestsSchema = z.object({
 		level: positive.int(),
 		requires: z.array(z.string()),
 		repeatHours: positive.optional(),
+		maxLevel: positive.int().optional(),
+		repeatPeriod: z.enum(['daily','weekly']).optional(),
 		offer: z.string(),
 		complete: z.string(),
 		objectives: z.array(QuestObjectiveSchema).min(1),

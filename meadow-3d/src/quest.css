@@ -27,3 +27,8 @@
 #npc-dialog .npc-close,#npc-dialog .npc-shop-open{font:inherit;min-height:38px;padding:0 16px;color:#fff4d6;background:#17372b;border:1px solid #b49e69;border-radius:6px;cursor:pointer}
 #npc-dialog .npc-shop-open{background:#5c4a1f;border-color:#ecd28e}
 .quest-actions button.primary{flex:0 0 auto}
+.quest-categories{display:flex;gap:5px;flex-wrap:wrap;margin:3px 0 8px;padding-bottom:10px;border-bottom:1px solid #b6a26a33}
+.quest-categories button{flex:1;min-height:34px;padding:7px 10px;border:1px solid #819b7a44;border-radius:6px;background:#0d251b;color:#a6c1ac;font:500 11px var(--font-ui);cursor:pointer;white-space:nowrap}
+.quest-categories button[aria-pressed=true]{border-color:#c6ae70;background:#3b5236;color:#f0deb0}
+.quest-categories button:focus-visible{outline:2px solid #edd49a;outline-offset:2px}
+.npc-quest .quest-reset{padding:6px 8px;border-left:2px solid #a9945d;background:#0b211980;color:#b4cdb5;font-size:11px;line-height:1.7}

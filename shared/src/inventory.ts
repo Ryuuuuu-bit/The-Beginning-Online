@@ -344,7 +344,7 @@ export function applyInventory(
 		for (const id of ids) {
 			const i = owned(id),
 				t = template(i.template);
-			if (i.bound && op.op === "sell") throw Error("ขายของผูกมัดไม่ได้");
+			if ((i.bound || t.bind === 'account') && op.op === "sell") throw Error("ขายของผูกมัดไม่ได้");
 			const qty = op.items ? op.items.find(row=>row.id===id)!.qty : op.ids ? i.qty : count;
 			if (!Number.isSafeInteger(qty) || qty < 1 || (!op.ids && qty > 9999)) throw Error("จำนวนไม่ถูกต้อง");
 			const value =

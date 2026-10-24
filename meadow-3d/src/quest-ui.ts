@@ -1,4 +1,4 @@
-import { loadGameData, questStatus, objectiveProgress, questsFor, emptyQuests, type QuestState, type QuestGiver, type Inventory } from '@the-beginning-online/shared';
+import { loadGameData, questStatus, questResetAt, objectiveProgress, questsFor, emptyQuests, type QuestState, type QuestGiver, type Inventory } from '@the-beginning-online/shared';
 import './quest.css';
 import { questDestination, type QuestDestination } from './quest-navigation';
 import { MAP_INFO, type MapId } from '@the-beginning-online/shared/maps';
@@ -12,6 +12,7 @@ interface PlayerView { level: number; x: number; z: number; inventory?: Inventor
 /** NPC quest dialogs and the journal tracker. The server validates every accept/turn-in. */
 export function mountQuests(options: { send: (m: unknown) => void; player: () => PlayerView; map: () => MapId; navigate: (point: QuestDestination) => void; notice: (text: string, chat?: 'system' | 'loot') => void }) {
 	let state: QuestState = emptyQuests(), ready = new Set<string>(), openGiver: QuestGiver | null = null, onChange: (() => void) | null = null;
+	let category: 'story'|'daily'|'weekly' = 'story';
 	const tracker = document.createElement('ol');
 	tracker.id = 'quest-tracker';
 	document.querySelector('#ui .quest')?.append(tracker);
@@ -65,8 +66,14 @@ export function mountQuests(options: { send: (m: unknown) => void; player: () =>
 		const p = options.player(), now = Date.now();
 		const box = document.createElement('section');
 		box.className = 'npc-quests';
+		const categories=document.createElement('nav');categories.className='quest-categories';categories.setAttribute('aria-label','ประเภทภารกิจ');
+		for(const [id,label] of [['story','เส้นทางผจญภัย'],['daily','ประจำวัน'],['weekly','ประจำสัปดาห์']] as const){
+		 const b=document.createElement('button');b.type='button';b.textContent=label;b.setAttribute('aria-pressed',String(category===id));
+		 b.onclick=()=>{category=id;const next=section(giver);box.replaceWith(next);next.querySelector<HTMLButtonElement>('[aria-pressed=true]')?.focus();};categories.append(b);
+		}box.append(categories);
 		const list = questsFor(giver, data).map(q => ({ q, status: questStatus(q, state, p.level, now, p.inventory) }))
-			.filter(({ q, status }) => status !== 'locked' || (q.requires.every(r => state.done[r] !== undefined) && p.level < q.level));
+			.filter(({q,status})=>(q.repeatPeriod??'story')===category &&
+			 (q.repeatPeriod ? ['active','ready'].includes(status)||(p.level>=q.level&&p.level<=(q.maxLevel??100)) : status!=='locked'||(q.requires.every(r=>state.done[r]!==undefined)&&p.level<q.level&&q.level<=p.level+5)));
 		for (const { q, status } of list) {
 			const card = document.createElement('article');
 			card.className = 'npc-quest';
@@ -80,6 +87,8 @@ export function mountQuests(options: { send: (m: unknown) => void; player: () =>
 			const text = document.createElement('p');
 			text.textContent = status === 'done' || status === 'cooldown' ? q.complete : q.offer;
 			card.append(head, text);
+			if(q.repeatPeriod){const reset=document.createElement('p');reset.className='quest-reset';reset.textContent=`Lv.${q.level}–${q.maxLevel} · รีเซ็ต${q.repeatPeriod==='weekly'?'วันจันทร์':'ทุกวัน'} 00:00 น. (ไทย)`;
+			 if(status==='cooldown')reset.textContent+=' · รับอีกครั้ง '+new Date(questResetAt(q,state.done[q.id])).toLocaleString('th-TH',{timeZone:'Asia/Bangkok',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});card.append(reset);}
 			if (status !== 'done') {
 				const goals = document.createElement('ul');
 				const progress = objectiveProgress(q, state, p.inventory);
@@ -137,6 +146,7 @@ export function mountQuests(options: { send: (m: unknown) => void; player: () =>
 		/** Renders the quest section into a container; re-renders on quest updates while open. */
 		mount(kind: string, container: HTMLElement) {
 			if (!isGiver(kind)) return;
+			if(openGiver!==kind)category='story';
 			openGiver = kind;
 			const draw = () => { container.querySelector('.npc-quests')?.remove(); container.append(section(kind)); };
 			onChange = draw;

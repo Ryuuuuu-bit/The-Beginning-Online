@@ -70,7 +70,7 @@ export class PostgresStore implements Store {
 
  private async loadInventory(c:PoolClient,id:string):Promise<Inventory> {
   const items=(await c.query('SELECT * FROM tn2_items WHERE character_id=$1 FOR UPDATE',[id])).rows.map(i=>({id:i.id,template:i.template,qty:1,location:i.location,slot:i.slot,refine:i.refine,cards:i.cards,bound:i.bound,source:i.source,...(i.sockets?{sockets:i.sockets}:{}),...(i.roll?{roll:i.roll}:{})}));
-  const stacks=(await c.query('SELECT * FROM tn2_item_stacks WHERE character_id=$1 FOR UPDATE',[id])).rows.map(i=>({id:i.location==='bag'?'stack:'+i.template:'stack:'+i.location+':'+i.template,template:i.template,qty:i.qty,location:i.location,slot:null,refine:0,cards:[],bound:false,source:i.source}));
+  const stacks=(await c.query('SELECT * FROM tn2_item_stacks WHERE character_id=$1 FOR UPDATE',[id])).rows.map(i=>({id:i.location==='bag'?'stack:'+i.template:'stack:'+i.location+':'+i.template,template:i.template,qty:i.qty,location:i.location,slot:null,refine:0,cards:[],bound:economyData.items.items.find(t=>t.id===i.template)?.bind==='account',source:i.source}));
   const settings=(await c.query('SELECT auto_pickup FROM tn2_characters WHERE id=$1',[id])).rows[0];return {version:1,items:[...items,...stacks],autoPickup:settings.auto_pickup};
  }
  private async writeInventory(c:PoolClient,id:string,inv:Inventory) {
