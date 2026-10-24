@@ -43,11 +43,15 @@ function showItem(id:string){
  const unique=STARTER_UNIQUES[id],effects=id.startsWith('card_')?[cardEffects(data,id)]:[...item.modifiers.map(modifierText).filter(Boolean),...(unique?[...unique.rolls.map(r=>`${r.name} ${r.min}–${r.max}`),...unique.lines]:[])];
  if(category(id)==='gear'&&id.startsWith('field_'))effects.unshift('อุปกรณ์ฐานสำหรับสุ่มออฟ · ค่าของจริงขึ้นกับระดับไอเทมและผลสุ่ม');
  if(item.atk)effects.push('พลังโจมตีฐาน '+item.atk);if(item.matk)effects.push('พลังเวทฐาน '+item.matk);
+ if(item.effect==='hp'||item.effect==='sp')effects.push(`ฟื้น ${item.effect.toUpperCase()} ${item.amount?.toLocaleString('en-US')}`);
  const lines=document.createElement('ul');for(const effect of effects.filter(Boolean)){const line=document.createElement('li');line.textContent=effect;lines.append(line);}content.append(lines);
+ const prices=document.createElement('p'),offers=Object.entries(data.economy.shops).filter(([,shop])=>shop[id]!==undefined);
+ const shopNames:Record<string,string>={market:'ร้านเบ็ดเตล็ด',forge:'ร้านตีเหล็ก'};
+ prices.textContent=offers.map(([shop,stock])=>`${shopNames[shop]??shop}: ซื้อ ${stock[id].toLocaleString('en-US')} ทอง`).concat(`ราคาขายคืนฐาน ${Math.floor(item.npcPrice*data.economy.sellMultiplier).toLocaleString('en-US')} ทอง`).join(' · ');content.append(prices);
  const heading=document.createElement('h3');heading.textContent='พบได้จาก';content.append(heading);
  const owners=dropOwners(id);
  for(const monster of owners){const a=document.createElement('a');a.href='/monsters.html#'+encodeURIComponent(monster.id);a.textContent=monster.nameTh+' · Lv.'+monster.level;a.className='item-drop-owner';content.append(a);}
- if(!owners.length){const note=document.createElement('p');note.textContent='ไม่มีรายชื่อมอนสเตอร์ที่ดรอปโดยตรงในข้อมูลปัจจุบัน';content.append(note);}
+ if(!owners.length){const note=document.createElement('p');note.textContent=offers.length?'ซื้อได้จากร้านในนครที่ถูกลืมเลือน':'ไม่มีรายชื่อมอนสเตอร์ที่ดรอปโดยตรงในข้อมูลปัจจุบัน';content.append(note);}
  dialog.querySelector<HTMLButtonElement>('.item-detail-close')!.onclick=()=>dialog.close();if(!dialog.open)dialog.showModal();
 }
 if(publicCatalog){

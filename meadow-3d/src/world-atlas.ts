@@ -5,7 +5,7 @@ import atlasImage from './assets/world-atlas-v1.webp?url';
 import './world-atlas.css';
 export interface AtlasRegion {id:string;mapId:MapId|null;name:string;levels:number[];status:string;myth:string;climate:string}
 export const ATLAS_REGIONS:AtlasRegion[]=[{id:'city',mapId:'city_plaza',name:'นครที่ถูกลืมเลือน',levels:[],status:'playable',myth:'เมืองสี่ประตู',climate:'ตลาด คลัง งานช่าง และจุดรวมปาร์ตี้'},...plan.biomes.map(b=>({id:b.id,mapId:b.mapId as MapId|null,name:b.name,levels:b.levels,status:b.status,myth:b.myth,climate:b.climate}))];
-export const atlasLevel=(r:AtlasRegion)=>r.levels.length?r.levels[0]===r.levels[1]?`Lv.${r.levels[0]}`:`Lv.${r.levels[1]-r.levels[0]>5?`${r.levels[0]}–${r.levels[0]+4} / ${r.levels[0]+5}–${r.levels[1]}`:r.levels.join('–')}`:'เขตปลอดภัย';
+export const atlasLevel=(r:Pick<AtlasRegion,'levels'>)=>r.levels.length?r.levels[0]===r.levels[1]?`Lv.${r.levels[0]}`:`Lv.${r.levels[1]-r.levels[0]>5?`${r.levels[0]}–${r.levels[0]+4} / ${r.levels[0]+5}–${r.levels[1]}`:r.levels.join('–')}`:'เขตปลอดภัย';
 const positions=new Map(layout.points.map(p=>[p.id,p]));
 /** Decorative geography only. Actual travel remains the caller's authoritative gate route. */
 export function mountWorldAtlas(host:HTMLElement,o:{currentMap?:MapId;level?:()=>number;onSelect:(region:AtlasRegion)=>void}){

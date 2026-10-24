@@ -12,3 +12,4 @@ if(host)for(const [id,image]of Object.entries(illustrations)){
 const regionCount=document.querySelector('[data-world-regions]');if(regionCount)regionCount.textContent=String(REGIONS.length);
 const maxLevel=document.querySelector('[data-world-max]');if(maxLevel)maxLevel.textContent=String(WORLD_MAX_LEVEL);
 const cards=document.querySelector('[data-world-cards]');if(cards)cards.textContent=String(worldData.items.items.filter(i=>i.type==='card').length);
+const starterRoute=document.querySelector('[data-starter-route]');if(starterRoute)starterRoute.textContent='เส้นทางช่วงต้น: '+['meadow','forest','ruins','canyon'].map(id=>{const region=REGIONS.find(r=>r.id===id)!;return `${region.name} Lv.${region.levels.join('–')}`;}).join(' → ');
