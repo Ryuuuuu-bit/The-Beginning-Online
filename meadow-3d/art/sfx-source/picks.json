@@ -41,5 +41,17 @@
   "guard_block": "soft-v2/guard_block.wav",
   "reflect": "soft-v2/reflect.wav",
   "blade_cyclone_tick": "soft-v2/blade_cyclone_tick.wav",
-  "leap_strike_land": "soft-v2/leap_strike_land.wav"
+  "leap_strike_land": "soft-v2/leap_strike_land.wav",
+  "mon_wolf_attack": "monster-v1/mon_wolf_attack.wav",
+  "mon_wolf_hurt": "monster-v1/mon_wolf_hurt.wav",
+  "mon_wolf_death": "monster-v1/mon_wolf_death.wav",
+  "mon_shroom_attack": "monster-v1/mon_shroom_attack.wav",
+  "mon_shroom_hurt": "monster-v1/mon_shroom_hurt.wav",
+  "mon_shroom_death": "monster-v1/mon_shroom_death.wav",
+  "mon_wood_attack": "monster-v1/mon_wood_attack.wav",
+  "mon_wood_hurt": "monster-v1/mon_wood_hurt.wav",
+  "mon_wood_death": "monster-v1/mon_wood_death.wav",
+  "mon_wisp_attack": "monster-v1/mon_wisp_attack.wav",
+  "mon_wisp_hurt": "monster-v1/mon_wisp_hurt.wav",
+  "mon_wisp_death": "monster-v1/mon_wisp_death.wav"
 }

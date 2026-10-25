@@ -139,7 +139,7 @@ export class AudioEngine {
     this.playable = true;
     this.syncMusic();
     this.syncAmbience();
-    void this.load('sfx-core').then(() => this.load('sfx-skills'));
+    void this.load('sfx-core').then(() => Promise.all([this.load('sfx-skills'), this.load('sfx-monsters')]));
   }
     play(id: string, position?: Position, bus: Bus = 'sfx', other = false) {
     const ctx = this.ctx, sprite = this.manifest?.sounds[id], buffer = sprite && this.buffers.get(sprite.group);

@@ -24,7 +24,7 @@ function run(args, input) {
 const pcmArgs = ['-f', 'f32le', '-ar', String(rate), '-ac', '1', '-i', 'pipe:0'];
 function filter(input, af) { return run([...pcmArgs, '-af', af, '-f', 'f32le', '-ar', String(rate), '-ac', '1', 'pipe:1'], input).stdout; }
 const manifest = { version: 1, sampleRate: rate, groups: {}, sounds: {} };
-const groups = { 'sfx-core': [], 'sfx-skills': [], 'sfx-king': [], 'amb-meadow': [] };
+const groups = { 'sfx-core': [], 'sfx-skills': [], 'sfx-king': [], 'amb-meadow': [], 'sfx-monsters': [] };
 const skills = new Set(['slash', 'whirlwind', 'dash', 'earth_break', 'provoke', 'endure', 'punch', 'shield_bash', 'bulwark', 'quake_slam', 'rally_roar', 'frenzy_slash', 'blood_rage', 'blade_cyclone', 'leap_strike', 'guard_block', 'reflect', 'blade_cyclone_tick', 'leap_strike_land']);
 /** Start `lead` seconds before the loudest 5 ms window. */
 function trimToImpact(pcm, lead) {
@@ -35,10 +35,11 @@ function trimToImpact(pcm, lead) {
 }
 for (const [id, path] of Object.entries(picks).sort(([a], [b]) => a.localeCompare(b))) {
   const ambience = id === 'amb_meadow', ui = id.startsWith('ui_');
-  const group = ambience ? 'amb-meadow' : id.startsWith('king_') ? 'sfx-king' : skills.has(id) ? 'sfx-skills' : 'sfx-core';
+  const monster = id.startsWith('mon_');
+  const group = ambience ? 'amb-meadow' : monster ? 'sfx-monsters' : id.startsWith('king_') ? 'sfx-king' : skills.has(id) ? 'sfx-skills' : 'sfx-core';
   // Approved sources already contain the soft EQ; only align, trim and balance them here.
   const timing = metadata[id];
-  const lufs = timing.lufs, peak = -4;
+  const lufs = timing.lufs, peak = monster ? -9 : -4;
   let pcm = run(['-i', resolve(source, path), '-af', 'silenceremove=start_periods=1:start_duration=0.005:start_threshold=-50dB,areverse,silenceremove=start_periods=1:start_duration=0.005:start_threshold=-50dB,areverse', '-f', 'f32le', '-ar', String(rate), '-ac', '1', 'pipe:1']).stdout;
   if (!pcm.length) throw Error('Empty take: ' + id);
   if (timing.lead !== undefined) pcm = trimToImpact(pcm, timing.lead);
@@ -68,7 +69,7 @@ for (const [id, path] of Object.entries(picks).sort(([a], [b]) => a.localeCompar
     pcm = filter(pcm, `afade=t=in:d=0.003,afade=t=out:st=${Math.max(0, duration - .035)}:d=0.035`);
   }
   const start = groups[group].reduce((s, b) => s + b.length, 0) / 4 / rate;
-  manifest.sounds[id] = { group, start, duration: pcm.length / 4 / rate, source: 'art/sfx-source/' + path, targetDuration: timing.max ?? timing.target, lufs, crossfade, pitch: ui ? 0 : id === 'mat_jelly' ? .08 : .04, cooldown: id === 'guard_block' ? .3 : id === 'jelly_hop' ? .8 : ui ? .06 : id === 'levelup' ? 0 : id === 'hit_thock' || id.startsWith('mat_') ? .05 : id === 'crit' ? .1 : .04, voices: id === 'hit_thock' || id.startsWith('mat_') ? 3 : id === 'jelly_hop' ? 2 : 4 };
+  manifest.sounds[id] = { group, start, duration: pcm.length / 4 / rate, source: 'art/sfx-source/' + path, targetDuration: timing.max ?? timing.target, lufs, crossfade, pitch: ui ? 0 : monster ? .015 : id === 'mat_jelly' ? .08 : .04, cooldown: monster ? (id.endsWith('_hurt') ? .35 : id.endsWith('_attack') ? .4 : .06) : id === 'guard_block' ? .3 : id === 'jelly_hop' ? .8 : ui ? .06 : id === 'levelup' ? 0 : id === 'hit_thock' || id.startsWith('mat_') ? .05 : id === 'crit' ? .1 : .04, voices: monster ? 2 : id === 'hit_thock' || id.startsWith('mat_') ? 3 : id === 'jelly_hop' ? 2 : 4 };
   groups[group].push(pcm); if (!ambience) groups[group].push(gap);
 }
 for (const [group, parts] of Object.entries(groups)) {

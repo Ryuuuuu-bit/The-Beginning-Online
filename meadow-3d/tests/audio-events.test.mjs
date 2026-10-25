@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {playEventAudio} from '../src/audio-events.ts';
+import {playEventAudio,monsterAudioFamily} from '../src/audio-events.ts';
 
 function recorder() {
   const plays = [], ducks = [];
@@ -33,4 +33,33 @@ test('remote sound attenuation and local-only rewards remain intact', () => {
   assert.equal(sound.plays[0][0],'combo3');assert.equal(sound.plays[0][3],true);
   playEventAudio(sound,{type:'pickup',playerId:'other'},'you');assert.equal(sound.plays.length,1);
   playEventAudio(sound,{type:'pickup',playerId:'you'},'you');assert.equal(sound.plays[1][0],'pickup');
+});
+
+test('monster voices follow actual identities and art aliases, never unrelated renderer fallbacks',()=>{
+  for(const [id,family] of Object.entries({shade_wolf:'wolf',relic_hound:'wolf',crag_wolf:'wolf',mist_shroom:'shroom',ruin_shroom:'shroom',forest_young_1:'shroom',forest_young_3:'shroom',volcano_red_smoke_shroom:'shroom',stump_guard:'wood',ruin_guard:'wood',crag_guard:'wood',lantern_wisp:'wisp',relic_wisp:'wisp',dust_wisp:'wisp'}))assert.equal(monsterAudioFamily(id),family,id);
+  for(const id of ['jelly_pink','amber_mantis','dawn_owl','moon_crab','missing'])assert.equal(monsterAudioFamily(id),undefined,id);
+});
+
+test('each creature family reacts to server wind-up, direct injury and kill at the monster position',()=>{
+  for(const [dataId,family] of Object.entries({shade_wolf:'wolf',mist_shroom:'shroom',stump_guard:'wood',lantern_wisp:'wisp'})){
+    const sound=recorder(),monster={dataId,boss:false,dead:false,x:7,z:8};
+    const play=e=>playEventAudio(sound,{id:4,x:1,z:2,playerId:'other',...e},'you',undefined,()=>monster);
+    play({type:family==='wisp'?'bolt':'warning',attack:'attack'});
+    play({type:'hit',damage:4});
+    monster.dead=true;play({type:'hit',damage:100});play({type:'kill',dataId});
+    const voices=sound.plays.filter(p=>p[0].startsWith('mon_'));
+    assert.deepEqual(voices.map(p=>p[0]),['attack','hurt','death'].map(a=>`mon_${family}_${a}`));
+    assert.ok(voices.every(p=>p[1]===monster&&p[3]!==true),'monster voices use distance, not other-player attenuation');
+  }
+});
+
+test('DoT, zero damage, unrelated warnings and bosses do not trigger creature injury/attack voices',()=>{
+  const sound=recorder(),monster={dataId:'shade_wolf',boss:false,dead:false,x:0,z:0};
+  for(const e of [{type:'hit',damage:0},{type:'hit',damage:2,dot:true},{type:'hit',damage:100,fatal:true},{type:'warning',attack:'slam'}])playEventAudio(sound,{id:1,...e},'you',undefined,()=>monster);
+  monster.boss=true;
+  for(const type of ['warning','bolt','kill'])playEventAudio(sound,{id:1,type,boss:true,attack:'attack'},'you',undefined,()=>monster);
+  assert.ok(!sound.plays.some(p=>p[0].startsWith('mon_')));
+  playEventAudio(sound,{type:'kill',dataId:'relic_wisp'},'you');
+  assert.equal(sound.plays.at(-1)[0],'mon_wisp_death','kill carries identity even after snapshot removal');
+  playEventAudio(sound,{type:'kill',dataId:'jelly_pink'},'you');assert.equal(sound.plays.at(-1)[0],'jelly_death');
 });

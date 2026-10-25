@@ -1,0 +1,209 @@
+{
+  "approved": "User approved all 12 takes on 2026-10-25",
+  "sources": [
+    {
+      "id": "mon_wolf_attack",
+      "label": "หมาป่า — โจมตี",
+      "raw": "art/sfx-source/monster-v1/mon_wolf_attack.mp3",
+      "rawSha256": "adb10c49b52ca9ed6f301bd45b670f1ee9d7c91ef163b42214c7194f3c6a0dae",
+      "wav": "art/sfx-source/monster-v1/mon_wolf_attack.wav",
+      "wavSha256": "97123bfd0bc4ff62fd8f33a5d6c88b1d19dbb4256d925f99356639203fd4a06c",
+      "approvedSource": "outputs/audio-production-20261025/monster-soft-v1/mon_wolf_attack_001.mp3",
+      "take": 1,
+      "model": "eleven_text_to_sound_v2",
+      "prompt": "One small fantasy wolf making a short low breathy huff with a restrained rounded canine growl while lunging. A subtle brush of fur, no bite impact. Single isolated game one-shot near the beginning, natural warm organic texture, soft rounded onset and gentle dry decay. Quiet, restrained, non-distressing. No speech, music, shrill squeal, metallic ring, sharp crack, huge bass or cinematic processing.",
+      "timing": {
+        "lufs": -27,
+        "lead": 0.025,
+        "max": 0.75
+      }
+    },
+    {
+      "id": "mon_wolf_hurt",
+      "label": "หมาป่า — บาดเจ็บ",
+      "raw": "art/sfx-source/monster-v1/mon_wolf_hurt.mp3",
+      "rawSha256": "071fdf29c084e24f287f5b7523497eb75453cc7510faecd74b213fcb48897489",
+      "wav": "art/sfx-source/monster-v1/mon_wolf_hurt.wav",
+      "wavSha256": "1abf1600fa20967ba0310b6877e9748be7cdb8143e58cc6dddbd6fe895b27430",
+      "approvedSource": "outputs/audio-production-20261025/monster-soft-v1/mon_wolf_hurt_001.mp3",
+      "take": 1,
+      "model": "eleven_text_to_sound_v2",
+      "prompt": "One small fantasy wolf recoils with a brief soft low canine grunt and an exhaled breath. Gentle stylized creature reaction, no high yelp or realistic animal suffering. Single isolated game one-shot near the beginning, natural warm organic texture, soft rounded onset and gentle dry decay. Quiet, restrained, non-distressing. No speech, music, shrill squeal, metallic ring, sharp crack, huge bass or cinematic processing.",
+      "timing": {
+        "lufs": -30,
+        "lead": 0.025,
+        "max": 0.55
+      }
+    },
+    {
+      "id": "mon_wolf_death",
+      "label": "หมาป่า — ตาย",
+      "raw": "art/sfx-source/monster-v1/mon_wolf_death.mp3",
+      "rawSha256": "e6e8dc8dfad655aae52958ae106a903dfba126eb93508144294c9fd59296441e",
+      "wav": "art/sfx-source/monster-v1/mon_wolf_death.wav",
+      "wavSha256": "c1d9c72f9365cb605845d0dee69b8aa6a8bba4411fedc71801ce472400e0e623",
+      "approvedSource": "outputs/audio-production-20261025/monster-soft-v1/mon_wolf_death_001.mp3",
+      "take": 1,
+      "model": "eleven_text_to_sound_v2",
+      "prompt": "One small fantasy wolf is defeated: a low soft canine sigh, fur settling gently onto earth and a quiet breath fading away. Short non-graphic stylized reaction, no howl. Single isolated game one-shot near the beginning, natural warm organic texture, soft rounded onset and gentle dry decay. Quiet, restrained, non-distressing. No speech, music, shrill squeal, metallic ring, sharp crack, huge bass or cinematic processing.",
+      "timing": {
+        "lufs": -25,
+        "lead": 0.025,
+        "max": 1.4
+      }
+    },
+    {
+      "id": "mon_shroom_attack",
+      "label": "เห็ด — โจมตี",
+      "raw": "art/sfx-source/monster-v1/mon_shroom_attack.mp3",
+      "rawSha256": "27c2703acd90622ddd5dd3cfd6e1e236b3968c45e33dd66871d9ef3aabd6da06",
+      "wav": "art/sfx-source/monster-v1/mon_shroom_attack.wav",
+      "wavSha256": "525028926ba08ea278209495563e2bd527b2af9c14b67b52621ce58f1b4f123f",
+      "approvedSource": "outputs/audio-production-20261025/monster-soft-v1/mon_shroom_attack_001.mp3",
+      "take": 1,
+      "model": "eleven_text_to_sound_v2",
+      "prompt": "One small walking mushroom lunges with a soft rounded hollow puff, a moist leathery cap flex and a tiny breath of spores. Organic Foley, no impact or squelchy harshness. Single isolated game one-shot near the beginning, natural warm organic texture, soft rounded onset and gentle dry decay. Quiet, restrained, non-distressing. No speech, music, shrill squeal, metallic ring, sharp crack, huge bass or cinematic processing.",
+      "timing": {
+        "lufs": -27,
+        "lead": 0.025,
+        "max": 0.75
+      }
+    },
+    {
+      "id": "mon_shroom_hurt",
+      "label": "เห็ด — บาดเจ็บ",
+      "raw": "art/sfx-source/monster-v1/mon_shroom_hurt.mp3",
+      "rawSha256": "9c76ce2684d2d0bff811c610ae609d3413ce70bc37ca3400f7456ad227002320",
+      "wav": "art/sfx-source/monster-v1/mon_shroom_hurt.wav",
+      "wavSha256": "8a7de525b1907925fc26648dc0aa89c98e72140a3e8dc8f6b44c5450bd77abc5",
+      "approvedSource": "outputs/audio-production-20261025/monster-soft-v1/mon_shroom_hurt_001.mp3",
+      "take": 1,
+      "model": "eleven_text_to_sound_v2",
+      "prompt": "One small mushroom creature recoils: a soft damp cork compression and warm muffled hollow wobble, followed by a tiny spore puff. Gentle organic texture, not a cartoon squeak. Single isolated game one-shot near the beginning, natural warm organic texture, soft rounded onset and gentle dry decay. Quiet, restrained, non-distressing. No speech, music, shrill squeal, metallic ring, sharp crack, huge bass or cinematic processing.",
+      "timing": {
+        "lufs": -30,
+        "lead": 0.025,
+        "max": 0.55
+      }
+    },
+    {
+      "id": "mon_shroom_death",
+      "label": "เห็ด — ตาย",
+      "raw": "art/sfx-source/monster-v1/mon_shroom_death.mp3",
+      "rawSha256": "9eb9335e022805feebd60256946cee696f714ca8824111106fd5f43ceb9e8055",
+      "wav": "art/sfx-source/monster-v1/mon_shroom_death.wav",
+      "wavSha256": "805a46d20b3f00dd3286334ffe6bd4822d695abf3d870691f873bce68ef7b387",
+      "approvedSource": "outputs/audio-production-20261025/monster-soft-v1/mon_shroom_death_001.mp3",
+      "take": 1,
+      "model": "eleven_text_to_sound_v2",
+      "prompt": "One small mushroom creature wilts and collapses: a gentle hollow cap deflating, a soft earthy crumble and a fine airy spore puff settling. Tender organic Foley without a pop. Single isolated game one-shot near the beginning, natural warm organic texture, soft rounded onset and gentle dry decay. Quiet, restrained, non-distressing. No speech, music, shrill squeal, metallic ring, sharp crack, huge bass or cinematic processing.",
+      "timing": {
+        "lufs": -25,
+        "lead": 0.025,
+        "max": 1.4
+      }
+    },
+    {
+      "id": "mon_wood_attack",
+      "label": "ตอไม้/เถาวัลย์ — โจมตี",
+      "raw": "art/sfx-source/monster-v1/mon_wood_attack.mp3",
+      "rawSha256": "5ac156fccefc7b0e7477aa6ff6d903fa5bdf4b25d2b5d9030658623cfd3c7be2",
+      "wav": "art/sfx-source/monster-v1/mon_wood_attack.wav",
+      "wavSha256": "9a64a7147f0794f192ed8435f1836a13df6b35c2b0e83ae4962f3caa611436db",
+      "approvedSource": "outputs/audio-production-20261025/monster-soft-v1/mon_wood_attack_001.mp3",
+      "take": 1,
+      "model": "eleven_text_to_sound_v2",
+      "prompt": "One living wooden stump swings a vine limb: a short low rounded woody joint creak, flexible root fibers and a soft leafy swish. Natural close Foley, no hit impact or loud snap. Single isolated game one-shot near the beginning, natural warm organic texture, soft rounded onset and gentle dry decay. Quiet, restrained, non-distressing. No speech, music, shrill squeal, metallic ring, sharp crack, huge bass or cinematic processing.",
+      "timing": {
+        "lufs": -27,
+        "lead": 0.025,
+        "max": 0.75
+      }
+    },
+    {
+      "id": "mon_wood_hurt",
+      "label": "ตอไม้/เถาวัลย์ — บาดเจ็บ",
+      "raw": "art/sfx-source/monster-v1/mon_wood_hurt.mp3",
+      "rawSha256": "86f267fa3ea12515abe4fed6eae2caae75f02dd23b678daf702af81c082dca9c",
+      "wav": "art/sfx-source/monster-v1/mon_wood_hurt.wav",
+      "wavSha256": "fa54bb2ccb2e9232c1f59be9c4bbe2930eef253a666749e0eb907405d0ae5332",
+      "approvedSource": "outputs/audio-production-20261025/monster-soft-v1/mon_wood_hurt_001.mp3",
+      "take": 1,
+      "model": "eleven_text_to_sound_v2",
+      "prompt": "One living wooden stump recoils: a low muted hollow wood groan, soft bark flexing and a few dry leaves shifting. Rounded restrained organic sound, no brittle cracking. Single isolated game one-shot near the beginning, natural warm organic texture, soft rounded onset and gentle dry decay. Quiet, restrained, non-distressing. No speech, music, shrill squeal, metallic ring, sharp crack, huge bass or cinematic processing.",
+      "timing": {
+        "lufs": -30,
+        "lead": 0.025,
+        "max": 0.55
+      }
+    },
+    {
+      "id": "mon_wood_death",
+      "label": "ตอไม้/เถาวัลย์ — ตาย",
+      "raw": "art/sfx-source/monster-v1/mon_wood_death.mp3",
+      "rawSha256": "c55475cab817bb0fb8238db20e90338fd9dab41116ff9819a247ac98135e91bb",
+      "wav": "art/sfx-source/monster-v1/mon_wood_death.wav",
+      "wavSha256": "32321fbefa3ef3536671215f95ec50de76e739af955c3110b06b796e0ab051d8",
+      "approvedSource": "outputs/audio-production-20261025/monster-soft-v1/mon_wood_death_001.mp3",
+      "take": 1,
+      "model": "eleven_text_to_sound_v2",
+      "prompt": "One living stump settles into moss as it is defeated: a gentle low woody creak, fibrous roots loosening and soft bark fragments and leaves landing on earth. No crash or sharp splinters. Single isolated game one-shot near the beginning, natural warm organic texture, soft rounded onset and gentle dry decay. Quiet, restrained, non-distressing. No speech, music, shrill squeal, metallic ring, sharp crack, huge bass or cinematic processing.",
+      "timing": {
+        "lufs": -25,
+        "lead": 0.025,
+        "max": 1.4
+      }
+    },
+    {
+      "id": "mon_wisp_attack",
+      "label": "ภูต — โจมตี",
+      "raw": "art/sfx-source/monster-v1/mon_wisp_attack.mp3",
+      "rawSha256": "3b4b0cfadd785ecdcd2737417cc26244d96849db4740a6d394550b43b4d998e6",
+      "wav": "art/sfx-source/monster-v1/mon_wisp_attack.wav",
+      "wavSha256": "c55dcddd263b836d0b1e0c5c35d0e0ec9f4f2401e8ba36678b3404737a2987c4",
+      "approvedSource": "outputs/audio-production-20261025/monster-soft-v1/mon_wisp_attack_001.mp3",
+      "take": 1,
+      "model": "eleven_text_to_sound_v2",
+      "prompt": "One small forest wisp sends a gentle breath of magic: a short warm airy hollow whoof with a faint low soft resonance. Organic wind-like movement, no bright chime or laser zap. Single isolated game one-shot near the beginning, natural warm organic texture, soft rounded onset and gentle dry decay. Quiet, restrained, non-distressing. No speech, music, shrill squeal, metallic ring, sharp crack, huge bass or cinematic processing.",
+      "timing": {
+        "lufs": -27,
+        "lead": 0.025,
+        "max": 0.75
+      }
+    },
+    {
+      "id": "mon_wisp_hurt",
+      "label": "ภูต — บาดเจ็บ",
+      "raw": "art/sfx-source/monster-v1/mon_wisp_hurt.mp3",
+      "rawSha256": "444cf72ad927bd0fbdfb840e4a87cd8a791e270c870842b6b5770446e2fab502",
+      "wav": "art/sfx-source/monster-v1/mon_wisp_hurt.wav",
+      "wavSha256": "564a4daddac2772880b746e0a8d76090a09f01d4180db38e9bb9c38a3be834e3",
+      "approvedSource": "outputs/audio-production-20261025/monster-soft-v1/mon_wisp_hurt_001.mp3",
+      "take": 1,
+      "model": "eleven_text_to_sound_v2",
+      "prompt": "One small forest wisp recoils: a short soft breathy flutter and rounded low hollow ripple, like air briefly folding inward. Subtle organic fantasy texture, no vocal scream or bright ringing. Single isolated game one-shot near the beginning, natural warm organic texture, soft rounded onset and gentle dry decay. Quiet, restrained, non-distressing. No speech, music, shrill squeal, metallic ring, sharp crack, huge bass or cinematic processing.",
+      "timing": {
+        "lufs": -30,
+        "lead": 0.025,
+        "max": 0.55
+      }
+    },
+    {
+      "id": "mon_wisp_death",
+      "label": "ภูต — ตาย",
+      "raw": "art/sfx-source/monster-v1/mon_wisp_death.mp3",
+      "rawSha256": "dc1645c2819993ae535bb0a352a11a238926d84fa794df1d8ba52716c014b01f",
+      "wav": "art/sfx-source/monster-v1/mon_wisp_death.wav",
+      "wavSha256": "8d9fd187ee63ba25ffae6d6794704c780c9066ade51fd890730788b9e9ba9a93",
+      "approvedSource": "outputs/audio-production-20261025/monster-soft-v1/mon_wisp_death_001.mp3",
+      "take": 1,
+      "model": "eleven_text_to_sound_v2",
+      "prompt": "One small forest wisp gently disperses: a warm hollow breath releasing, a fine soft airy swirl and a low felt-muted resonance dissolving into silence. Peaceful restrained magic, no musical notes. Single isolated game one-shot near the beginning, natural warm organic texture, soft rounded onset and gentle dry decay. Quiet, restrained, non-distressing. No speech, music, shrill squeal, metallic ring, sharp crack, huge bass or cinematic processing.",
+      "timing": {
+        "lufs": -25,
+        "lead": 0.025,
+        "max": 1.4
+      }
+    }
+  ]
+}

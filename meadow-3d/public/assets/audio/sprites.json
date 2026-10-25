@@ -45,6 +45,17 @@
         "bytes": 240158
       },
       "duration": 28.384666666666668
+    },
+    "sfx-monsters": {
+      "opus": {
+        "url": "/assets/audio/sfx-monsters-01cf39d77aa9.ogg",
+        "bytes": 94448
+      },
+      "aac": {
+        "url": "/assets/audio/sfx-monsters-e360c450bc08.m4a",
+        "bytes": 105684
+      },
+      "duration": 10.848041666666667
     }
   },
   "sounds": {
@@ -419,6 +430,150 @@
       "pitch": 0.04,
       "cooldown": 0.05,
       "voices": 3
+    },
+    "mon_shroom_attack": {
+      "group": "sfx-monsters",
+      "start": 0,
+      "duration": 0.40902083333333333,
+      "source": "art/sfx-source/monster-v1/mon_shroom_attack.wav",
+      "targetDuration": 0.75,
+      "lufs": -27,
+      "crossfade": 0,
+      "pitch": 0.015,
+      "cooldown": 0.4,
+      "voices": 2
+    },
+    "mon_shroom_death": {
+      "group": "sfx-monsters",
+      "start": 0.5290208333333334,
+      "duration": 1.4,
+      "source": "art/sfx-source/monster-v1/mon_shroom_death.wav",
+      "targetDuration": 1.4,
+      "lufs": -25,
+      "crossfade": 0,
+      "pitch": 0.015,
+      "cooldown": 0.06,
+      "voices": 2
+    },
+    "mon_shroom_hurt": {
+      "group": "sfx-monsters",
+      "start": 2.0490208333333335,
+      "duration": 0.55,
+      "source": "art/sfx-source/monster-v1/mon_shroom_hurt.wav",
+      "targetDuration": 0.55,
+      "lufs": -30,
+      "crossfade": 0,
+      "pitch": 0.015,
+      "cooldown": 0.35,
+      "voices": 2
+    },
+    "mon_wisp_attack": {
+      "group": "sfx-monsters",
+      "start": 2.7190208333333334,
+      "duration": 0.75,
+      "source": "art/sfx-source/monster-v1/mon_wisp_attack.wav",
+      "targetDuration": 0.75,
+      "lufs": -27,
+      "crossfade": 0,
+      "pitch": 0.015,
+      "cooldown": 0.4,
+      "voices": 2
+    },
+    "mon_wisp_death": {
+      "group": "sfx-monsters",
+      "start": 3.5890208333333335,
+      "duration": 1.4,
+      "source": "art/sfx-source/monster-v1/mon_wisp_death.wav",
+      "targetDuration": 1.4,
+      "lufs": -25,
+      "crossfade": 0,
+      "pitch": 0.015,
+      "cooldown": 0.06,
+      "voices": 2
+    },
+    "mon_wisp_hurt": {
+      "group": "sfx-monsters",
+      "start": 5.109020833333333,
+      "duration": 0.55,
+      "source": "art/sfx-source/monster-v1/mon_wisp_hurt.wav",
+      "targetDuration": 0.55,
+      "lufs": -30,
+      "crossfade": 0,
+      "pitch": 0.015,
+      "cooldown": 0.35,
+      "voices": 2
+    },
+    "mon_wolf_attack": {
+      "group": "sfx-monsters",
+      "start": 5.779020833333333,
+      "duration": 0.6899583333333333,
+      "source": "art/sfx-source/monster-v1/mon_wolf_attack.wav",
+      "targetDuration": 0.75,
+      "lufs": -27,
+      "crossfade": 0,
+      "pitch": 0.015,
+      "cooldown": 0.4,
+      "voices": 2
+    },
+    "mon_wolf_death": {
+      "group": "sfx-monsters",
+      "start": 6.588979166666666,
+      "duration": 1.2064583333333334,
+      "source": "art/sfx-source/monster-v1/mon_wolf_death.wav",
+      "targetDuration": 1.4,
+      "lufs": -25,
+      "crossfade": 0,
+      "pitch": 0.015,
+      "cooldown": 0.06,
+      "voices": 2
+    },
+    "mon_wolf_hurt": {
+      "group": "sfx-monsters",
+      "start": 7.9154375,
+      "duration": 0.55,
+      "source": "art/sfx-source/monster-v1/mon_wolf_hurt.wav",
+      "targetDuration": 0.55,
+      "lufs": -30,
+      "crossfade": 0,
+      "pitch": 0.015,
+      "cooldown": 0.35,
+      "voices": 2
+    },
+    "mon_wood_attack": {
+      "group": "sfx-monsters",
+      "start": 8.5854375,
+      "duration": 0.65025,
+      "source": "art/sfx-source/monster-v1/mon_wood_attack.wav",
+      "targetDuration": 0.75,
+      "lufs": -27,
+      "crossfade": 0,
+      "pitch": 0.015,
+      "cooldown": 0.4,
+      "voices": 2
+    },
+    "mon_wood_death": {
+      "group": "sfx-monsters",
+      "start": 9.3556875,
+      "duration": 0.7023541666666666,
+      "source": "art/sfx-source/monster-v1/mon_wood_death.wav",
+      "targetDuration": 1.4,
+      "lufs": -25,
+      "crossfade": 0,
+      "pitch": 0.015,
+      "cooldown": 0.06,
+      "voices": 2
+    },
+    "mon_wood_hurt": {
+      "group": "sfx-monsters",
+      "start": 10.178041666666667,
+      "duration": 0.55,
+      "source": "art/sfx-source/monster-v1/mon_wood_hurt.wav",
+      "targetDuration": 0.55,
+      "lufs": -30,
+      "crossfade": 0,
+      "pitch": 0.015,
+      "cooldown": 0.35,
+      "voices": 2
     },
     "pickup": {
       "group": "sfx-core",

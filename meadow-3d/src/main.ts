@@ -181,11 +181,11 @@ function number(text:string,e:{x:number;z:number},kind='',height=1.8){if(documen
  const life=NUMBER_LIFE[kind]??.95;
  numbers.push({el,kind,x:e.x,z:e.z,height:Math.min(height,1.5),life,max:life,jx:(Math.random()-.5)*(kind==='reward'||kind==='boss-skill'?0:34),stack,drift:kind==='hurt'?(Math.random()<.5?-1:1)*22:(Math.random()-.5)*12});}
 
-function events(){for(const e of game.events.splice(0)){
+function events(){const batch=game.events.splice(0),killed=new Set(batch.filter(e=>e.type==='kill').map(e=>e.id));for(const e of batch){
 
  lighterVfx=!!e.playerId&&e.playerId!==net.you;combatFeel.event(e,net.you,game.p,performance.now());if(e.playerId===net.you)guide?.event(e);renderer.event(e);
  if(['kingAttack','phase2','summon','stun','kill','victory'].includes(e.type)){encounterLog.push({...e,time:game.time});if(encounterLog.length>128)encounterLog.shift();}
- sound.setListener(game.p);playEventAudio(sound,{...e,guarded:game.p.statuses?.some(s=>s.id==='guard')},net.you,game.enemies.find(e=>e.boss)||ARENA,id=>{const m=game.enemies.find(x=>x.id===id);return monsterSpecies(m?.dataId,m?.boss);});
+ sound.setListener(game.p);playEventAudio(sound,{...e,fatal:killed.has(e.id),guarded:game.p.statuses?.some(s=>s.id==='guard')},net.you,game.enemies.find(e=>e.boss)||ARENA,id=>game.enemies.find(x=>x.id===id));
  switch(e.type){
  case'miss':number('พลาด',e,'evade',e.defender==='player'?2.4:e.boss?2.5:1.55);break;
  case'hit':if(e.playerId===net.you)qol?.attacked(game.enemies.find(v=>v.id===e.id));number(e.damage,e,e.crit?'crit':'',e.boss?2.5:1.55);break;
