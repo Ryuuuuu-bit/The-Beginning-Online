@@ -17,6 +17,7 @@ export interface EconomyResult {
 	claimedLevelRewards?: number[];legacyLevelRewards?:number[];consumableBuffs?:ConsumableBuffs;
 	inventory: Inventory;
 	gold: number;
+	boundGold?:number;
 	effect?: { kind: string; amount: number; duration?:number };
 	error?: string;
 	duplicate?: boolean;

@@ -49,6 +49,22 @@ async function fixture(t: any) {
 }
 const bagItem = (inv: Inventory, template: string) => inv.items.find((i) => i.template === template && i.location === "bag");
 
+test('live trade refuses mailbox gold but allows earned gold from the same wallet',async t=>{
+ const f=await fixture(t),a=await f.player('GiftWallet',[],100),b=await f.player('EarnedWallet');
+ const room=[...f.rt.rooms.values()].find(r=>r.game.players.has(a.c.id))!,p=room.game.players.get(a.c.id)!;
+ p.level=5;p.profile.level=5;
+ const req=randomUUID();a.send({t:'mailbox',op:'claim',level:5,req});
+ await a.until(m=>m.t==='inv'&&m.req===req&&m.boundGold===5000);
+ assert.equal(p.boundGold,5000);assert.equal(p.gold,5100);
+ a.send({t:'trade',op:'request',name:b.c.name});await b.until(m=>m.t==='tradeInvite');b.send({t:'trade',op:'accept'});await a.until(m=>m.t==='tradeState');
+ a.send({t:'trade',op:'offer',items:[],gold:5000});await a.until(m=>m.t==='tradeError'&&/ทองแจก/.test(m.text));
+ a.send({t:'trade',op:'offer',items:[],gold:100});await b.until(m=>m.t==='tradeState'&&m.trade.them.gold===100);
+ a.send({t:'trade',op:'lock'});b.send({t:'trade',op:'lock'});await a.until(m=>m.t==='tradeState'&&m.trade.you.locked&&m.trade.them.locked);
+ a.send({t:'trade',op:'confirm'});b.send({t:'trade',op:'confirm'});await a.until(m=>m.t==='tradeClosed'&&m.done);
+ await a.until(m=>m.t==='inv'&&m.gold===5000&&m.boundGold===5000);
+ assert.equal((await b.inventory()).gold,100);assert.equal(p.boundGold,5000);
+});
+
 test('trade offer shows exact affixes to the receiver before locking',async(t)=>{
  const f=await fixture(t),roll=rollEquipment('field_sword',5,data,()=>.5,'rare')!;
  const a=await f.player('RollSeller',[{template:'field_sword',qty:1,roll}]),b=await f.player('RollBuyer');

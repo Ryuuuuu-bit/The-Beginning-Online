@@ -277,7 +277,7 @@ export function mountInventory(send: (m: any) => void, onOpen: () => void) {
 				add(`เจาะช่องการ์ด`, () => {
 					if (confirm(`ให้ช่างตีเหล็กเจาะช่องการ์ด 1 ช่องใน ${t.nameTh}?
 ค่าเจาะ ${price.gold.toLocaleString()} ทอง + ${mat} ×${price.qty}
-ใช้วัสดุผูกตัวแล้วอุปกรณ์จะผูกตัวด้วย
+ใช้วัสดุหรือทองแจกแล้วอุปกรณ์จะผูกตัวด้วย
 (ต้องยืนคุยกับช่างตีเหล็กในเมือง)`)) request("socket", { id: i.id });
 				}).title = `${price.gold.toLocaleString()} ทอง + ${mat} ×${price.qty} · ที่ช่างตีเหล็ก`;
 			}
@@ -778,6 +778,8 @@ export function mountInventory(send: (m: any) => void, onOpen: () => void) {
 			if (!count) lines.innerHTML = `<p class="inv-empty">ตะกร้ายังว่าง<br>เลือกจำนวนที่การ์ดสินค้าแล้วกด "ใส่ตะกร้า"</p>`;
 			const after = gold - total;
 			sum.innerHTML = `<dt>รวม</dt><dd class="total">${fmtGold(total)}</dd><dt>ทองคงเหลือ</dt><dd class="${after < 0 ? "bad" : ""}">${fmtGold(gold)} → ${fmtGold(after)}</dd><dt>น้ำหนัก</dt><dd>+${fmtWeight(weight)}</dd>`;
+   const giftUsed=Math.max(0,total-(gold-(p?.boundGold??0)));
+   if(giftUsed)sum.innerHTML+=`<dt>ใช้ทองแจก</dt><dd>${fmtGold(giftUsed)}</dd><dd class="cart-bound-warning">รายการที่ใช้ทองแจกจะผูกตัว ขาย/เทรดไม่ได้</dd>`;
 			go.textContent = !count ? "ซื้อ" : after < 0 ? "ทองไม่พอ" : `ซื้อ · ${fmtGold(total)} ทอง`;
 			go.disabled = !count || after < 0 || !!pending || buyQueue.length > 0;
 			go.onclick = () => {
@@ -839,6 +841,7 @@ export function mountInventory(send: (m: any) => void, onOpen: () => void) {
 			panel.querySelector(".g-head")!.setAttribute("data-npc", shop!);
 			panel.querySelector(".g-head h2")!.setAttribute("data-place", npc?.[1] ?? "");
 		} else summary.textContent = `◈ ${fmtGold(p?.gold ?? 0)} ทอง · ${inventorySlots(inv, data)} / ${data.economy.inventorySlots} ช่อง${storage ? ` · คลัง ${storageSlots(inv, data)} / ${data.economy.storageSlots}` : ""}`;
+  if(p?.boundGold){const wallet=document.createElement('span');wallet.className='inv-pill';wallet.textContent=`ทองแจก ${fmtGold(p.boundGold)} · เทรดได้ ${fmtGold(p.gold-p.boundGold)}${shop?" · ใช้ทองแจกซื้อ/ตีบวกแล้วของจะผูกตัว":""}`;wallet.title='ใช้ทองปกติก่อน ทองแจกช่วยจ่ายส่วนที่ขาดให้ NPC · ของที่ซื้อหรืออัปเกรดด้วยทองแจกจะผูกตัวละคร';summary.append(wallet);}
 		const weight = panel.querySelector<HTMLProgressElement>("progress")!;
 		weight.value = (carryWeight / ((p as any)?.weightLimit || 1)) * 100;
 		panel.querySelector(".inv-weight-text")!.textContent = `${Math.round(carryWeight)} / ${Math.round((p as any)?.weightLimit || 0)}`;
@@ -909,7 +912,7 @@ export function mountInventory(send: (m: any) => void, onOpen: () => void) {
 		if (refining) {
 			content.append(refine.root);
 			refine.update(inv, p?.gold ?? 0);
-			countBox.textContent = "หินตีบวก 1 ก้อน + ทอง ต่อครั้ง · ใช้หินผูกตัวแล้วอุปกรณ์จะผูกตัวด้วย · +1 ถึง +4 ไม่มีทางล้มเหลว · ต้องยืนคุยกับช่างตีเหล็ก";
+			countBox.textContent = "หินตีบวก 1 ก้อน + ทอง ต่อครั้ง · ใช้หินผูกตัวหรือทองแจกแล้วอุปกรณ์จะผูกตัวด้วย · +1 ถึง +4 ไม่มีทางล้มเหลว · ต้องยืนคุยกับช่างตีเหล็ก";
 			return;
 		}
 		if(crafting){
@@ -1017,7 +1020,7 @@ export function mountInventory(send: (m: any) => void, onOpen: () => void) {
 			p = player;
 			const signature = JSON.stringify([
 				p.inventory,
-				p.gold, p.level, p.profile?.classId, p.masteries,
+				p.gold, p.boundGold, p.level, p.profile?.classId, p.masteries,
 				(p as any).carryWeight,
 				(p as any).weightLimit,
 			]);
@@ -1035,6 +1038,7 @@ export function mountInventory(send: (m: any) => void, onOpen: () => void) {
 					if (p) {
 						p.inventory = m.inventory;
 						p.gold = m.gold;
+      p.boundGold = m.boundGold??0;
 					}
 				}
 				const completed=pending&&pending.req===m.req?pending.message:undefined;

@@ -17,7 +17,7 @@ export function mountTrade(options: { send: (m: unknown) => void; player: () => 
 	panel.setAttribute("aria-label", "แลกเปลี่ยนไอเทม");
 	panel.hidden = true;
 	panel.innerHTML = `<header><h2>แลกเปลี่ยน</h2><small class="trade-partner"></small><button type="button" class="trade-x" aria-label="ยกเลิกการแลก">×</button></header>
-<div class="trade-sides"><div class="trade-side trade-you"><h3>ของคุณ <span class="trade-flag"></span></h3><ul class="trade-items"></ul><label class="trade-gold">ทอง <input type="number" min="0" step="1" inputmode="numeric" value="0"></label></div>
+<div class="trade-sides"><div class="trade-side trade-you"><h3>ของคุณ <span class="trade-flag"></span></h3><ul class="trade-items"></ul><label class="trade-gold">ทอง <input type="number" min="0" step="1" inputmode="numeric" value="0"></label><small class="trade-available"></small></div>
 <div class="trade-side trade-them"><h3><span class="trade-them-name"></span> <span class="trade-flag"></span></h3><ul class="trade-items"></ul><p class="trade-gold-them"></p></div></div>
 <p class="trade-hint"></p><div class="trade-bag" aria-label="เลือกของจากกระเป๋า"></div>
 <footer><button type="button" class="trade-lock">ล็อก</button><button type="button" class="trade-confirm primary">ยืนยันแลก</button><button type="button" class="trade-cancel">ยกเลิก</button></footer>`;
@@ -34,7 +34,7 @@ export function mountTrade(options: { send: (m: unknown) => void; player: () => 
 	const icon = (templateId: string) => itemIcon({ id: templateId });
 	const send = (op: string, extra: Record<string, unknown> = {}) => options.send({ t: "trade", op, ...extra });
 	const sendOffer = () => {
-		const problem = offerProblem({ gold: options.player().gold, inventory: options.player().inventory! }, offer, data);
+		const problem = offerProblem({ gold: options.player().gold,boundGold:options.player().boundGold, inventory: options.player().inventory! }, offer, data);
 		if (problem) { hint.textContent = problem; return; }
 		send("offer", { items: offer.items, gold: offer.gold });
 	};
@@ -99,6 +99,8 @@ export function mountTrade(options: { send: (m: unknown) => void; player: () => 
 		$(".trade-gold-them").textContent = `ทอง ${them.gold.toLocaleString()}`;
 		if (document.activeElement !== goldInput) goldInput.value = String(you.gold);
 		goldInput.disabled = you.locked;
+  const tradable=Math.max(0,options.player().gold-(options.player().boundGold??0));goldInput.max=String(tradable);
+  $('.trade-available').textContent=`เทรดได้ ${tradable.toLocaleString()} ทอง · ทองแจกใช้กับ NPC เท่านั้น`;
 		$<HTMLButtonElement>(".trade-lock").disabled = you.locked || view.settling;
 		$<HTMLButtonElement>(".trade-confirm").disabled = !you.locked || !them.locked || you.confirmed || view.settling;
 		hint.textContent = view.settling ? "กำลังบันทึกการแลก…"

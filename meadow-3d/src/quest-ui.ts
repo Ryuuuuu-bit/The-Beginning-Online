@@ -18,7 +18,7 @@ export function mountQuests(options: { send: (m: unknown) => void; player: () =>
 	document.querySelector('#ui .quest')?.append(tracker);
 
 	const rewardText = (q: (typeof data.quests.quests)[number]) =>
-		[q.rewards.exp && `ประสบการณ์ ${q.rewards.exp}`, q.rewards.jobExp && `อาชีพ ${q.rewards.jobExp}`, q.rewards.gold && `${q.rewards.gold} ทอง`, ...q.rewards.items.map(i => `${itemName(i.template)} ×${i.qty}`)].filter(Boolean).join(' · ');
+		[q.rewards.exp && `ประสบการณ์ ${q.rewards.exp}`, q.rewards.jobExp && `อาชีพ ${q.rewards.jobExp}`, q.rewards.gold && `${q.rewards.gold} ${q.id==='storage_ledger'?'ทองแจก (โอนไม่ได้)':'ทอง'}`, q.objectives.some(o=>o.kind==='collect')&&'ถ้าใช้ของผูกตัวส่งภารกิจ ทองรางวัลจะโอนไม่ได้', ...q.rewards.items.map(i => `${itemName(i.template)} ×${i.qty}`)].filter(Boolean).join(' · ');
 
 	function renderTracker() {
 		const p = options.player();

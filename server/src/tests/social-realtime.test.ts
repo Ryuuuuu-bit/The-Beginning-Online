@@ -133,6 +133,7 @@ test("storage keeper: range-checked deposit counts for the storage quest", async
 	assert.equal(p.inventory!.items.find((i: any) => i.id === "stack:storage:bound:red_small")!.qty, 2);
 	peer.send({ t: "quest", op: "turnIn", id: "storage_ledger" });
 	await peer.until((m: any) => m.t === "quests" && m.state.done.storage_ledger);
+ assert.equal(p.boundGold,30);
 });
 
 test('quest turn-in rejects abandonment while pending and commits EXP with rewards', async t => {

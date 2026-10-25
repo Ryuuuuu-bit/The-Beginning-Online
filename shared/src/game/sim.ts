@@ -196,6 +196,7 @@ export interface Player extends Vec, JobProgress {
 	xp: number;
 	nextXp: number;
 	gold: number;
+	boundGold?: number;
 	potions: number;
 	dead: boolean;
 	fx: number;
@@ -1560,7 +1561,7 @@ function drinkPotion(g: Game, kind: "hp" | "sp", cooldown: number) {
 		g.inventoryCommit(p, { op: "use", id: best.id }, () => {});
 		return true;
 	}
-	const out = applyInventory({ gold: p.gold, inventory: p.inventory }, { op: "use", id: best.id }, p.profile, g.data, () => String(g.nextId++));
+	const out = applyInventory({ gold: p.gold, boundGold:p.boundGold, inventory: p.inventory }, { op: "use", id: best.id }, p.profile, g.data, () => String(g.nextId++));
 	p.inventory = out.state.inventory;
 	applyPotionEffect(g,p,kind,out.effect!.amount);
 	refreshStats(g, p);
@@ -2618,7 +2619,7 @@ export function step(
    if(g.inventoryCommit){
     if(d.blocked)continue;
     d.pending=true;g.inventoryCommit(p,{op:'pickup',id:String(d.id),gold:d.gold,loot:d.loot??[]},done);
-   }else if(p.inventory){try{const out=applyInventory({gold:p.gold,inventory:p.inventory},{op:'pickup',gold:d.gold,loot:d.loot??[]},p.profile,g.data,()=>String(g.nextId++));p.gold=out.state.gold;p.inventory=out.state.inventory;refreshStats(g,p);done();}catch{d.noticeAt=g.time;d.blocked=true;}}
+   }else if(p.inventory){try{const out=applyInventory({gold:p.gold,boundGold:p.boundGold,inventory:p.inventory},{op:'pickup',gold:d.gold,loot:d.loot??[]},p.profile,g.data,()=>String(g.nextId++));p.gold=out.state.gold;p.inventory=out.state.inventory;refreshStats(g,p);done();}catch{d.noticeAt=g.time;d.blocked=true;}}
    else{p.gold+=d.gold;done();}
   }
  }

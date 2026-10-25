@@ -23,6 +23,8 @@ export const emptyOffer = (): TradeOffer => ({ items: [], gold: 0 });
 export function offerProblem(state: EconomyState, offer: TradeOffer, data: GameData): string | null {
 	if (!Number.isSafeInteger(offer.gold) || offer.gold < 0) return "จำนวนทองไม่ถูกต้อง";
 	if (offer.gold > state.gold) return "ทองไม่พอ";
+ if(!Number.isSafeInteger(state.boundGold??0)||(state.boundGold??0)<0||(state.boundGold??0)>state.gold)return 'ข้อมูลทองแจกไม่ถูกต้อง';
+ if(offer.gold>state.gold-(state.boundGold??0))return `ทองแจกโอนไม่ได้ · เทรดได้ ${state.gold-(state.boundGold??0)} ทอง`;
 	if (offer.items.length > TRADE_MAX_ITEMS) return `วางของได้สูงสุด ${TRADE_MAX_ITEMS} ชิ้น`;
 	const seen = new Set<string>();
 	for (const o of offer.items) {

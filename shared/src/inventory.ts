@@ -34,6 +34,8 @@ export interface Inventory {
 }
 export interface EconomyState {
 	gold: number;
+	/** Included in gold; spendable at NPCs but never transferable. */
+	boundGold?: number;
 	inventory: Inventory;
 }
 export interface InventoryOp {
@@ -60,6 +62,8 @@ export interface InventoryOp {
 	levels?: number[];
 	/** Filled from persisted receipts by the server, never accepted from a client. */
 	legacyLevels?: number[];
+ /** Server-selected tutorial reward policy; never accepted from the client. */
+ boundRewardGold?:boolean;
 	template?: string;
 	id?: string;
 	/** Physical destination; item templates keep accessory1 for either ring slot. */
@@ -272,6 +276,16 @@ export function applyInventory(
 	const next = structuredClone(state),
 		inv = next.inventory,
 		ledger: LedgerEntry[] = [];
+ const validWallet=()=>Number.isSafeInteger(next.boundGold??0)&&(next.boundGold??0)>=0&&(next.boundGold??0)<=next.gold;
+ if(!validWallet())throw Error('ข้อมูลทองแจกไม่ถูกต้อง');
+ // Spend earned gold first so ordinary purchases remain tradable whenever earned funds cover the price.
+ const spendGold=(cost:number)=>{
+  if(!Number.isSafeInteger(cost)||cost<0||cost>next.gold)throw Error('ทองไม่พอ');
+  const earned=next.gold-(next.boundGold??0),boundUsed=Math.max(0,cost-earned);
+  next.gold-=cost;
+  if(boundUsed)next.boundGold=(next.boundGold??0)-boundUsed;
+  return boundUsed>0;
+ };
 	const template = (id: string) => {
 		const t = data.items.items.find((t) => t.id === id);
 		if (!t) throw Error("ไม่พบชนิดไอเทม");
@@ -336,9 +350,8 @@ export function applyInventory(
 		const price = data.economy.shops[op.shop || ""]?.[t.id];
 		if (price === undefined) throw Error("ร้านนี้ไม่มีสินค้านี้");
 		const cost = price * count;
-		if (cost > next.gold) throw Error("ทองไม่พอ");
-		next.gold -= cost;
-		add(t.id, count, "npc");
+		const bound=spendGold(cost);
+		add(t.id, count, "npc", undefined, bound);
 		log("npc_buy", undefined, count, -cost);
 	}
 	if (op.op === "sell" || op.op === "discard") {
@@ -401,10 +414,10 @@ export function applyInventory(
 		if (typeof price === "string") throw Error(price);
 		if (next.gold < price.gold) throw Error("ทองไม่พอ");
 		const bound=takeMaterial(price.material,price.qty);
-		next.gold -= price.gold;
+		const boundPayment=spendGold(price.gold);
 		log("npc_buy", target, 0, -price.gold);
 		target.sockets = (target.sockets ?? 0) + 1;
-		target.bound ||= bound;
+		target.bound ||= bound || boundPayment;
 	}
 	if (op.op === "refine") {
 		const target = owned(op.id), quote = refineQuote(target, data);
@@ -412,10 +425,10 @@ export function applyInventory(
 		if (typeof op.roll !== "number" || !(op.roll >= 0 && op.roll < 1)) throw Error("การตีบวกต้องสุ่มจากเซิร์ฟเวอร์");
 		if (next.gold < quote.gold) throw Error("ทองไม่พอ");
 		const bound=takeMaterial(quote.stone,1);
-		next.gold -= quote.gold;
+		const boundPayment=spendGold(quote.gold);
 		log("npc_buy", target, 0, -quote.gold);
 		target.refine = op.roll < quote.chance ? quote.next : quote.failTo;
-		target.bound ||= bound;
+		target.bound ||= bound || boundPayment;
 		if (target.location === "equip") deriveStats(inventoryProfile(profile,inv,data), data);
 	}
 	if (op.op === "card") {
@@ -476,10 +489,12 @@ export function applyInventory(
 		if (storageSlots(inv, data) > data.economy.storageSlots) throw Error("คลังเต็ม");
 	}
 	if (op.op === "quest") {
+  let boundReward=!!op.boundRewardGold;
 		for (const need of op.loot ?? []) {
 			let left = need.qty;
-			for (const i of inv.items.filter((i) => i.template === need.template && i.location === "bag")) {
+			for (const i of inv.items.filter((i) => i.template === need.template && i.location === "bag").sort((a,b)=>Number(a.bound)-Number(b.bound))) {
 				const take = Math.min(left, i.qty);
+    boundReward ||= take>0&&i.bound;
 				remove(i, take);
 				log("quest", i, -take);
 				left -= take;
@@ -494,6 +509,7 @@ export function applyInventory(
 		const gold = op.gold ?? 0;
 		if (!Number.isSafeInteger(gold) || gold < 0) throw Error("ทองไม่ถูกต้อง");
 		next.gold += gold;
+  if(boundReward&&gold)next.boundGold=(next.boundGold??0)+gold;
 		ledger.push({ kind: "quest", qty: 0, goldDelta: gold });
 	}
 	if (op.op === "settings") inv.autoPickup = !!op.on;
@@ -511,13 +527,13 @@ export function applyInventory(
 	 const fragments=inv.items.find(i=>i.location==='bag'&&i.template===FORGE_FRAGMENT);
 	 if(!fragments||fragments.qty<recipe.fragments)throw Error(`ต้องใช้เศษผลึกช่าง ×${recipe.fragments}`);
 	 remove(fragments,recipe.fragments);log('craft',fragments,-recipe.fragments);
-	 next.gold-=recipe.gold;add(recipe.template,1,'craft',undefined,fragments.bound);
+	 const boundPayment=spendGold(recipe.gold);add(recipe.template,1,'craft',undefined,fragments.bound||boundPayment);
 	 ledger.push({kind:'craft',template:recipe.template,qty:1,goldDelta:-recipe.gold});
 	}
 	if(op.op==='levelReward')for(const level of validateRewardLevels(op.levels,profile.level,data.stats.maxLevel)){
  const reward=levelReward(level,data,op.legacyLevels?.includes(level),profile.level);
 	 for(const item of reward.items){add(item.template,item.qty,'level_reward',undefined,true);ledger.push({kind:'level_reward',template:item.template,qty:item.qty,goldDelta:0});}
-	 next.gold+=reward.gold;ledger.push({kind:'level_reward',qty:0,goldDelta:reward.gold});
+	 next.gold+=reward.gold;if(reward.gold)next.boundGold=(next.boundGold??0)+reward.gold;ledger.push({kind:'level_reward',qty:0,goldDelta:reward.gold});
 	}
 	if (
 		!Number.isSafeInteger(next.gold) ||
@@ -525,6 +541,7 @@ export function applyInventory(
 		next.gold > 2147483647
 	)
 		throw Error("ทองเกินขีดจำกัด");
+ if(!validWallet())throw Error('ข้อมูลทองแจกไม่ถูกต้อง');
 	if (["buy", "pickup", "equip", "unequip", "retrieve", "quest", "levelReward", "craft", "salvage"].includes(op.op)) {
 		if (inventorySlots(inv, data) > data.economy.inventorySlots)
 			throw Error("กระเป๋าเต็ม");

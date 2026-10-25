@@ -10,7 +10,7 @@ export function mountMailbox(o:{send:(message:unknown)=>void;onOpen:()=>void;you
  <section class="mail-overview" aria-label="สรุปรางวัล"><div><span class="mail-current-level"></span><strong class="mail-ready-count"></strong></div><button type="button" id="mailbox-claim-all">รับทั้งหมด</button></section>
  <nav aria-label="กรองรางวัล"><button type="button" data-filter="ready">รับได้ <b></b></button><button type="button" data-filter="locked">ยังไม่ถึงเลเวล <b></b></button><button type="button" data-filter="claimed">รับแล้ว <b></b></button></nav>
  <p class="mailbox-status" role="status"></p><div class="mailbox-list" aria-label="รายการรางวัล"></div>
- <footer><span>◆ ของผูกตัวละคร · ขาย / เทรดไม่ได้</span><details><summary>เงื่อนไขการรับ</summary><p>แต่ละเลเวลรับได้ครั้งเดียวต่อบัญชี ลบตัวละครแล้วสิทธิ์ไม่คืน · ขนาดยาตามเลเวลตอนรับ · ถ้ากระเป๋าหรือน้ำหนักไม่พอ รางวัลจะยังอยู่ · ไม่หมดอายุ</p></details></footer>`;
+ <footer><span>◆ ของผูกตัวละคร · ขาย / เทรดไม่ได้</span><details><summary>เงื่อนไขการรับ</summary><p>ทองแจกใช้กับร้านและช่างได้ แต่โอนไม่ได้ · ใช้ทองปกติก่อน หากใช้ทองแจกซื้อหรืออัปเกรด ของจะผูกตัวละคร · แต่ละเลเวลรับได้ครั้งเดียวต่อบัญชี ลบตัวละครแล้วสิทธิ์ไม่คืน · ขนาดยาตามเลเวลตอนรับ · ถ้ากระเป๋าหรือน้ำหนักไม่พอ รางวัลจะยังอยู่ · ไม่หมดอายุ</p></details></footer>`;
  document.body.append(panel);
  let level=0,claimed:number[]=[],legacy:number[]=[],pending=false,filter='ready',feedback='';
  const levels=Array.from({length:data.stats.maxLevel},(_,i)=>i+1);
@@ -38,7 +38,7 @@ export function mountMailbox(o:{send:(message:unknown)=>void;onOpen:()=>void;you
    const badge=document.createElement('span');badge.className='mail-badge';badge.textContent=state==='claimed'?'✓ รับแล้ว':state==='locked'?`ปลดล็อกอีก ${n-level} เลเวล`:'พร้อมรับ';
    items.className='mail-items';
    const addItem=(icon:HTMLElement,name:string,amount:string)=>{const li=document.createElement('li'),label=document.createElement('span'),qty=document.createElement('b');icon.setAttribute('aria-hidden','true');label.textContent=name;qty.textContent=amount;li.append(icon,label,qty);items.append(li);};
-   if(reward.gold){const coin=document.createElement('span');coin.className='mail-coin';coin.textContent='◈';addItem(coin,'ทอง',reward.gold.toLocaleString('en-US'));}
+   if(reward.gold){const coin=document.createElement('span');coin.className='mail-coin';coin.textContent='◈';addItem(coin,'ทองแจก',reward.gold.toLocaleString('en-US'));}
    for(const item of reward.items){const t=data.items.items.find(t=>t.id===item.template)!;addItem(itemIcon(t),t.nameTh,`×${item.qty}`);}
    receive.type='button';receive.textContent=state==='claimed'?'รับแล้ว':state==='locked'?`ปลดล็อก Lv.${n}`:'รับรางวัล';receive.disabled=pending||state!=='ready';receive.onclick=()=>claim(n);
    copy.append(title,badge,items);row.append(levelTag,copy,receive);list.append(row);

@@ -29,7 +29,7 @@ interface Options<P extends TradePeer> {
 	store: Pick<Store, "trade">;
 	data: GameData;
 	/** Applies a settled inventory to the live player and tells the client (inv, stats). */
-	settled: (peer: P, player: Player, result: { inventory: Player["inventory"]; gold: number }) => void;
+	settled: (peer: P, player: Player, result: { inventory: Player["inventory"]; gold: number;boundGold?:number }) => void;
 	now?: () => number;
 }
 const INVITE_MS = 30000;
@@ -164,7 +164,7 @@ export function createTrades<P extends TradePeer>(options: Options<P>) {
 			if (m.op === "offer") {
 				if (t.locked.has(peer.id)) { error(peer, "ล็อกแล้ว แก้ของไม่ได้"); return; }
 				const offer: TradeOffer = { items: m.items ?? [], gold: m.gold ?? 0 };
-				const problem = offerProblem({ gold: me.gold, inventory: me.inventory! }, offer, data);
+				const problem = offerProblem({ gold: me.gold, boundGold:me.boundGold, inventory: me.inventory! }, offer, data);
 				if (problem) { error(peer, problem); return; }
 				t.offers.set(peer.id, offer);
 				// Any change unlocks both sides, so nobody confirms an offer they have not seen.

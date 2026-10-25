@@ -508,3 +508,5 @@ body #inventory-window .sale-quantity button{padding:4px 6px;min-height:0;font-s
  body #inventory-window[data-mode=shop] .inv-cart{margin:0;min-width:0}
  body #inventory-window[data-mode=shop] .cart-go,body #inventory-window[data-mode=shop] .inv-cart dl{flex-shrink:0}
 }
+
+#inventory-window .cart-bound-warning{grid-column:1/-1;white-space:normal;text-align:left;color:#d7bb85;font-size:12px;line-height:1.6;font-weight:400}

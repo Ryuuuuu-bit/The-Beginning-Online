@@ -113,6 +113,7 @@ const playerKeys = ["gender",
 	"xp",
 	"nextXp",
 	"gold",
+	"boundGold",
 	"kills",
 	"potions",
 	"dead",
@@ -237,24 +238,24 @@ export function mountRealtime(server: Server, options: RealtimeOptions) {
   if(announce&&earned.length)send(peer.ws,{t:'ev',list:earned.map(t=>({type:'notice',playerId:p.id,text:'ได้รับฉายา · '+t.name}))});
  }
  const social=createSocial<Peer>({live,send,command:(peer,text)=>gm.command(peer,text)});
- const trades=createTrades<Peer>({live,send,store,data,settled:(peer,p,r)=>{p.inventory=r.inventory;p.gold=r.gold;refreshStats(peer.room.game,p);sendStats(peer,p);send(peer.ws,{t:'inv',req:randomUUID(),inventory:p.inventory,gold:p.gold});}});
+ const trades=createTrades<Peer>({live,send,store,data,settled:(peer,p,r)=>{p.inventory=r.inventory;p.gold=r.gold;p.boundGold=r.boundGold??0;refreshStats(peer.room.game,p);sendStats(peer,p);send(peer.ws,{t:'inv',req:randomUUID(),inventory:p.inventory,gold:p.gold,boundGold:p.boundGold??0});}});
  function economy(peer:Peer,p:Player,op:InventoryOp,req:string,done=()=>{},quest?:EconomyContext['quest']) {
   const room=peer.room,g=room.game;
   const usedTemplate=op.op==='use'?data.items.items.find(t=>t.id===p.inventory?.items.find(i=>i.id===op.id)?.template):undefined;
   const sunTarget=usedTemplate?.effect==='arcane'&&p.level>=usedTemplate.level?sunScrollTarget(g,p)?.id:undefined;
   if(op.op==='pickup'){
    if(peer.busy){const d=g.drops.find(d=>String(d.id)===op.id);if(d)d.pending=false;return;}
-   try{applyInventory({inventory:p.inventory!,gold:p.gold},op,p.profile,data,randomUUID);}catch(error){const d=g.drops.find(d=>String(d.id)===op.id);if(d){d.pending=false;d.blocked=true;}send(peer.ws,{t:'ev',list:[{type:'notice',playerId:p.id,text:(error as Error).message}]});return;}
+   try{applyInventory({inventory:p.inventory!,gold:p.gold,boundGold:p.boundGold??0},op,p.profile,data,randomUUID);}catch(error){const d=g.drops.find(d=>String(d.id)===op.id);if(d){d.pending=false;d.blocked=true;}send(peer.ws,{t:'ev',list:[{type:'notice',playerId:p.id,text:(error as Error).message}]});return;}
   }
   peer.busy=(peer.busy||0)+1;
   const operation=room.saveQueue.then(async()=>{
    const result=await store.inventoryOp(peer.accountId,p.id,req,op,{quest,leaseOwner:peer.leaseOwner,bossLoot:op.op==='pickup'?(g.drops.find(d=>String(d.id)===op.id&&d.boss)?.bossId??(g.drops.some(d=>String(d.id)===op.id&&d.boss)?'king_jelly':undefined)):undefined,profile:structuredClone(p.profile),room:room.key,tick:room.tick});
    const latest=result.duplicate?await store.inventory(peer.accountId,p.id):result;
-   p.inventory=latest.inventory;p.gold=latest.gold;if(latest.claimedLevelRewards)p.claimedLevelRewards=[...latest.claimedLevelRewards];refreshStats(g,p);
+   p.inventory=latest.inventory;p.gold=latest.gold;p.boundGold=latest.boundGold??0;if(latest.claimedLevelRewards)p.claimedLevelRewards=[...latest.claimedLevelRewards];refreshStats(g,p);
    if(result.error){if(op.op==='pickup')room.dropRequests?.delete(op.id!);throw Error(result.error);}
    if(result.effect&&!result.duplicate){if(result.effect.kind==='arcane'&&sunTarget!==undefined)castSunScroll(g,p,result.effect.amount,sunTarget,usedTemplate?.arcaneElement);applyPotionEffect(g,p,result.effect.kind,result.effect.amount,result.effect.duration);}
       if(latest.consumableBuffs)p.consumableBuffs=structuredClone(latest.consumableBuffs);if(latest.legacyLevelRewards)p.legacyLevelRewards=[...latest.legacyLevelRewards];
-      done();if(op.op==='store'&&p.quests&&recordStore(p.quests,data).length)sendQuests(peer,p);if(op.op==='pickup')void save(room,p.id);sendStats(peer,p);send(peer.ws,{t:'inv',req,inventory:p.inventory,gold:p.gold});
+      done();if(op.op==='store'&&p.quests&&recordStore(p.quests,data).length)sendQuests(peer,p);if(op.op==='pickup')void save(room,p.id);sendStats(peer,p);send(peer.ws,{t:'inv',req,inventory:p.inventory,gold:p.gold,boundGold:p.boundGold??0});
    if(op.op==='pickup'){room.dropRequests?.delete(op.id!);}
    if(op.op==='pickup')send(peer.ws,{t:'ev',list:[{type:'itemPickup',playerId:p.id,loot:op.loot}]});
   });
@@ -488,7 +489,7 @@ export function mountRealtime(server: Server, options: RealtimeOptions) {
 			return;
 		}
 		if (message.t === "spawnReady") {
-            const p=g.players.get(peer.id);if(p)send(peer.ws,{t:"inv",inventory:p.inventory,gold:p.gold});
+            const p=g.players.get(peer.id);if(p)send(peer.ws,{t:"inv",inventory:p.inventory,gold:p.gold,boundGold:p.boundGold??0});
 			if (!peer.ready) {
 				peer.ready = true;
 				room.disconnected.delete(peer.id);
@@ -834,7 +835,7 @@ export function mountRealtime(server: Server, options: RealtimeOptions) {
 					await room.saveQueue;const economyState=await store.inventory(session.accountId,character.id);
                     if(ws.readyState!==WebSocket.OPEN||closing){return;}
                     profile.equipment=equipped(economyState.inventory);profile.cards=[];
-                    created=true;const p = addPlayer(room.game, character.id, profile);p.inventory=economyState.inventory;p.gold=economyState.gold;
+                    created=true;const p = addPlayer(room.game, character.id, profile);p.inventory=economyState.inventory;p.gold=economyState.gold;p.boundGold=economyState.boundGold??0;
                     p.profile.equipment=equipped(p.inventory);p.profile.cards=equippedCards(p.inventory);
 					Object.assign(p, normalizeJob(character));
                     p.audioSettings = character.audioSettings;
