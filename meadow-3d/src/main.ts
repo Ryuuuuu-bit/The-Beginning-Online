@@ -34,7 +34,7 @@ import{ShadowHero,parseShadowManifest}from'./shadow-hero';
 
 import './shadow-combat.css';
 import {TOWN_NPCS,nearbyTownNpc} from './city-2d-locations';
-import {paintMinimapLayer} from './minimap-view';
+import {paintMinimapLayer,minimapView} from './minimap-view';
 import {MEADOW_LANDMARKS,FIELD_HABITATS} from '@the-beginning-online/shared/maps';
 type TextureManifest=Record<string,{webp:string}>;
 import{GameSocket}from'./net/socket';import{NetworkWorld}from'./net/world';
@@ -324,11 +324,11 @@ let lastXpLost=0;
 function showDeath(){if(netOverlay)return;overlay('<p class="caption">เริ่มต้นใหม่</p><h1>พักสักหน่อย<br>แล้วเริ่มใหม่</h1><p>'+(lastXpLost>0?`เสียประสบการณ์ ${lastXpLost.toLocaleString('th-TH')} (1% ของระดับนี้) · ทองและไอเทมยังอยู่ครบ`:'ประสบการณ์และเงินที่เก็บได้ยังอยู่')+'</p><p id="revive-countdown"></p><button id="revive" class="primary">กลับเมือง →</button>');$('#revive').textContent=activeMap==='confluence'?'ฟื้นที่จุดพักในเรด →':'กลับเมือง →';$('#revive').onclick=()=>{if(!net.connected){notice('ยังไม่ได้เชื่อมต่อ');return;}if((game.p.reviveRemaining??0)>0)return;net.send({t:'revive'});};}
 
 const map=$<HTMLCanvasElement>('#map'),mx=map.getContext('2d')!;
-// Round, player-centred minimap. Terrain and markers are drawn in the 160×132 map space; hud-qol draws its
+// Round minimap that follows the player until the camera reaches the world edge. Terrain and markers use 160×132 map space; hud-qol draws its
 // markers right after this on the same transform and inverts it (map.view) for clicks.
 // Zoom is set in screen pixels per world metre so the circle shows ~60 m around the player on every map size.
 const MAP_SIZE=168,MAP_PX_PER_METRE=2.8;
-function minimap(){const m=mapScale(activeMap),cx=m.x(game.p.x),cy=m.z(game.p.z),zoom=MAP_PX_PER_METRE/m.k,view={k:zoom,ox:MAP_SIZE/2-zoom*cx,oy:MAP_SIZE/2-zoom*cy};(map as any).view=view;
+function minimap(){const m=mapScale(activeMap),cx=m.x(game.p.x),cy=m.z(game.p.z),zoom=MAP_PX_PER_METRE/m.k,view=minimapView(MAP_SIZE,zoom,cx,cy);(map as any).view=view;
  mx.setTransform(1,0,0,1,0,0);mx.clearRect(0,0,MAP_SIZE,MAP_SIZE);
  paintMinimapLayer(mx,MAP_SIZE,view,drawMinimap,'#10231f');
  $('#map-coords').textContent=`${Math.round(game.p.x)}, ${Math.round(game.p.z)}`;}
@@ -359,10 +359,10 @@ function minimapTerrain(id:MapId){
 }
 function drawMinimap(){
  const m=mapScale(activeMap);mx.drawImage(minimapTerrain(activeMap),0,0);
+ mx.strokeStyle='#c1cda45c';mx.lineWidth=1/((map as any).view?.k||1);mx.strokeRect(0,0,160,132);
  const k=((map as any).view?.k)||1,dot=(x:number,z:number,r:number,color:string,stroke?:string)=>{mx.fillStyle=color;mx.beginPath();mx.arc(m.x(x),m.z(z),r*1.3/k,0,6.28);mx.fill();if(stroke){mx.strokeStyle=stroke;mx.lineWidth=1.5/k;mx.stroke();}};
  for(const e of game.enemies){if(e.dead)continue;dot(e.x,e.z,e.boss?3.5:1.5,e.boss?'#ffdb87':activeMap==='forest'?'#e7c3a0':e.variant==='mint'?'#80d7af':e.variant==='sky'?'#9bcae8':'#f4b3c5');}
  for(const o of worldState.others)dot(o.x,o.z,2,'#9fd3ff');
- dot(game.p.x,game.p.z,3,'#fff7d5','#314d39');
 }
 const clock=(s:number)=>`${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;
 /** Field maps: the boss runs on a 30-minute map timer (server sends seconds left in bossIn). */
