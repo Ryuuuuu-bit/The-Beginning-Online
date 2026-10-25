@@ -1,0 +1,11 @@
+{
+  "method": "Front-facing frame (top-left quadrant) of each approved city NPC sheet in art/city-sprite-v2, cropped to its opaque bounds and downscaled to 400px tall WebP. No regeneration.",
+  "sources": {
+    "angel": "art/city-sprite-v2/npc-angel.png",
+    "guard": "art/city-sprite-v2/npc-guard.png",
+    "healer": "art/city-sprite-v2/npc-healer.png",
+    "blacksmith": "art/city-sprite-v2/npc-blacksmith.png",
+    "merchant": "art/city-sprite-v2/npc-merchant.png",
+    "clerk": "art/city-sprite-v2/npc-clerk.png"
+  }
+}

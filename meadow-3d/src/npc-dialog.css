@@ -1,0 +1,48 @@
+/* Shared NPC dialog shell (ui-mockup/npc-dialogs.html): NPC portrait in a lit arch beside the content column. */
+body :is(#angel-window,#npc-dialog){--nd-line:#2a4448;--nd-text:#ecf1ea;--nd-muted:#a7bab3;--nd-faint:#71877f;--nd-gold:#e8cb8f;--nd-gold-hi:#fff0c8;--nd-jade:#8fd8ab;--nd-sky:#9cc8ef;--nd-halo:#9cc8ef30;
+ width:min(960px,calc(100vw - 48px));max-width:none;max-height:calc(100dvh - 48px);padding:0;overflow:visible;border:0;border-radius:20px;color:var(--nd-text);font:14px/1.5 var(--font-ui,Tahoma);text-shadow:none;
+ background:radial-gradient(ellipse 60% 40% at 70% 0,#2f5a4d44,transparent 70%),repeating-linear-gradient(135deg,#ffffff03 0 2px,transparent 2px 7px),linear-gradient(#0f2228,#091519);
+ box-shadow:0 0 0 1px #c9a86277,0 0 0 5px #0a1418,0 0 0 6px #c9a86233,0 30px 90px #000d,inset 0 1px 0 #ffffff10;backdrop-filter:none}
+body :is(#angel-window,#npc-dialog)[open]{display:grid;grid-template-columns:270px minmax(0,1fr)}
+body :is(#angel-window,#npc-dialog)::backdrop{background:#030d138f;backdrop-filter:blur(5px)}
+body :is(#angel-window,#npc-dialog) *{box-sizing:border-box}
+body :is(#angel-window,#npc-dialog) :is(h2,h3,p){margin:0}
+body :is(#angel-window,#npc-dialog) button{font:inherit;cursor:pointer;min-height:0;transition:filter .15s,transform .15s,box-shadow .15s}
+body :is(#angel-window,#npc-dialog) button:focus-visible{outline:2px solid var(--nd-gold);outline-offset:3px}
+body :is(#angel-window,#npc-dialog) .nd-corner{position:absolute;width:54px;height:54px;pointer-events:none;z-index:3;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 54 54' fill='none' stroke='%23e8cb8f' stroke-width='1.6'%3E%3Cpath d='M3 40V10a7 7 0 0 1 7-7h30'/%3E%3Cpath d='M9 30V15a6 6 0 0 1 6-6h15' opacity='.55'/%3E%3Cpath d='M3 10c8 0 12 4 12 12M10 3c0 8 4 12 12 12' opacity='.7'/%3E%3Ccircle cx='15' cy='15' r='2.4' fill='%23e8cb8f'/%3E%3C/svg%3E") no-repeat}
+body :is(#angel-window,#npc-dialog) .nd-corner.tl{left:-1px;top:-1px}
+body :is(#angel-window,#npc-dialog) .nd-corner.tr{right:-1px;top:-1px;transform:scaleX(-1)}
+body :is(#angel-window,#npc-dialog) .nd-corner.bl{left:-1px;bottom:-1px;transform:scaleY(-1)}
+body :is(#angel-window,#npc-dialog) .nd-corner.br{right:-1px;bottom:-1px;transform:scale(-1)}
+
+/* portrait column */
+body :is(#angel-window,#npc-dialog) .nd-who{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;min-height:440px;padding:22px 18px;border-radius:20px 0 0 20px;overflow:hidden;
+ background:radial-gradient(ellipse 70% 45% at 50% 42%,var(--nd-halo),transparent 70%),linear-gradient(#132b2c,#0a1719);border-right:1px solid #c9a86233}
+body :is(#angel-window,#npc-dialog) .nd-who::before{content:'';position:absolute;left:50%;top:26px;width:200px;height:330px;transform:translateX(-50%);border-radius:100px 100px 14px 14px;
+ background:repeating-conic-gradient(from 0deg at 50% 38%,#fff3d010 0 5deg,transparent 5deg 13deg);box-shadow:inset 0 0 0 1px #c9a86240,inset 0 0 40px #0007}
+body :is(#angel-window,#npc-dialog) .nd-who::after{content:'';position:absolute;left:50%;bottom:118px;width:170px;height:26px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(#000a,transparent 70%)}
+body :is(#angel-window,#npc-dialog) .nd-figure{position:relative;z-index:1;height:320px;max-width:240px;object-fit:contain;margin-bottom:16px;filter:drop-shadow(0 0 22px var(--nd-halo)) drop-shadow(0 8px 10px #0008)}
+body :is(#angel-window,#npc-dialog) .nd-figure[hidden]{display:none}
+body :is(#angel-window,#npc-dialog) .nd-plate{position:relative;z-index:1;width:100%;text-align:center}
+body :is(#angel-window,#npc-dialog) .nd-plate::before{content:'';display:block;width:120px;height:10px;margin:0 auto 8px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 10' fill='none' stroke='%23c9a862'%3E%3Cpath d='M0 5h48M72 5h48'/%3E%3Cpath d='M60 1l4 4-4 4-4-4z' fill='%23e8cb8f'/%3E%3C/svg%3E")}
+body :is(#angel-window,#npc-dialog) .nd-plate small{display:block;font-size:10.5px!important;letter-spacing:.28em;color:#c7ab72!important}
+body :is(#angel-window,#npc-dialog) .nd-plate h2{margin:0;font:800 20px/1.3 var(--font-ui);background:linear-gradient(#fff1cf,#e2bd78);-webkit-background-clip:text;background-clip:text;color:transparent}
+body :is(#angel-window,#npc-dialog) .nd-plate p{font-size:12px!important;color:var(--nd-muted)!important}
+
+/* content column */
+body :is(#angel-window,#npc-dialog) .nd-body{position:relative;display:flex;flex-direction:column;gap:14px;min-width:0;max-height:calc(100dvh - 48px);overflow:auto;padding:22px 26px 18px;scrollbar-width:thin;scrollbar-color:#3d5a55 transparent}
+body :is(#angel-window,#npc-dialog) .nd-x{position:absolute;right:18px;top:18px;z-index:2;width:38px;height:38px;padding:0;border:0!important;border-radius:50%!important;box-shadow:0 0 0 1px #c9a86266;background:#ffffff06!important;font-size:19px;color:var(--nd-muted)}
+body :is(#angel-window,#npc-dialog) .nd-x:hover{color:var(--nd-gold-hi);background:#ffffff10!important}
+body :is(#angel-window,#npc-dialog) .nd-say{position:relative;margin-right:46px;padding:12px 16px;border-radius:14px;background:#ffffff08;box-shadow:inset 0 0 0 1px #ffffff12;font-size:14px!important;line-height:1.65;color:#dbe6df!important}
+body :is(#angel-window,#npc-dialog) .nd-say::before{content:'';position:absolute;left:-7px;top:18px;width:12px;height:12px;transform:rotate(45deg);background:#13262b;box-shadow:-1px 1px 0 #ffffff12}
+body :is(#angel-window,#npc-dialog) .nd-say b{color:var(--nd-gold-hi);font-weight:600}
+body :is(#angel-window,#npc-dialog) .nd-chip{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 11px;border-radius:14px;background:#ffffff08;box-shadow:inset 0 0 0 1px #ffffff14;font-size:12.5px;color:var(--nd-muted)}
+body :is(#angel-window,#npc-dialog) .nd-chip b{color:var(--nd-text);font-weight:700}
+body :is(#angel-window,#npc-dialog) .nd-chip svg{width:14px;height:14px}
+body :is(#angel-window,#npc-dialog) .nd-hint{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:auto;padding-top:10px;border-top:1px solid #ffffff0c;font-size:12px;color:var(--nd-faint)}
+body :is(#angel-window,#npc-dialog) kbd{display:inline-grid;place-items:center;min-width:24px;height:20px;padding:0 6px;border-radius:5px;background:#ffffff10;box-shadow:inset 0 -1px 0 #0006;font:700 11px var(--font-ui);color:var(--nd-text)}
+body :is(#angel-window,#npc-dialog) .nd-primary{display:flex;align-items:center;justify-content:center;gap:10px;height:46px;padding:0 22px;border:0!important;border-radius:13px!important;font-size:15px;font-weight:800;color:#1e2a1f!important;
+ background:linear-gradient(#f6e2ad,#d6af68 55%,#b98d46)!important;box-shadow:0 0 0 1px #fff0c8aa,0 8px 22px #d8bc7a40,inset 0 1px 0 #fff8}
+body :is(#angel-window,#npc-dialog) .nd-primary:not(:disabled):hover{filter:brightness(1.07)}
+@media(max-height:760px){body :is(#angel-window,#npc-dialog) .nd-who{min-height:0}body :is(#angel-window,#npc-dialog) .nd-figure{height:250px}}
+@media(prefers-reduced-motion:reduce){body :is(#angel-window,#npc-dialog) button{transition:none}}

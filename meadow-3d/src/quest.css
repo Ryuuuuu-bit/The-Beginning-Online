@@ -1,43 +1,84 @@
-/* NPC quest cards and journal tracker. */
-#npc-dialog{box-sizing:border-box;width:560px;max-width:calc(100vw - 40px);max-height:calc(100dvh - 40px);padding:0;overflow:hidden}
-#npc-dialog[open]{display:flex;flex-direction:column}
-#npc-dialog .npc-dialog-head,#npc-dialog .npc-dialog-foot{flex:none;padding:16px 22px;background:rgba(8,23,34,.5)}
-#npc-dialog .npc-dialog-head{border-bottom:1px solid var(--g-line)}
-#npc-dialog .npc-dialog-head>span{font-size:12px;color:var(--g-gold)}
-#npc-dialog .npc-dialog-head h2{margin:4px 0 0;font-size:22px}
-#npc-dialog .npc-dialog-body{min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:16px 22px;scrollbar-gutter:stable}
-#npc-dialog .npc-intro{margin:0 0 14px;font-size:14px;line-height:1.65}
-#npc-dialog .npc-dialog-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid var(--g-line)}
-#npc-dialog .npc-dialog-foot>span{font-size:12px;color:var(--g-muted)}
-#npc-dialog .npc-quest{min-width:0;padding:15px;overflow-wrap:anywhere}
-#npc-dialog .npc-quest h3{flex-wrap:wrap;justify-content:space-between;line-height:1.5;gap:4px 10px;margin-bottom:8px}
-#npc-dialog .quest-badge{flex:none;white-space:nowrap}
-#npc-dialog .npc-quest[data-status=ready]{border-color:#89d7b080;background:rgba(43,92,65,.2)}
-#npc-dialog .npc-quest[data-status=available]{border-color:var(--g-line-strong)}
-#npc-dialog .quest-actions{margin-top:12px;gap:10px}
-#npc-dialog .quest-actions button{min-height:44px;white-space:normal}
-#npc-dialog .quest-actions button.primary{flex:1 1 160px;background:var(--g-gold);border-color:var(--g-gold);color:#18251f;font-weight:700}
-#npc-dialog .quest-actions button:not(.primary){font-size:13px;color:var(--g-muted)}
-#npc-dialog .npc-locked{border-top:1px solid var(--g-line);padding-top:10px}
-#npc-dialog .npc-locked summary{padding:8px 2px;color:var(--g-muted);font-size:14px;cursor:pointer}
-#npc-dialog .npc-locked .npc-quest{margin-top:10px}
-#npc-dialog :is(button,summary):focus-visible{outline:2px solid var(--g-gold);outline-offset:3px}
-#npc-dialog .npc-extra{display:grid;gap:10px;margin:8px 0}
-#npc-dialog .npc-shop-open{justify-self:start}
-.npc-quests{display:grid;gap:10px}
-.npc-quest{padding:10px 12px;border:1px solid #d6bc8855;border-radius:10px 3px 10px 3px;background:#0f221cc0}
-.npc-quest h3{display:flex;align-items:center;gap:8px;margin:0 0 4px;font-size:16px;color:#ecd28e}
-.npc-quest .quest-badge{font-size:12px;font-weight:600;padding:1px 7px;border-radius:9px;background:#17372b;color:#fff4d6;border:1px solid #b49e6966}
-.npc-quest[data-status=available] .quest-badge{background:#5c4a1f;border-color:#ecd28e}
-.npc-quest[data-status=ready] .quest-badge{background:#2f5a3a;border-color:#a9e3c4}
-.npc-quest[data-status=done] .quest-badge,.npc-quest[data-status=cooldown] .quest-badge,.npc-quest[data-status=locked] .quest-badge{opacity:.75}
-.npc-quest p{margin:2px 0 6px;font-size:14px;line-height:1.5}
-.npc-quest ul{margin:0 0 4px;padding-left:18px;font-size:14px}
-.npc-quest .quest-rewards{font-size:13px;opacity:.85}
-.quest-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
-.quest-actions button{font:inherit;min-height:38px;padding:0 14px;color:#fff4d6;background:#17372b;border:1px solid #b49e69;border-radius:6px;cursor:pointer}
-.quest-actions button.primary{background:#5c4a1f;border-color:#ecd28e}
-.quest-actions button:disabled{opacity:.5;cursor:wait}
+/* NPC talk + quest content (ui-mockup/npc-dialogs.html); the frame lives in npc-dialog.css. */
+body #npc-dialog .npc-extra{display:flex;flex-direction:column;gap:12px;min-width:0}
+body #npc-dialog .npc-shop-open{align-self:flex-start;height:46px;padding:0 24px;border:0!important;border-radius:12px!important;font-weight:800;color:#1e2a1f!important;background:linear-gradient(#f6e2ad,#d6af68 55%,#b98d46)!important;box-shadow:0 0 0 1px #fff0c8aa,inset 0 1px 0 #fff8}
+body #npc-dialog .npc-shop-open:hover{filter:brightness(1.07)}
+
+/* healer service */
+body #npc-dialog .npc-heal{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:16px;padding:14px 16px;border-radius:15px;background:radial-gradient(ellipse at 0 50%,#8fd8ab22,transparent 60%),linear-gradient(150deg,#16302a,#0f1f1f);box-shadow:inset 0 0 0 1px #8fd8ab44}
+body #npc-dialog .npc-heal-ic{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;color:#c9f5d9;background:radial-gradient(circle at 35% 30%,#3e7c5d,#11291f);box-shadow:inset 0 0 0 1px #8fd8ab55,0 0 18px #8fd8ab33}
+body #npc-dialog .npc-heal-ic svg{width:26px;height:26px}
+body #npc-dialog .npc-heal-bars{display:grid;gap:5px}
+body #npc-dialog .npc-heal-bars b{font-size:15px}
+body #npc-dialog .npc-heal-bars div{display:grid;grid-template-columns:minmax(0,1fr) 100px;align-items:center;gap:10px}
+body #npc-dialog .npc-heal-bars span{height:7px;border-radius:4px;background:#0000004d;overflow:hidden}
+body #npc-dialog .npc-heal-bars i{display:block;height:100%;border-radius:4px;transition:width .4s}
+body #npc-dialog .npc-heal-bars .hp i{background:linear-gradient(90deg,#b8404a,#e8656a)}
+body #npc-dialog .npc-heal-bars .mp i{background:linear-gradient(90deg,#3c86b8,#5fb6e8)}
+body #npc-dialog .npc-heal-bars small{font-size:11.5px!important;color:var(--nd-muted)!important;font-variant-numeric:tabular-nums}
+body #npc-dialog .npc-heal-go{height:44px;min-width:150px;padding:0 18px;border:0!important;border-radius:12px!important;font-weight:800;color:#f1fff5!important;background:linear-gradient(#5cae82,#357a59 60%,#2a6449)!important;box-shadow:0 0 0 1px #9ae3b8aa,inset 0 1px 0 #fff5}
+body #npc-dialog .npc-heal-go:disabled{background:#183034!important;color:var(--nd-muted)!important;box-shadow:0 0 0 1px var(--nd-line);cursor:default}
+
+/* quests */
+body #npc-dialog .npc-quests{display:flex;flex-direction:column;gap:12px;min-width:0}
+body #npc-dialog .quest-categories{display:flex;gap:6px;margin:0;padding:4px;border:0;border-radius:13px;background:#0000002e;box-shadow:inset 0 0 0 1px #ffffff0d}
+body #npc-dialog .quest-categories button{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;height:40px;min-height:0;padding:0 8px!important;border:0!important;border-radius:10px!important;background:none!important;font-size:13.5px;font-weight:600;color:var(--nd-muted);white-space:nowrap}
+body #npc-dialog .quest-categories button:hover{color:var(--nd-text)}
+body #npc-dialog .quest-categories button[aria-pressed=true]{background:linear-gradient(#28473c,#1d382f)!important;color:var(--nd-text);box-shadow:inset 0 0 0 1px #5c806c,0 4px 10px #0004}
+body #npc-dialog .quest-count{min-width:20px;height:20px;padding:0 6px;border-radius:10px;background:#ffffff10;font-size:11px;line-height:20px}
+body #npc-dialog .quest-count.hot{background:var(--nd-jade);color:#10261b}
+body #npc-dialog .npc-quest-list{display:flex;flex-direction:column;gap:10px}
+body #npc-dialog .npc-quest{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:16px;margin:0;padding:16px 18px;border:0;border-radius:15px;background:linear-gradient(150deg,#16302f,#0f1f22);box-shadow:inset 0 0 0 1px #ffffff12,0 8px 18px #0004}
+body #npc-dialog .npc-quest::before{content:'';position:absolute;left:0;top:14px;bottom:14px;width:3px;border-radius:0 3px 3px 0;background:var(--qs,#4a605c)}
+body #npc-dialog .npc-quest[data-status=available]{--qs:var(--nd-gold)}
+body #npc-dialog .npc-quest[data-status=active]{--qs:var(--nd-sky)}
+body #npc-dialog .npc-quest[data-status=ready]{--qs:var(--nd-jade);box-shadow:inset 0 0 0 1px #8fd8ab66,0 0 22px #8fd8ab18}
+body #npc-dialog .quest-main{min-width:0}
+body #npc-dialog .quest-top{display:flex;align-items:center;flex-wrap:wrap;gap:8px 10px}
+body #npc-dialog .npc-quest h3{margin:0;font-size:17px;line-height:1.35;color:var(--nd-text)}
+body #npc-dialog .quest-badge{height:22px;padding:0 9px;border:0;border-radius:11px;background:#ffffff0d;font-size:11.5px;font-weight:700;line-height:22px;color:var(--nd-muted);white-space:nowrap}
+body #npc-dialog .npc-quest[data-status=available] .quest-badge{background:#e8cb8f22;color:var(--nd-gold-hi)}
+body #npc-dialog .npc-quest[data-status=active] .quest-badge{background:#9cc8ef22;color:var(--nd-sky)}
+body #npc-dialog .npc-quest[data-status=ready] .quest-badge{background:#8fd8ab26;color:var(--nd-jade)}
+body #npc-dialog .quest-level{font-size:11.5px;color:var(--nd-faint)}
+body #npc-dialog .quest-main>p{margin-top:4px;font-size:13px!important;line-height:1.6;color:#c2cfc9!important}
+body #npc-dialog .quest-main>p.quest-reset{padding:0;border:0;background:none;font-size:11.5px!important;color:var(--nd-faint)!important}
+body #npc-dialog .quest-goals{display:grid;gap:6px;margin:10px 0 0;padding:0;list-style:none}
+body #npc-dialog .quest-goals li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:4px 10px;font-size:13px;color:var(--nd-text)}
+body #npc-dialog .quest-goals svg{width:16px;height:16px}
+body #npc-dialog .quest-goals b{font-size:12.5px;font-variant-numeric:tabular-nums}
+body #npc-dialog .quest-bar{grid-column:1/-1;position:relative;display:block;height:6px;border-radius:3px;background:#0000004d;overflow:hidden}
+body #npc-dialog .quest-bar::after{content:'';position:absolute;inset:0 auto 0 0;width:var(--v);border-radius:3px;background:linear-gradient(90deg,#4f86b0,var(--nd-sky))}
+body #npc-dialog .npc-quest[data-status=ready] .quest-bar::after{background:linear-gradient(90deg,#3d8a62,var(--nd-jade))}
+body #npc-dialog .quest-side{display:flex;flex-direction:column;gap:8px;min-width:0;padding-left:16px;border-left:1px solid #ffffff0c}
+body #npc-dialog .quest-side>small{font-size:11px!important;letter-spacing:.06em;color:var(--nd-faint)!important}
+body #npc-dialog .quest-rewards{display:flex;flex-wrap:wrap;gap:6px;margin:0;padding:0;border:0;background:none}
+body #npc-dialog .quest-reward{display:flex;align-items:center;gap:6px;height:30px;padding:0 8px;border-radius:9px;background:#0000002e;font-size:12px;font-weight:700;white-space:nowrap;color:var(--nd-text)}
+body #npc-dialog .quest-reward>i,body #npc-dialog .quest-reward>.item-icon{width:20px;height:20px;flex:none;border-radius:50%}
+body #npc-dialog .quest-reward>.item-icon{margin:0;border-radius:5px}
+body #npc-dialog .quest-reward.exp>i{background:radial-gradient(circle at 35% 30%,#c9f5d9,#3d8a62)}
+body #npc-dialog .quest-reward.job>i{background:radial-gradient(circle at 35% 30%,#d4e6ff,#4f73b0)}
+body #npc-dialog .quest-reward.gold>i{background:radial-gradient(circle at 35% 30%,#fff6d4,#c99a4a)}
+body #npc-dialog .quest-reward.item{flex-basis:100%}
+body #npc-dialog .quest-note{font-size:11px!important;line-height:1.5;color:var(--nd-faint)!important}
+body #npc-dialog .quest-actions{display:flex;flex-direction:column;gap:6px;margin-top:auto;padding:0;border:0}
+body #npc-dialog .quest-actions button{height:42px;min-height:0;padding:0 12px!important;border:0!important;border-radius:11px!important;font-size:14px;font-weight:800}
+body #npc-dialog .quest-actions button.primary{color:#1e2a1f!important;background:linear-gradient(#f6e2ad,#d6af68 55%,#b98d46)!important;box-shadow:0 0 0 1px #fff0c8aa,inset 0 1px 0 #fff8}
+body #npc-dialog .npc-quest[data-status=ready] .quest-actions button.primary{color:#f1fff5!important;background:linear-gradient(#5cae82,#357a59 60%,#2a6449)!important;box-shadow:0 0 0 1px #9ae3b8aa,inset 0 1px 0 #fff5}
+body #npc-dialog .quest-actions .quest-go{color:var(--nd-sky)!important;background:#9cc8ef14!important;box-shadow:inset 0 0 0 1px #9cc8ef55}
+body #npc-dialog .quest-actions .quest-abandon{height:28px;font-size:12px;font-weight:600;color:var(--nd-faint)!important;background:none!important}
+body #npc-dialog .quest-actions .quest-abandon:hover{color:#ef8f86!important}
+body #npc-dialog .quest-actions button:not(:disabled):hover{filter:brightness(1.08)}
+body #npc-dialog .quest-actions button:disabled{opacity:.55;cursor:default}
+body #npc-dialog .npc-locked{display:flex;flex-direction:column;gap:8px;margin:0;padding:0;border:0;background:none}
+body #npc-dialog .npc-locked summary{cursor:pointer;font-size:12.5px;color:var(--nd-muted)}
+body #npc-dialog .npc-locked-row{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:13px;background:#00000026;box-shadow:inset 0 0 0 1px #ffffff0d;font-size:13px;color:var(--nd-muted)}
+body #npc-dialog .npc-locked-row svg{width:18px;height:18px;flex:none}
+body #npc-dialog .npc-locked-row b{display:block;color:var(--nd-text)}
+body #npc-dialog .npc-locked-row small{font-size:12px!important;color:var(--nd-faint)!important}
+body #npc-dialog .npc-locked-row>span{margin-left:auto;font-size:12px;color:var(--nd-faint)}
+body #npc-dialog .quest-empty{padding:22px;text-align:center;font-size:13px!important;color:var(--nd-muted)!important}
+
+/* Journal tracker on the HUD */
 #quest-tracker{list-style:none;margin:8px 0 0;padding:6px 0 0;border-top:1px solid #d6bc8833;display:grid;gap:6px}
 #quest-tracker li{display:grid;gap:1px}
 #quest-tracker b{font-size:13px;color:#ecd28e}
@@ -45,12 +86,4 @@
 #quest-tracker li.ready small{color:#a9e3c4}
 #ui #quest-tracker .quest-navigate{justify-self:start;min-height:32px;margin-top:4px;padding:4px 10px;border:1px solid var(--g-line-strong);border-radius:6px;background:rgba(230,201,143,.08);color:var(--g-gold);font:inherit;font-size:12px;pointer-events:auto}
 #ui #quest-tracker .quest-navigate:focus-visible{outline:2px solid var(--g-gold);outline-offset:2px}
-@media(max-width:650px){.quest-actions button{min-height:44px}#quest-tracker b{font-size:12px}}
-#npc-dialog .npc-close,#npc-dialog .npc-shop-open{font:inherit;min-height:38px;padding:0 16px;color:#fff4d6;background:#17372b;border:1px solid #b49e69;border-radius:6px;cursor:pointer}
-#npc-dialog .npc-shop-open{background:#5c4a1f;border-color:#ecd28e}
-.quest-actions button.primary{flex:0 0 auto}
-.quest-categories{display:flex;gap:5px;flex-wrap:wrap;margin:3px 0 8px;padding-bottom:10px;border-bottom:1px solid #b6a26a33}
-.quest-categories button{flex:1;min-height:34px;padding:7px 10px;border:1px solid #819b7a44;border-radius:6px;background:#0d251b;color:#a6c1ac;font:500 11px var(--font-ui);cursor:pointer;white-space:nowrap}
-.quest-categories button[aria-pressed=true]{border-color:#c6ae70;background:#3b5236;color:#f0deb0}
-.quest-categories button:focus-visible{outline:2px solid #edd49a;outline-offset:2px}
-.npc-quest .quest-reset{padding:6px 8px;border-left:2px solid #a9945d;background:#0b211980;color:#b4cdb5;font-size:11px;line-height:1.7}
+@media(max-width:650px){#quest-tracker b{font-size:12px}}

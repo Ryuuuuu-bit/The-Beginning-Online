@@ -145,15 +145,29 @@ async function switchMap(id:MapId){
  }finally{switching=false;fade.hidden=failedMap!==id;}
 }
 const npcTalk=document.createElement('button');npcTalk.id='npc-talk';npcTalk.hidden=true;$('#ui').append(npcTalk);
-const npcDialog=document.createElement('dialog');npcDialog.id='npc-dialog';npcDialog.setAttribute('aria-labelledby','npc-dialog-title');npcDialog.innerHTML='<header class="npc-dialog-head"><span>พูดคุยและเควส</span><h2 id="npc-dialog-title"></h2></header><div class="npc-dialog-body"><p class="npc-intro"></p><div class="npc-extra"></div></div><footer class="npc-dialog-foot"><span>Esc เพื่อปิด</span><button type="button" class="npc-close">ปิดหน้าต่าง</button></footer>';document.body.append(npcDialog);npcDialog.querySelector<HTMLButtonElement>('.npc-close')!.onclick=()=>npcDialog.close();npcDialog.addEventListener('close',()=>quests?.unmount());
-let nearNpc: {name:string;kind:string;text:string}|null=null;
-npcTalk.onclick=()=>{if(!nearNpc)return;clearInput();const kind=nearNpc.kind,shopKind=['market','forge','storage'].includes(kind);if(shopKind&&!quests?.pending(kind)){inventoryUI.shop(kind);return;}sound.play(`npc_${kind}_greet`);if(kind==='heal')net.send({t:'heal'});npcDialog.querySelector('h2')!.textContent=nearNpc.name;npcDialog.querySelector('p')!.textContent=shopKind?(kind==='storage'?'ฝากของไว้ที่นี่ได้ ของในคลังปลอดภัยเสมอ':'มาดูของก่อนสิ'):nearNpc.text;const extra=npcDialog.querySelector<HTMLElement>('.npc-extra')!;extra.replaceChildren();if(shopKind){const open=document.createElement('button');open.className='npc-shop-open primary';open.textContent=kind==='storage'?'เปิดคลังเก็บของ':'เปิดร้าน';open.onclick=()=>{npcDialog.close();inventoryUI.shop(kind);};extra.append(open);}quests?.mount(kind,extra);if(!npcDialog.open)npcDialog.showModal();};
+const npcDialog=document.createElement('dialog');npcDialog.id='npc-dialog';npcDialog.setAttribute('aria-labelledby','npc-dialog-title');npcDialog.innerHTML='<i class="nd-corner tl"></i><i class="nd-corner tr"></i><i class="nd-corner bl"></i><i class="nd-corner br"></i><aside class="nd-who"><img class="nd-figure" alt=""><div class="nd-plate"><small class="npc-tag"></small><h2 id="npc-dialog-title"></h2><p class="npc-role"></p></div></aside><div class="nd-body"><button type="button" class="nd-x npc-close" aria-label="ปิดหน้าต่าง">×</button><p class="nd-say npc-intro"></p><div class="npc-extra"></div><footer class="nd-hint"><span>คุยกับ NPC อื่นได้ทุกเมื่อในเมือง</span><span><kbd>Esc</kbd> ปิด</span></footer></div>';document.body.append(npcDialog);npcDialog.querySelector<HTMLButtonElement>('.npc-close')!.onclick=()=>npcDialog.close();npcDialog.addEventListener('close',()=>quests?.unmount());
+let nearNpc: {name:string;kind:string;text:string;art:string;role:string}|null=null;
+const NPC_TAG:Record<string,string>={guard:'GATE CAPTAIN',heal:'CITY HEALER',forge:'BLACKSMITH',market:'MERCHANT',storage:'STOREKEEPER'};
+const NPC_HALO:Record<string,string>={guard:'#9cc8ef30',heal:'#ace1b738',forge:'#e8b46a30',market:'#e8cb8f30',storage:'#b6c4d030'};
+/** Healer service card: the server heals on talk; this shows the result and the 60 s cooldown. */
+function healerCard(){
+ const card=document.createElement('div');card.className='npc-heal';
+ card.innerHTML='<span class="npc-heal-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/><path d="M12 9v6M9 12h6"/></svg></span><div class="npc-heal-bars"><b>ฟื้นพลังเต็ม</b><div><span class="hp"><i></i></span><small></small></div><div><span class="mp"><i></i></span><small></small></div></div><button type="button" class="npc-heal-go"></button>';
+ const [hp,mp]=[...card.querySelectorAll<HTMLElement>('.npc-heal-bars>div')],go=card.querySelector<HTMLButtonElement>('button')!;
+ go.onclick=()=>net.send({t:'heal'});
+ const draw=()=>{if(!card.isConnected){clearInterval(timer);return;}const p=game.p,left=Math.max(0,Math.ceil(((p as any).healerReadyAt-Date.now())/1000));
+  hp.querySelector('i')!.style.width=`${p.hp/p.maxHp*100}%`;hp.querySelector('small')!.textContent=`HP ${Math.round(p.hp)} / ${Math.round(p.maxHp)}`;
+  mp.querySelector('i')!.style.width=`${p.mp/p.maxMp*100}%`;mp.querySelector('small')!.textContent=`MP ${Math.round(p.mp)} / ${Math.round(p.maxMp)}`;
+  go.disabled=left>0||p.dead;go.textContent=left>0?`พร้อมอีก ${left} วิ`:'ฟื้น HP / MP';};
+ const timer=window.setInterval(draw,500);requestAnimationFrame(draw);return card;
+}
+npcTalk.onclick=()=>{if(!nearNpc)return;clearInput();const kind=nearNpc.kind,shopKind=['market','forge','storage'].includes(kind);if(shopKind&&!quests?.pending(kind)){inventoryUI.shop(kind);return;}sound.play(`npc_${kind}_greet`);if(kind==='heal')net.send({t:'heal'});npcDialog.querySelector('h2')!.textContent=nearNpc.name;npcDialog.querySelector('.npc-tag')!.textContent=NPC_TAG[kind]??'CITY';npcDialog.querySelector('.npc-role')!.textContent=nearNpc.role;npcDialog.style.setProperty('--nd-halo',NPC_HALO[kind]??'#9cc8ef30');{const figure=npcDialog.querySelector<HTMLImageElement>('.nd-figure')!;figure.src=`/assets/npc-portraits-v1/${nearNpc.art}.webp`;}npcDialog.querySelector('.npc-intro')!.textContent=shopKind?(kind==='storage'?'ฝากของไว้ที่นี่ได้ ของในคลังปลอดภัยเสมอ':'มาดูของก่อนสิ'):nearNpc.text;const extra=npcDialog.querySelector<HTMLElement>('.npc-extra')!;extra.replaceChildren();if(kind==='heal')extra.append(healerCard());if(shopKind){const open=document.createElement('button');open.className='npc-shop-open primary';open.textContent=kind==='storage'?'เปิดคลังเก็บของ':'เปิดร้าน';open.onclick=()=>{npcDialog.close();inventoryUI.shop(kind);};extra.append(open);}quests?.mount(kind,extra);if(!npcDialog.open)npcDialog.showModal();};
 function mapInteractions(){
  const mapTitle=document.querySelector('.map-head');if(mapTitle)mapTitle.textContent=areaName(activeMap);
  overview.hidden=activeMap!=='city_plaza';const p=game.p;nearNpc=null;
  if(activeMap==='city_plaza'&&!CITY.empty&&!p.dead){
   const n=nearbyTownNpc(p.x,p.z);
-  if(n&&n.kind!=='angel')nearNpc={name:n.name,kind:n.kind,text:n.line};
+  if(n&&n.kind!=='angel')nearNpc={name:n.name,kind:n.kind,text:n.line,art:n.art,role:n.role};
  }
  npcTalk.hidden=!nearNpc;npcTalk.textContent=nearNpc?`คุย [${keyLabel(KEYS.talk[0])}] · ${nearNpc.name}`:'';
  const gates=GATES[activeMap];let closed='';
