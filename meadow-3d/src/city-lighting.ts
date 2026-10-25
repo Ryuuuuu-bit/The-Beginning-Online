@@ -26,11 +26,24 @@ export function drawCityWindowGlow(c:CanvasRenderingContext2D,glow:Sprite|undefi
 /** Reusable light stamps: no per-frame canvas filters or additional asset downloads. */
 export class CityLighting{
  private halo:HTMLCanvasElement;private pool:HTMLCanvasElement;private portal:HTMLCanvasElement;
+ private haze?:{width:number;height:number;morning:boolean;image:HTMLCanvasElement};
  constructor(){
   const stamp=(stops:[number,string][])=>{const out=document.createElement('canvas');out.width=out.height=128;const c=out.getContext('2d')!,g=c.createRadialGradient(64,64,0,64,64,64);for(const [at,color] of stops)g.addColorStop(at,color);c.fillStyle=g;c.fillRect(0,0,128,128);return out;};
   this.halo=stamp([[0,'#fff1c9e0'],[.07,'#ffdc88ae'],[.24,'#ffb54148'],[1,'#f4a23b00']]);
   this.pool=stamp([[0,'#ffd18a70'],[.35,'#e9ad4634'],[1,'#d99d3d00']]);
   this.portal=stamp([[0,'#d5fff2a0'],[.25,'#81dec973'],[.65,'#65b8bf29'],[1,'#65b8bf00']]);
+ }
+ /** Low-resolution light veil is rebuilt only on resize, never blurred every frame. */
+ finish(c:CanvasRenderingContext2D,width:number,height:number,sun:number,high:boolean,hour=10){
+  if(sun<=0||!high)return;
+  const morning=hour<12;
+  if(!this.haze||this.haze.width!==width||this.haze.height!==height||this.haze.morning!==morning){
+   const image=document.createElement('canvas');image.width=Math.ceil(width/3);image.height=Math.ceil(height/3);
+   const a=image.getContext('2d')!,w=image.width,h=image.height;if(!morning)a.transform(-1,0,0,1,w,0);
+   const glow=a.createRadialGradient(w*.12,-h*.18,0,w*.12,-h*.18,w*.85);glow.addColorStop(0,'#ffe6ad24');glow.addColorStop(.45,'#ffdf9810');glow.addColorStop(1,'#ffdf9800');a.fillStyle=glow;a.fillRect(0,0,w,h);
+   this.haze={width,height,morning,image};
+  }
+  c.save();c.globalCompositeOperation='screen';c.globalAlpha=sun*.4;c.drawImage(this.haze.image,0,0,width,height);c.restore();
  }
  draw(c:CanvasRenderingContext2D,items:readonly LightItem[],project:Project,s:number,width:number,height:number,ground=false){
   c.save();c.globalCompositeOperation='screen';

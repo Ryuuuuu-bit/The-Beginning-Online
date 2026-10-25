@@ -6,9 +6,10 @@ import {route} from '../src/city-2d-layout.ts';
 import {windowEmission,CityLighting} from '../src/city-lighting.ts';
 import jobs from '../../shared/data/jobs.json' with {type:'json'};
 
-test('approved city preserves the saved 242 placements, facing, scale and NPC service coordinates',()=>{
+test('approved city preserves the saved 238 placements, facing, scale and NPC service coordinates',()=>{
  const parsed=parseDraft(CITY_LAYOUT,new Set(CITY_LAYOUT.items.map(p=>p.assetId)));
- assert.equal(parsed.items.length,242);
+ assert.equal(parsed.items.length,238);
+ assert(!parsed.items.some(p=>/^(gate:|theme:(warp-core|portal|marker):)/.test(p.assetId)));
  const gazebo=parsed.items.find(p=>p.assetId==='theme:gazebo:5:5');
  assert.deepEqual([gazebo.x,gazebo.z],[-12,19.5]);
  const merchant=parsed.items.find(p=>p.assetId==='npc:merchant');
@@ -67,5 +68,22 @@ test('exit auras sit inside the four gates, label destinations and stay still wi
   for(const [i,[x,z]] of still.anchors.entries()){assert.ok(cityWalkable(x,z,.38));assert.ok(travelDestination('city_plaza',exits[i].id,{x,z}),'aura must sit inside the server gate activation radius');}
   assert.notDeepEqual(frame(0,false).arrows,frame(3,false).arrows);
   assert.deepEqual(exits,original);
+ }finally{globalThis.document=previous;}
+});
+
+test('city keeps painted shadows and caches a soft light veil without per-frame blur',()=>{
+ const previous=globalThis.document;let canvases=0,filters=0;
+ const gradient=()=>({addColorStop(){}});
+ globalThis.document={createElement:()=>{canvases++;return{getContext:()=>({createRadialGradient:gradient,createLinearGradient:gradient,fillRect(){},drawImage(){},save(){},restore(){},transform(){},set filter(value){if(value!=='none')filters++;}})};}};
+ try{
+  const lights=new CityLighting(),states=[];
+  const c={globalCompositeOperation:'source-over',globalAlpha:1,save(){states.push([this.globalCompositeOperation,this.globalAlpha]);},restore(){[this.globalCompositeOperation,this.globalAlpha]=states.pop();},transform(){},drawImage(){}};
+  lights.finish(c,1920,1080,.72,true);
+  const allocated=canvases,blurred=filters;
+  for(let i=0;i<3;i++){lights.finish(c,1920,1080,.72,true);}
+  assert.equal(canvases,allocated,'camera movement reuses the same light veil');assert.equal(filters,blurred,'no per-frame blur');
+  assert.equal(c.globalCompositeOperation,'source-over');assert.equal(c.globalAlpha,1);
+  lights.finish(c,1440,900,.72,false);lights.finish(c,1440,900,0,true);assert.equal(canvases,allocated);
+  lights.finish(c,1440,900,.72,true);assert.equal(canvases,allocated+1,'resize rebuilds the light veil once');lights.finish(c,1440,900,.72,true,15);assert.equal(canvases,allocated+2,'afternoon changes the direction of the sunlight');
  }finally{globalThis.document=previous;}
 });

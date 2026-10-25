@@ -2092,42 +2092,6 @@
       "facing": 0
     },
     {
-      "id": "gate:x@0,47",
-      "assetId": "gate:x",
-      "x": 0,
-      "z": 47,
-      "scale": 1,
-      "flip": false,
-      "facing": 0
-    },
-    {
-      "id": "gate:x@0,-47",
-      "assetId": "gate:x",
-      "x": 0,
-      "z": -47,
-      "scale": 1,
-      "flip": false,
-      "facing": 0
-    },
-    {
-      "id": "gate:z@47,0",
-      "assetId": "gate:z",
-      "x": 47.5,
-      "z": -0.5,
-      "scale": 1,
-      "flip": false,
-      "facing": 0
-    },
-    {
-      "id": "gate:z@-47,0",
-      "assetId": "gate:z",
-      "x": -47,
-      "z": 0,
-      "scale": 1,
-      "flip": false,
-      "facing": 0
-    },
-    {
       "id": "npc:clerk@12,-15",
       "assetId": "npc:clerk",
       "x": 12,

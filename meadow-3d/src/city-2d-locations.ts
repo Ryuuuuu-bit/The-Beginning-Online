@@ -21,10 +21,10 @@ export const WAYPOINTS = CITY.empty?[]:[
   {id:'garden',name:'สวนธาราจันทร์',x:-12,z:23,color:'#b5d997'},
 ] as const;
 export const CITY_EXITS = [
-  {id:'south',name:'ประตูทุ่งวุ้นจิ๋ว',destination:'ทุ่งวุ้นจิ๋ว',x:0,z:44,color:'#c7d98c'},
-  {id:'east',name:'ประตูป่าหมอก',destination:'ป่าหมอก',x:44,z:0,color:'#8ecdd5'},
-  {id:'north',name:'ประตูซากนคร',destination:'ซากนครโบราณ · Lv.10–15',x:0,z:-44,color:'#b6b3d8'},
-  {id:'west',name:'ประตูหุบเขา',destination:'หุบเขาหิน · Lv.15–20',x:-44,z:0,color:'#deb797'},
+  {id:'south',name:'วงวาร์ปทุ่งวุ้นจิ๋ว',destination:'ทุ่งวุ้นจิ๋ว',x:0,z:44,color:'#c7d98c'},
+  {id:'east',name:'วงวาร์ปป่าหมอก',destination:'ป่าหมอก',x:44,z:0,color:'#8ecdd5'},
+  {id:'north',name:'วงวาร์ปซากนคร',destination:'ซากนครโบราณ · Lv.10–15',x:0,z:-44,color:'#b6b3d8'},
+  {id:'west',name:'วงวาร์ปหุบเขา',destination:'หุบเขาหิน · Lv.15–20',x:-44,z:0,color:'#deb797'},
 ] as const;
 export function nearbyWaypoint(x:number,z:number){return WAYPOINTS.find(p=>Math.hypot(x-p.x,z-p.z)<2.8);}
 export function nearbyExit(x:number,z:number){return CITY_EXITS.find(p=>Math.hypot(x-p.x,z-p.z)<2.8);}

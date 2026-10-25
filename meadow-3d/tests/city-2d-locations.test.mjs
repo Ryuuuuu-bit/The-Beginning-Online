@@ -34,11 +34,11 @@ test('every waypoint and its landing are connected and walkable',()=>{
  assert.equal(waypointArrival('missing'),undefined);
  assert.equal(nearbyWaypoint(0,14),undefined);
 });
-test('original gate towers block movement while all four approaches stay open',()=>{
+test('removed gate towers leave no invisible blockers and all four warps remain reachable',()=>{
  assert.equal(CITY_EXITS.length,4);
  for(const p of FORTIFICATION_SOLIDS)assert.equal(city2dWalkable(p.x,p.z,.38),false);
  for(const gate of CITY_EXITS){assert.equal(nearbyExit(gate.x,gate.z)?.id,gate.id);assert.ok(route({x:0,z:14},gate).length);}
  for(let v=40;v<=46;v+=.25)for(const sign of [-1,1]){assert.ok(city2dWalkable(0,v*sign,.38),'north/south corridor');assert.ok(city2dWalkable(v*sign,0,.38),'east/west corridor');}
- assert.equal(city2dWalkable(-5,46,.38),false,'south tower inner edge');
- assert.equal(city2dWalkable(46,5,.38),false,'east tower inner edge');
+ assert.equal(city2dWalkable(-5,46,.38),true,'removed south tower leaves no blocker');
+ assert.equal(city2dWalkable(46,5,.38),true,'removed east tower leaves no blocker');
 });

@@ -9,7 +9,7 @@ import {LAYOUTS,FIELD_BOSS,FIELD_PLACES,GATES,MAP_INFO,isField,travelDestination
 import {CanvasAssets} from './game-2d-assets';
 import {loadCity2DScene} from './city-2d-scene';
 import {drawNpcSprite} from './city-npc-sprite';
-import {TOWN_NPCS,CITY_EXITS} from './city-2d-locations';
+import {TOWN_NPCS} from './city-2d-locations';
 import {drawFountainWater} from './city-2d-fountain';
 import {loadField2D} from './game-2d-fields';
 import {loadMapBackdrop} from './game-2d-backdrop';
@@ -30,7 +30,6 @@ import {SHIELD_BASH_ART} from './shield-bash-art';
 import {sceneryOpacity,placeWorldLabel,type Rect} from './world-labels';
 import {drawAreaRing,drawAreaTag} from './world-area';
 import {drawWarpPortal,prepareWarpPortal} from './warp-portal';
-import warpColumnUrl from '../art/warp-portal-v1/column.png';
 import warpFloorUrl from '../art/warp-portal-v1/floor.png';
 
 const tint:Record<string,string>={ruin_shroom:'hue-rotate(40deg) saturate(.65)',relic_hound:'sepia(.45)',relic_wisp:'hue-rotate(125deg)',ruin_guard:'saturate(.65)',relic_warden:'sepia(.3)',crag_slime:'sepia(.8) saturate(.7)',crag_wolf:'sepia(.75)',dust_wisp:'saturate(.7)',crag_guard:'sepia(.8)',crag_titan:'sepia(.8) saturate(1.2)'};
@@ -39,6 +38,7 @@ export class GameCanvas2D{
  shadowHero?:ShadowHero;
  private remoteHeroes=new Map<string,ShadowHero>();
  readonly atmosphere=new Atmosphere2D();
+ portalMotion:boolean|null=null;
  private cityLighting=new CityLighting();
  private portalArt?:ReturnType<typeof prepareWarpPortal>;
  readonly canvas=document.createElement('canvas');readonly ctx:CanvasRenderingContext2D;readonly assets:CanvasAssets;
@@ -58,7 +58,7 @@ export class GameCanvas2D{
  private tints=new WeakMap<CanvasImageSource,Map<string,HTMLCanvasElement>>();private focus={x:0,y:0};private map:MapId='city_plaza';
  scale=30;zoomHeight=27.5;overview=false;highQuality=true;drawCalls=0;
  constructor(manifest:Record<string,{webp:string}>,private swordEffects:'canvas'|'pixi'='canvas'){this.assets=new CanvasAssets(manifest);this.canvas.setAttribute('aria-label','โลกเกม 2D');this.canvas.tabIndex=0;const context=this.canvas.getContext('2d');if(!context)throw Error('เบราว์เซอร์ไม่รองรับ Canvas 2D');this.ctx=context;this.resize();window.addEventListener('pagehide',e=>{if(!e.persisted)this.swordVfx?.destroy();});}
- resize(){this.width=innerWidth;this.height=innerHeight;const dpr=this.highQuality?Math.min(devicePixelRatio,1.5):1;this.dpr=dpr;this.canvas.width=Math.round(this.width*dpr);this.canvas.height=Math.round(this.height*dpr);this.canvas.style.width='100%';this.canvas.style.height='100%';this.ctx.setTransform(dpr,0,0,dpr,0,0);this.swordVfx?.resize(this.width,this.height,dpr);}
+ resize(){this.width=innerWidth;this.height=innerHeight;const dpr=this.highQuality?Math.min(devicePixelRatio,this.map==='city_plaza'?2:1.5,Math.sqrt(3840*2160/(this.width*this.height))):1;this.dpr=dpr;this.canvas.width=Math.round(this.width*dpr);this.canvas.height=Math.round(this.height*dpr);this.canvas.style.width='100%';this.canvas.style.height='100%';this.ctx.setTransform(dpr,0,0,dpr,0,0);this.swordVfx?.resize(this.width,this.height,dpr);}
  private async prepareSwordVfx(){
   if(this.swordEffects==='canvas'||this.swordAttempted)return;this.swordAttempted=true;
   let layer:SwordVfxPixi|undefined;
@@ -72,8 +72,8 @@ export class GameCanvas2D{
   await Promise.all([...this.companionImages].map(path=>this.assets.image(path)));
   const shield=this.assets.get(SHIELD_BASH_ART.url)!;
   this.skillVfx.setShieldArt(shield,SHIELD_BASH_ART.rect);
-  const portal=await Promise.all([warpColumnUrl,warpFloorUrl].map(url=>this.assets.image(url))).catch(error=>{console.warn('Warp art unavailable; using gate marker',error);return null;});
-  if(portal)this.portalArt=prepareWarpPortal(portal[0],portal[1]);
+  const portal=await this.assets.image(warpFloorUrl).catch(error=>{console.warn('Warp art unavailable; using gate marker',error);return null;});
+  if(portal)this.portalArt=prepareWarpPortal(portal);
   await this.prepareMap(map);
  }
  async prepareMap(id:MapId){
@@ -97,7 +97,7 @@ export class GameCanvas2D{
   // every previous-map monster (including meadow/forest, not just hunting art).
   for(const path of this.monsterImages)if(!neededMonsters.has(path)&&!this.companionImages.has(path))this.assets.release(path);
   this.monsterImages=neededMonsters;
-  this.map=id;this.effects.length=0;this.swordVfx?.clear();this.skillVfx.clear();this.enemyData.clear();this.masteryVfx.clear();this.heroStates.clear();this.remoteHeroes.clear();this.monsterFrames.clear();
+  const resized=this.map!==id;this.map=id;if(resized)this.resize();this.effects.length=0;this.swordVfx?.clear();this.skillVfx.clear();this.enemyData.clear();this.masteryVfx.clear();this.heroStates.clear();this.remoteHeroes.clear();this.monsterFrames.clear();
   // Each baked region plane is about 25–35 MB; retain only the current region
   // and two recent regions while travelling across the expanded world.
   for(const cache of [this.fields,this.backdrops])while(cache.size>3){const old=[...cache.keys()].find(key=>key!==id);if(old===undefined)break;cache.delete(old);}
@@ -163,7 +163,7 @@ export class GameCanvas2D{
   if(skill){key=`/assets/hero-skills/hero-skill-${skill}-${v2?'v2':'v1'}.png`;cell={column:skillFrame(skill,state.elapsed),row:v2?WALK_DIRECTIONS.indexOf(facing8For(p.fx,p.fz)):['SE','SW','NE','NW'].indexOf(facingFor(p.fx,p.fz)),columns:SKILL_FRAMES[skill],rows:v2?8:4};}
   const scale=skill?1:pose.scale,image=this.assets.get(key)!;const q=this.screen(p.x,p.z),qs=p.lift?this.screen(p.x,p.z,p.lift):q,w=px.w*HERO_PIXEL_METRES*this.scale*scale,h=px.h*HERO_PIXEL_METRES*this.scale*scale,foot=px.feet/px.h,anchorX=shadow?.anchorX??.5;
   for(const g of p.ghosts??[]){const gq=this.screen(g.x,g.z,g.lift);this.ghostSprite(image,cell,gq.x-w*anchorX,gq.y-h*foot,w,h,g.tint??p.ghostTint,g.alpha);}
-  this.atmosphere.actorShadow(this.ctx,q,this.scale,.76);this.circle(p.x,p.z,.42,this.atmosphere.settings.enabled?'transparent':'#162c2940',own?'#e7d39b88':undefined);this.ctx.drawImage(image,cell.column*image.width/cell.columns,cell.row*image.height/cell.rows,image.width/cell.columns,image.height/cell.rows,qs.x-w*anchorX,qs.y-h*foot,w,h);this.drawCalls++;
+  this.atmosphere.actorShadow(this.ctx,q,this.scale,.76);if(this.map!=='city_plaza')this.circle(p.x,p.z,.42,this.atmosphere.settings.enabled?'transparent':'#162c2940',own?'#e7d39b88':undefined);this.ctx.drawImage(image,cell.column*image.width/cell.columns,cell.row*image.height/cell.rows,image.width/cell.columns,image.height/cell.rows,qs.x-w*anchorX,qs.y-h*foot,w,h);this.drawCalls++;
   if(!this.overview&&!p.dead){const title=titleDefinition(p.titleId);if(title)this.text(title.name,qs.x,qs.y-(HERO_METRES+.7)*this.scale,title.color,10);this.text(p.name||'นักผจญภัย',qs.x,qs.y-(HERO_METRES+.3)*this.scale);}
   for(const [i,status]of (p.statuses??[]).entries()){if(i>4)break;this.circle(p.x,p.z,.55+i*.08,'transparent',status.id==='guard'?'#b9d9ed88':'#d6d28c66');}
  }
@@ -232,17 +232,18 @@ export class GameCanvas2D{
   for(const p of backdrop?.props??[]){const q=this.screen(p.x,p.z);if(!visible(q,p.h*s))continue;if(p.tree)sceneryTrees.push(p);add(p.x,p.z,()=>{c.save();if(p.tree){const sway=this.atmosphere.sway(p.x,p.z,time);c.transform(1,0,sway,1,-sway*q.y,0);}const x=q.x-p.w*p.anchor[0]*s,y=q.y-p.h*p.anchor[1]*s;c.globalAlpha=sceneryOpacity({left:x,top:y,right:x+p.w*s,bottom:y+p.h*s},q.y,protectedActors);c.drawImage(p.image,...p.rect as [number,number,number,number],x,y,p.w*s,p.h*s);c.restore();this.drawCalls++;});}
   if(this.map==='city_plaza'&&this.city){
    for(const p of this.city.props){const q=this.screen(p.x,p.z);if(!visible(q))continue;if(p.tree)sceneryTrees.push({x:p.x,z:p.z,h:p.image.height/28,w:p.image.width/28});add(p.x,p.z,()=>{c.save();if(p.tree||p.foliage){const sway=this.atmosphere.sway(p.x,p.z,time);c.transform(1,0,sway,1,-sway*q.y,0);}const x=q.x+p.image.left*s,y=q.y+p.image.top*s,w=p.image.width/28*s,h=p.image.height/28*s;c.globalAlpha=p.fade?sceneryOpacity({left:x,top:y,right:x+w,bottom:y+h},q.y,protectedActors):1;c.drawImage(p.image,x,y,w,h);drawCityWindowGlow(c,p.glow,q.x,q.y,s);c.restore();if(p.water)drawFountainWater(c,q.x,q.y,s,time,this.atmosphere.reducedMotion);});}
-   for(const [i,n] of TOWN_NPCS.entries()){const q=this.screen(n.x,n.z);if(!visible(q))continue;add(n.x,n.z,()=>{drawNpcSprite(c,this.city!.npcSprites.get(n.art)!,q.x,q.y,s,time+i*.173);});}
+   for(const [i,n] of TOWN_NPCS.entries()){const q=this.screen(n.x,n.z);if(!visible(q))continue;add(n.x,n.z,()=>{this.atmosphere.actorShadow(c,q,s,.48);drawNpcSprite(c,this.city!.npcSprites.get(n.art)!,q.x,q.y,s,time+i*.173);});}
   }else{const field=this.fields.get(this.map);if(field){
    for(const p of field.props){const q=this.screen(p.x,p.z);if(!visible(q))continue;if(p.tree)sceneryTrees.push(p);add(p.x,p.z,()=>{c.save();if(p.tree||p.foliage){const sway=this.atmosphere.sway(p.x,p.z,time);c.transform(1,0,sway,1,-sway*q.y,0);}const x=q.x-p.w*p.anchor[0]*s,y=q.y-p.h*p.anchor[1]*s;c.globalAlpha=sceneryOpacity({left:x,top:y,right:x+p.w*s,bottom:y+p.h*s},q.y,protectedActors);c.drawImage(p.image,...p.rect as [number,number,number,number],x,y,p.w*s,p.h*s);c.restore();});}
   }}
   this.atmosphere.shadows(c,sceneryTrees,(x,z,h)=>this.screen(x,z,h),s,time);
+  const portalReducedMotion=this.portalMotion===null?this.atmosphere.reducedMotion:!this.portalMotion;
   for(const [gate,p] of Object.entries(GATES[this.map])){
    const destination=travelDestination(this.map,gate,p),q=this.screen(p.x,p.z);if(!destination||!visible(q,120))continue;
    const to=destination.mapId,high=to!=='city_plaza'&&!LAYOUTS[to].exploration&&parseInt(MAP_INFO[to].levels,10)>game.p.level+2;
    const portal=this.portalArt;
-   if(portal){drawWarpPortal(c,portal,q.x,q.y,s,time,this.atmosphere.reducedMotion,high,'ground');this.drawCalls++;
-    add(p.x,p.z,()=>{drawWarpPortal(c,portal,q.x,q.y,s,time,this.atmosphere.reducedMotion,high,'light');this.drawCalls++;});
+   if(portal){drawWarpPortal(c,portal,q.x,q.y,s,now/1000,portalReducedMotion,high,'ground');this.drawCalls++;
+    add(p.x,p.z,()=>{drawWarpPortal(c,portal,q.x,q.y,s,now/1000,portalReducedMotion,high,'light');this.drawCalls++;});
    }else this.circle(p.x,p.z,1.1,'#58caff22','#b8efff');
   }
   for(const effect of this.effects){effect.age+=dt;if(effect.type==='frost_ward'||effect.type==='frost_signal')this.circle(effect.x,effect.z,effect.r??1.5,'#9bcae033','#d0eeff');if(effect.type==='frost_tracks'){for(let i=0;i<10;i++){const t=i/9;this.circle(effect.x+(effect.targetX-effect.x)*t+(i%2?.18:-.18),effect.z+(effect.targetZ-effect.z)*t,.13,'#577a9b99');}}if(effect.type==='sand_patch')this.circle(effect.x,effect.z,effect.r??1.3,'#d1ae6555','#bc8a3c');if((effect.type==='item_pool'||effect.type==='safe_zone'))this.circle(effect.x,effect.z,effect.r??2,'#79cdbc44','#a7f1dd');if(effect.type==='warning'){const half=(effect.angle??360)*Math.PI/360,start=effect.shape==='cone'?Math.atan2(effect.fz,effect.fx)-half:0,end=effect.shape==='cone'?start+half*2:Math.PI*2;this.circle(effect.x,effect.z,effect.r??2,'#e5503a42','#ff8264',effect.shape==='ring'?effect.inner:0,start,end);}}
@@ -267,6 +268,7 @@ export class GameCanvas2D{
   this.skillVfx.pre(vfxFrame,dt);
   draws.sort((a,b)=>a.depth-b.depth).forEach(d=>d.draw());
   this.atmosphere.light(c,this.width,this.height,this.map);
+  if(this.map==='city_plaza'&&this.atmosphere.settings.enabled)this.cityLighting.finish(c,this.width,this.height,this.atmosphere.settings.sun,this.highQuality,this.atmosphere.settings.hour);
   if(this.map==='city_plaza')this.cityLighting.draw(c,CITY_LAYOUT.items,(x,z)=>this.screen(x,z),s,this.width,this.height);
   this.atmosphere.leaves(c,sceneryTrees,(x,z,h)=>this.screen(x,z,h),s,time,this.width,this.height,this.highQuality);
   const labelSpace:Rect[]=[...protectedActors];
@@ -280,7 +282,7 @@ export class GameCanvas2D{
   for(const [gate,p] of Object.entries(GATES[this.map])){
    const destination=travelDestination(this.map,gate,p),q=this.screen(p.x,p.z);if(!destination||!visible(q,100))continue;
    const to=destination.mapId,explore=LAYOUTS[to].exploration,high=to!=='city_plaza'&&!explore&&parseInt(MAP_INFO[to].levels,10)>game.p.level+2,color=high?'#ffcb96':'#b8efff';
-   label('◇ วาร์ปไป'+MAP_INFO[to].name+(to==='city_plaza'?' · เขตปลอดภัย':' · Lv.'+MAP_INFO[to].levels)+(explore?' · สำรวจ':high?' · ระดับสูง':''),p.x,p.z,color,5.4*s);
+   label('◇ วาร์ปไป'+MAP_INFO[to].name+(to==='city_plaza'?' · เขตปลอดภัย':' · Lv.'+MAP_INFO[to].levels)+(explore?' · สำรวจ':high?' · ระดับสูง':''),p.x,p.z,color,1.8*s);
   }
   if(this.map!=='city_plaza')for(const [i,p] of LAYOUTS[this.map].camps.entries()){
    const q=this.screen(p.x,p.z);if(visible(q,2*s)&&Math.hypot(p.x-game.p.x,p.z-game.p.z)<12){const r=drawAreaTag(c,{x:q.x,y:q.y-2*s*.71-14},`แคมป์พักฟื้น ${i+1}`,'ฟื้น HP · ยังมีอันตราย','camp','#a9d3b4',labelSpace);if(r)labelSpace.push(r);}

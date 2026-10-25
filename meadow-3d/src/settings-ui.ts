@@ -12,7 +12,7 @@ const TABS: [Tab, string][] = [
 	["help", "ช่วยเหลือ"],
 ];
 
-export function mountSettingsWindow(o: { onOpen: () => void; keysChanged: () => void }) {
+export function mountSettingsWindow(o: { onOpen: () => void; keysChanged: () => void; portalMotion:boolean; setPortalMotion:(enabled:boolean)=>void }) {
 	const panel = document.createElement("dialog");
 	panel.id = "settings-window";
 	panel.setAttribute("aria-labelledby", "settings-title");
@@ -34,6 +34,11 @@ export function mountSettingsWindow(o: { onOpen: () => void; keysChanged: () => 
 	const quality = $("#quality");
 	quality.classList.remove('menu-tile', 'menu-quality');
 	panel.querySelector('.settings-quality-host')!.append(quality);
+	const portalMotion=document.createElement('label');
+	portalMotion.innerHTML='<input type="checkbox"> เคลื่อนไหววงวาร์ป <small>(เปิดเพื่อหมุน แม้ระบบตั้งลดการเคลื่อนไหว)</small>';
+	const motion=portalMotion.querySelector('input')!;motion.checked=o.portalMotion;
+	motion.onchange=()=>o.setPortalMotion(motion.checked);
+	panel.querySelector('.settings-quality-host')!.append(portalMotion);
 	const help = $("#help");
 	help.className = 'settings-action';
 	help.textContent = 'เปิดคู่มือการเล่น';

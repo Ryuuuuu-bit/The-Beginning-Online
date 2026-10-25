@@ -1,10 +1,9 @@
 import { CITY, CITY_LAYOUT, CITY_BUILDINGS, CITY_PLANTERS, CITY_BENCHES, CITY_STALLS } from '@the-beginning-online/shared/maps';
 import {bake,type Sprite} from './city-2d-art';
 import {CITY_HOUSES,CITY_ART_SOLIDS,DECOR,CITY2D_FOUNTAIN as CITY_FOUNTAIN,GARDEN_TREES,city2dWalkable} from './city-2d-layout';
-import {TOWN_NPCS,WAYPOINTS,CITY_EXITS} from './city-2d-locations';
+import {TOWN_NPCS} from './city-2d-locations';
 import {loadPaintedCityScene} from './city-2d-painted-scene';
 import {makePaintedGround,isCityPlantingGround} from './city-2d-ground';
-import {CITY_GATES} from './city-2d-gates';
 import type {NpcSprite} from './city-npc-sprite';
 import {loadCitySpriteTheme} from './city-sprite-theme';
 import {cityWindowGlow} from './city-lighting';
@@ -85,18 +84,7 @@ export async function loadCity2DScene(editor=false){
   }
   for(const [start,end] of [[-47,-4.8],[4.8,47]])for(const side of [-47,47]){wallRun('x',side,start,end);wallRun('z',side,start,end);}
   for(const [x,z] of [[-47,-47],[47,-47],[-47,47],[47,47]])themed(x,z,theme.footprint('watchtower',3.4,3.4),'theme:watchtower:3.4:3.4','หอคอยกำแพง','กำแพงและประตู');
-  for(const gate of CITY_GATES)themed(gate.x,gate.z,theme.gate(gate.axis),`gate:${gate.axis}`,gate.axis==='x'?'ประตูเมืองแนวตะวันออก–ตะวันตก':'ประตูเมืองแนวเหนือ–ใต้','กำแพงและประตู',gate.name);
-  for(const p of WAYPOINTS){
-    themed(p.x,p.z,theme.sprite('portal',3.8,3.8*240/359/2),'theme:portal:3.8','วงแหวนวาร์ป','ของตกแต่ง',undefined,false);
-    for(const dx of [-2,2])themed(p.x+dx,p.z,theme.upright('marker',1.65),'theme:marker:1.65','เสาหินนำทาง');
-  }
-
  const spriteTheme=await loadCitySpriteTheme();
- for(const exit of CITY_EXITS){
-   // Set the cores inside the approach so the tall gate facade cannot hide them.
-   const x=exit.x===0?2.5:exit.x-Math.sign(exit.x)*4,z=exit.z===0?2.5:exit.z-Math.sign(exit.z)*4;
-   themed(x,z,spriteTheme.faces('theme:warp-core:3.4',theme.upright('marker',3.4))[0],'theme:warp-core:3.4','แกนวาร์ปทางออกเมือง','ของตกแต่ง','วาร์ปสู่'+exit.destination,false);
- }
  for(const prop of props)prop.image=spriteTheme.faces(prop.asset.id,prop.image)[0];
  for(const npc of TOWN_NPCS)npcSprites.set(npc.art,spriteTheme.npc(npc.art));
  paintedSceneAssets=Object.keys(spriteTheme.manifest.assets).length;
