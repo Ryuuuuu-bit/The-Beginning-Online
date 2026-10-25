@@ -127,7 +127,8 @@ export function mountTutorialGuide(o:GuideOptions){
 
  function draw(c:Ctx){
   const s=STEPS[step];
-  q('.gn-title').textContent=s.title;q('.gn-count').textContent=`${step+1}/${STEPS.length}`;
+  if(q('.gn-title').textContent!==s.title)q('.gn-title').textContent=s.title;
+  q('.gn-count').textContent=`${step+1}/${STEPS.length}`;
   const text=s.text(c);if(q('.gn-text').textContent!==text)q('.gn-text').textContent=text;
   q<HTMLElement>('.gn-track i').style.width=`${step/STEPS.length*100}%`;
   q('.gn-track').setAttribute('aria-valuenow',String(step));q('.gn-track').setAttribute('aria-valuemin','0');q('.gn-track').setAttribute('aria-valuemax',String(STEPS.length));
