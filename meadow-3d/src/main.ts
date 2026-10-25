@@ -50,6 +50,7 @@ import './game-menu.css';
 import './combat-bar.css';
 import {mountTutorialGuide} from './tutorial-guide';
 import {mountAngel} from './angel-ui';
+import './hud-compact.css';
 let angelUI:ReturnType<typeof mountAngel>|undefined;
 let guide:ReturnType<typeof mountTutorialGuide>|undefined;
 let qol:ReturnType<typeof mountHUDQOL>|undefined;let worldMap:ReturnType<typeof mountWorldMap>|undefined;let settingsUI:ReturnType<typeof mountSettingsWindow>|undefined;let pendingUI:any;

@@ -1,0 +1,27 @@
+/* Keep side panels and NPC prompts above the real combat bar, including extra skills. */
+body #ui #guide-nav{top:var(--guide-top,318px);max-height:max(52px,calc((var(--combat-top,100dvh) - 84px - var(--guide-top,318px)) / var(--ui-scale,1)))}
+body #ui .quest{--journal-top:calc(20px + 248px * var(--ui-scale,1));top:var(--journal-top);max-height:max(44px,calc((var(--combat-top,100dvh) - 84px - var(--journal-top)) / var(--ui-scale,1)));overflow:auto}
+body :is(#npc-talk,#angel-talk){bottom:calc(100dvh - var(--combat-top,100dvh) + 12px)}
+body #ui .combat-ui{z-index:7}
+body #notices{pointer-events:none}
+body #ui .map.expanded{top:8px;right:8px;width:min(280px,calc(100vw - 16px));transform:none;z-index:25}
+body #ui .map.expanded #map{width:min(256px,calc(100vw - 40px))!important;height:auto!important;aspect-ratio:1}
+
+/* A narrow or short PC window keeps mouse controls, with a compact row below the map. */
+@media(max-width:650px),(max-height:640px){
+ body #ui .map{top:8px;right:8px;width:126px;padding:0;transform:none;visibility:visible!important}
+ body #ui .map .map-head,body #ui .map .map-foot{display:none!important}
+ body #ui #map{display:block;width:104px!important;height:104px!important;margin:0 auto}
+ body #ui :is(#stats-button,#skills-button,#inventory-button,#quest-button,#game-menu,.tools #audio){display:grid;position:absolute;top:120px;left:auto;bottom:auto;width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;padding:0;z-index:6}
+ body #ui #stats-button{right:248px}body #ui #skills-button{right:200px}body #ui #inventory-button{right:152px}body #ui #quest-button{right:104px}body #ui #game-menu{right:8px}
+ body #ui .tools{position:absolute;top:120px;right:56px;width:44px;height:44px;visibility:visible!important}
+ body #ui .tools #audio{top:0;right:0}
+ body #ui .tools :is(#quality,#help,#pause){display:none}
+ body #ui #guide-nav,body #ui #guide-nav.min{--guide-top:176px;left:8px;width:min(288px,calc((100vw - 32px) / 2));max-width:none;padding:6px;transform:none;max-height:max(52px,calc(var(--combat-top,100dvh) - 84px - 176px))}
+ body #ui .quest,body #ui .quest.collapsed{--journal-top:176px;right:8px;width:min(288px,calc((100vw - 32px) / 2));padding:4px 6px;transform:none;visibility:visible!important;max-height:max(44px,calc(var(--combat-top,100dvh) - 84px - 176px))}
+ body #ui #journal-toggle{min-height:44px}
+ body #joystick{display:none}
+}
+@media(max-width:650px){
+ body :is(#npc-talk,#angel-talk){top:100px;left:8px;right:auto;bottom:auto!important;transform:none;width:min(240px,calc(100vw - 312px));min-width:0;max-width:none;max-height:64px;overflow:auto;padding:4px;font-size:12px;line-height:1.35}
+}

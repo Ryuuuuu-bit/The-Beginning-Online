@@ -224,7 +224,7 @@ export function mountSocial(options: { send: Send; you: () => string; enabled: (
 	window.addEventListener('keydown', e => {
 		if (e.key !== 'Enter' || e.repeat || e.isComposing) return;
 		const target = e.target as HTMLElement | null;
-		if (target?.matches?.('input,textarea,select,button') || target?.isContentEditable || document.querySelector('dialog[open]')) return;
+		if (target?.matches?.('input,textarea,select,button,[role="button"]') || target?.isContentEditable || document.querySelector('dialog[open]')) return;
 		e.preventDefault();
 		e.stopImmediatePropagation();
 		open();

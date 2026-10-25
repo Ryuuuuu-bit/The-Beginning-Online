@@ -11,6 +11,13 @@ export function mountCombatBar(drinkMana:()=>void){
  auto.append(document.querySelector('#auto-hunt')!,document.querySelector('#auto-settings-button')!);
  bar.prepend(auto);
  const xp=document.createElement('div');xp.id='combat-exp';xp.innerHTML='<progress max="100" value="0" aria-label="ค่าประสบการณ์"></progress><span></span>';bar.append(xp);
+ // Reserve the actual bar height, including extra skill rows and the saved UI scale.
+ const root=document.documentElement;let top='',scale=root.style.getPropertyValue('--ui-scale');
+ const reserve=()=>{let y=bar.getBoundingClientRect().top;for(const button of bar.querySelectorAll('button'))if(button.getClientRects().length)y=Math.min(y,button.getBoundingClientRect().top);
+  const next=`${Math.round(y)}px`;if(next!==top){top=next;root.style.setProperty('--combat-top',next);}};
+ const resize=new ResizeObserver(reserve);resize.observe(bar);resize.observe(document.querySelector('#ui')!);
+ new MutationObserver(()=>{const next=root.style.getPropertyValue('--ui-scale');if(next!==scale){scale=next;reserve();}}).observe(root,{attributes:true,attributeFilter:['style']});
+ let more=false;new MutationObserver(()=>{const next=document.body.classList.contains('more-skills');if(next!==more){more=next;reserve();}}).observe(document.body,{attributes:true,attributeFilter:['class']});
  const buttons=[...document.querySelectorAll<HTMLButtonElement>('[data-potion]')];
  for(const button of buttons){
   const art=itemIcon({id:button.dataset.potion==='hp'?'red_small':'blue_potion'});
