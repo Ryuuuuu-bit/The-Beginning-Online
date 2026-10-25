@@ -25,6 +25,9 @@ meadow-3d/art/**
 # This source image is imported by the game bundle.
 !meadow-3d/art/skill-vfx/
 !meadow-3d/art/skill-vfx/shield-bash-jade-gold-v1.png
+!meadow-3d/art/warp-portal-v1/
+!meadow-3d/art/warp-portal-v1/column.png
+!meadow-3d/art/warp-portal-v1/floor.png
 !meadow-3d/art/mastery-icons/
 !meadow-3d/art/mastery-icons/manifest.json
 !meadow-3d/art/city-sprite-v2/

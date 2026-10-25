@@ -6,7 +6,9 @@ import {drawWarpPortal,prepareWarpPortal} from '../src/warp-portal.ts';
 
 test('portal layers match their provenance and retain transparent PNG pixels',()=>{
  const manifest=JSON.parse(readFileSync(new URL('../art/warp-portal-v1/provenance.json',import.meta.url),'utf8'));
+ const buildContext=readFileSync(new URL('../../.dockerignore',import.meta.url),'utf8');
  for(const layer of manifest.layers){
+  assert(buildContext.includes('!meadow-3d/art/warp-portal-v1/'+layer.file),'Railway build context must contain '+layer.file);
   const image=readFileSync(new URL('../art/warp-portal-v1/'+layer.file,import.meta.url));
   assert.equal(createHash('sha256').update(image).digest('hex'),layer.sha256);
   assert.equal(image.readUInt32BE(16),layer.width);assert.equal(image.readUInt32BE(20),layer.height);
