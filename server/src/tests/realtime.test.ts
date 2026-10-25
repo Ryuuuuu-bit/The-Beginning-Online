@@ -117,6 +117,11 @@ test('disconnected leases renew through retention and a slow final save before r
  };
  f.store.releaseLease=async(id,owner)=>{if(leases.get(id)?.owner===owner)leases.delete(id);};
  const save=f.store.saveProgress.bind(f.store);
+ const discover=f.store.discoverMap.bind(f.store);
+ f.store.discoverMap=async(account,id,map,owner)=>{
+  const lease=leases.get(id);if(owner&&(!lease||lease.owner!==owner||lease.until<=Date.now()))throw Error('Lease expired');
+  return discover(account,id,map);
+ };
  let delay=false,release!:()=>void,entered!:()=>void;
  const gate=new Promise<void>(r=>release=r),started=new Promise<void>(r=>entered=r);
  t.after(()=>release());
