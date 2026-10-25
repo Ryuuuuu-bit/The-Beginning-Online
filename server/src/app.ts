@@ -17,6 +17,11 @@ export function createApp(options:AppOptions){if(options.production&&!options.se
  const registerAttempts=new Map<string,{count:number;until:number}>();
  app.post('/api/register',(req,_res,next)=>{const now=Date.now(),key=req.ip||'unknown';for(const[k,v]of registerAttempts)if(v.until<=now)registerAttempts.delete(k);let b=registerAttempts.get(key);if(!b){b={count:0,until:now+3600000};registerAttempts.set(key,b);}if(++b.count>(options.registersPerHour??30))return next(new AppError(429,'RATE_LIMIT','สมัครบัญชีบ่อยเกินไป กรุณารอสักครู่'));next();});
  app.get('/api/admin/realtime',(req,res)=>{if(!admins.isAdminAccount(req.auth?.account)){res.status(403).json({error:{code:'FORBIDDEN'}});return;}res.json(options.realtimeMetrics?.()||{});});
+ app.get('/api/admin/economy',async(req,res,next)=>{
+  if(!admins.isAdminAccount(req.auth?.account)){res.status(403).json({error:{code:'FORBIDDEN',message:'หน้านี้สำหรับแอดมินเท่านั้น'}});return;}
+  if(Object.keys(req.query).some(k=>k!=='days')||(req.query.days!==undefined&&req.query.days!=='1'&&req.query.days!=='7')){res.status(400).json({error:{code:'BAD_RANGE',message:'เลือกช่วงเวลา 1 หรือ 7 วัน'}});return;}
+  try{res.json(await options.store.economyReport(req.query.days==='7'?7:1));}catch(e){next(e);}
+ });
  app.post('/api/admin/economy/integrity',async(req,res,next)=>{if(!admins.isAdminAccount(req.auth?.account)){res.sendStatus(403);return;}try{res.json(await options.store.integrity());}catch(e){next(e);}});
  app.use('/api',authRoutes(options.store,session,{...options,build:options.build||'dev',verifyGoogle:options.verifyGoogle||googleVerifier(options.googleClientId)}));app.use('/api/characters',characterRoutes(options.store));
  app.use('/api',(_req,_res,next)=>next(new AppError(404,'NOT_FOUND','ไม่พบ API นี้')));

@@ -33,6 +33,7 @@ export interface IntegrityResult {
 	issues: string[];
 }
 export interface EconomyStore {
+	economyReport(days:1|7):Promise<import('../economy-report.js').EconomyReport>;
 	inventory(accountId: string, id: string): Promise<EconomyResult>;
 	inventoryOp(
 		accountId: string,

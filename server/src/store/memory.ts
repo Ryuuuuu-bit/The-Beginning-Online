@@ -5,7 +5,20 @@ import {characterGender,creationJob,needsJob,migrateMap} from './progress.js';
 import {loadGameData,newJob,normalizeJob,normalizeMastery} from '@the-beginning-online/shared';
 import{randomUUID}from'node:crypto';import type{Account,AuditEntry,Character,GoogleIdentity,PasswordIdentity,Session,Store}from'./types.js';import{newUid,ADMIN_SEED_UIDS}from'./types.js';import{AppError,missing}from'../errors.js';
 const now=()=>new Date().toISOString();
+import {makeEconomyReport,EXTERNAL_GOLD_KINDS,type EconomyFlow,type EconomyHour,type EconomyMaterial} from '../economy-report.js';
 export class MemoryStore implements Store {
+ async economyReport(days:1|7){
+  const asOf=Date.now(),since=asOf-days*86400000,characters=[...this.chars.values()].filter(c=>!c.deletedAt);
+  const flows=new Map<string,{flow:EconomyFlow;requests:Set<string>}>(),hours=new Map<number,EconomyHour>(),materials=new Map<string,EconomyMaterial>();
+  for(const row of this.ledger){
+   if(row.at<since||row.at>asOf)continue;const e=row.entry;
+   const group=flows.get(e.kind)??{flow:{kind:e.kind,incoming:0,outgoing:0,requests:0},requests:new Set<string>()};
+   group.flow.incoming+=Math.max(0,e.goldDelta);group.flow.outgoing+=Math.max(0,-e.goldDelta);group.requests.add(row.character+':'+row.req);group.flow.requests=group.requests.size;flows.set(e.kind,group);
+   if(!EXTERNAL_GOLD_KINDS.includes(e.kind)){const at=Math.floor(row.at/3600000)*3600000,bin=hours.get(at)??{at:new Date(at).toISOString(),incoming:0,outgoing:0};bin.incoming+=Math.max(0,e.goldDelta);bin.outgoing+=Math.max(0,-e.goldDelta);hours.set(at,bin);}
+   if(e.template){const key=e.kind+':'+e.template,m=materials.get(key)??{kind:e.kind,template:e.template,positive:0,negative:0};m.positive+=Math.max(0,e.qty);m.negative+=Math.max(0,-e.qty);materials.set(key,m);}
+  }
+  return makeEconomyReport(days,asOf,{characters:characters.length,total:characters.reduce((n,c)=>n+c.gold,0)},[...flows.values()].map(v=>v.flow),[...hours.values()],[...materials.values()]);
+ }
  private leases=new Map<string,string>();
  async rankingCharacters():Promise<import('@the-beginning-online/shared').RankingCharacter[]>{return [...this.chars.values()].filter(c=>!c.deletedAt).map(c=>({id:c.id,name:c.name,jobId:c.jobId??c.classId,level:c.level,xp:c.xp,kills:c.kills,titleId:c.titleId,unlockedTitles:structuredClone(c.unlockedTitles??[]),titleRecords:structuredClone(c.titleRecords??{bosses:{}})}));}
  async health(){}
@@ -20,7 +33,7 @@ export class MemoryStore implements Store {
  private accounts=new Map<string,Account>();private sessions=new Map<string,Session>();private chars=new Map<string,Character>();
  private inventories=new Map<string,Inventory>();
  private requests=new Map<string,{at:number;result:EconomyResult}>();
- private ledger:{character:string;entry:LedgerEntry}[]=[];
+ private ledger:{character:string;entry:LedgerEntry;at:number;req:string}[]=[];
  /** Mirrors migration 016: each seed uid becomes admin once, as soon as its account exists. */
  async init(){for(const uid of ADMIN_SEED_UIDS){if(this.seeded.has(uid))continue;const a=[...this.accounts.values()].find(a=>a.uid===uid);if(!a)continue;this.seeded.add(uid);a.isAdmin=true;this.audits.push({at:now(),action:'admin.seed',targetUid:uid,detail:{source:'016_admin.sql'}});}}
  async close(){}
@@ -32,13 +45,13 @@ export class MemoryStore implements Store {
   if(changed){a.isAdmin=admin;this.audits.push({at:now(),actorAccountId:actor.accountId,actorUid:actor.uid,action:admin?'admin.add':'admin.remove',targetUid});}return{account:{...a},changed};}
  async audit(entry:AuditEntry){this.audits.push({at:now(),...structuredClone(entry)});if(this.audits.length>10000)this.audits.splice(0,this.audits.length-10000);}
  async auditLog(limit=50){return structuredClone(this.audits.slice(-limit).reverse());}
- private econCharacter(accountId:string,id:string) {const c=this.chars.get(id);if(!c||c.accountId!==accountId||c.deletedAt)throw missing();if(!this.inventories.has(id)){const inv=starterInventory(c.potions,randomUUID);this.inventories.set(id,inv);this.ledger.push({character:id,entry:{kind:'admin',qty:0,goldDelta:c.gold}},...inv.items.map(i=>({character:id,entry:{kind:'admin',template:i.template,itemId:i.id,qty:i.qty,goldDelta:0}})));}return c;}
+ private econCharacter(accountId:string,id:string) {const c=this.chars.get(id);if(!c||c.accountId!==accountId||c.deletedAt)throw missing();if(!this.inventories.has(id)){const inv=starterInventory(c.potions,randomUUID);this.inventories.set(id,inv);this.ledger.push({character:id,at:Date.now(),req:'migration:'+id,entry:{kind:'admin',qty:0,goldDelta:c.gold}},...inv.items.map(i=>({character:id,at:Date.now(),req:'migration:'+id,entry:{kind:'admin',template:i.template,itemId:i.id,qty:i.qty,goldDelta:0}})));}return c;}
  async inventory(accountId:string,id:string):Promise<EconomyResult> {const c=this.econCharacter(accountId,id);return structuredClone({inventory:this.inventories.get(id)!,gold:c.gold,claimedLevelRewards:c.upgradedLevelRewards??[],legacyLevelRewards:c.claimedLevelRewards??[],consumableBuffs:c.consumableBuffs??{}});}
  async inventoryOp(accountId:string,id:string,req:string,op:InventoryOp,context:EconomyContext):Promise<EconomyResult> {
   checkRequest(req);if(context.leaseOwner&&this.leases.get(id)!==context.leaseOwner)throw Error('Lease lost');const c=this.econCharacter(accountId,id),key=id+':'+req,previous=this.requests.get(key);
   if(previous&&Date.now()-previous.at<86400000)return {...structuredClone(previous.result),duplicate:true};
   let result:EconomyResult;
-  try{const claimed=levelRewardClaims(c,op),buffs=consumedBuffs(c,op,this.inventories.get(id)!),progress=questProgress(c,context);const out=applyInventory({gold:c.gold,inventory:this.inventories.get(id)!},{...op,legacyLevels:c.claimedLevelRewards??[]},op.op==='levelReward'?{...context.profile,level:c.level}:context.profile,economyData,randomUUID);if(progress)Object.assign(c,progress);if(claimed)c.upgradedLevelRewards=claimed;if(buffs)c.consumableBuffs=buffs;this.inventories.set(id,out.state.inventory);c.gold=out.state.gold;if(context.bossLoot){if(context.bossLoot===true||context.bossLoot==='king_jelly')c.bossReadyAt=Date.now()+600000;else c.bossCooldowns={...c.bossCooldowns,[context.bossLoot]:Date.now()+600000};}this.ledger.push(...out.ledger.map(entry=>({character:id,entry})));result={...out.state,effect:out.effect,claimedLevelRewards:c.upgradedLevelRewards??[],legacyLevelRewards:c.claimedLevelRewards??[],consumableBuffs:c.consumableBuffs??{}};}
+  try{const claimed=levelRewardClaims(c,op),buffs=consumedBuffs(c,op,this.inventories.get(id)!),progress=questProgress(c,context);const out=applyInventory({gold:c.gold,inventory:this.inventories.get(id)!},{...op,legacyLevels:c.claimedLevelRewards??[]},op.op==='levelReward'?{...context.profile,level:c.level}:context.profile,economyData,randomUUID);if(progress)Object.assign(c,progress);if(claimed)c.upgradedLevelRewards=claimed;if(buffs)c.consumableBuffs=buffs;this.inventories.set(id,out.state.inventory);c.gold=out.state.gold;if(context.bossLoot){if(context.bossLoot===true||context.bossLoot==='king_jelly')c.bossReadyAt=Date.now()+600000;else c.bossCooldowns={...c.bossCooldowns,[context.bossLoot]:Date.now()+600000};}this.ledger.push(...out.ledger.map(entry=>({character:id,entry,at:Date.now(),req})));result={...out.state,effect:out.effect,claimedLevelRewards:c.upgradedLevelRewards??[],legacyLevelRewards:c.claimedLevelRewards??[],consumableBuffs:c.consumableBuffs??{}};}
   catch(e){result={inventory:this.inventories.get(id)!,gold:c.gold,claimedLevelRewards:c.upgradedLevelRewards??[],legacyLevelRewards:c.claimedLevelRewards??[],consumableBuffs:c.consumableBuffs??{},error:(e as Error).message};}
   this.requests.set(key,{at:Date.now(),result:structuredClone(result)});
   for(const[k,r]of this.requests)if(Date.now()-r.at>86400000)this.requests.delete(k);
@@ -49,7 +62,7 @@ export class MemoryStore implements Store {
   const ca=this.econCharacter(a.accountId,a.id),cb=this.econCharacter(b.accountId,b.id);
   const state=(c:Character)=>({gold:c.gold,inventory:this.inventories.get(c.id)!});
   try{const out=applyTrade({state:state(ca),offer:a.offer,profile:a.profile},{state:state(cb),offer:b.offer,profile:b.profile},economyData);
-   for(const [c,side] of [[ca,out.a],[cb,out.b]] as const){this.inventories.set(c.id,side.state.inventory);c.gold=side.state.gold;this.ledger.push(...side.ledger.map(entry=>({character:c.id,entry})));}
+   for(const [c,side] of [[ca,out.a],[cb,out.b]] as const){this.inventories.set(c.id,side.state.inventory);c.gold=side.state.gold;this.ledger.push(...side.ledger.map(entry=>({character:c.id,entry,at:Date.now(),req:context.tradeId})));}
    return structuredClone({a:{inventory:out.a.state.inventory,gold:ca.gold},b:{inventory:out.b.state.inventory,gold:cb.gold}});}
   catch(e){return structuredClone({a:state(ca),b:state(cb),error:(e as Error).message,side:(e as {side?:number}).side});}
  }

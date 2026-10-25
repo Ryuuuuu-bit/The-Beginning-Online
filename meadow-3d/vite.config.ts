@@ -52,6 +52,7 @@ export default defineConfig(({ command }) => ({
 		target: "es2022",
 		rollupOptions: {
 			input: {
+				adminEconomy: fileURLToPath(new URL('./admin-economy.html',import.meta.url)),
 				worldGuide: fileURLToPath(new URL('./world.html',import.meta.url)),
 				items: fileURLToPath(new URL('./items.html',import.meta.url)),
 				lootArt: fileURLToPath(new URL('./loot-art-review.html',import.meta.url)),
