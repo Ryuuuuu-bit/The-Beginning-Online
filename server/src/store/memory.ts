@@ -38,6 +38,7 @@ export class MemoryStore implements Store {
  async saveUISettings(id:string,settings:import('@the-beginning-online/shared').UISettings){this.ui.set(id,structuredClone(settings));}
 
  private accounts=new Map<string,Account>();private sessions=new Map<string,Session>();private chars=new Map<string,Character>();
+ private accountClaims=new Map<string,number[]>();
  private inventories=new Map<string,Inventory>();
  private requests=new Map<string,{at:number;result:EconomyResult}>();
  private ledger:{character:string;entry:LedgerEntry;at:number;req:string}[]=[];
@@ -53,13 +54,18 @@ export class MemoryStore implements Store {
  async audit(entry:AuditEntry){this.audits.push({at:now(),...structuredClone(entry)});if(this.audits.length>10000)this.audits.splice(0,this.audits.length-10000);}
  async auditLog(limit=50){return structuredClone(this.audits.slice(-limit).reverse());}
  private econCharacter(accountId:string,id:string) {const c=this.chars.get(id);if(!c||c.accountId!==accountId||c.deletedAt)throw missing();if(!this.inventories.has(id)){const inv=starterInventory(c.potions,randomUUID);this.inventories.set(id,inv);this.ledger.push({character:id,at:Date.now(),req:'migration:'+id,entry:{kind:'admin',qty:0,goldDelta:c.gold}},...inv.items.map(i=>({character:id,at:Date.now(),req:'migration:'+id,entry:{kind:'admin',template:i.template,itemId:i.id,qty:i.qty,goldDelta:0}})));}return c;}
- async inventory(accountId:string,id:string):Promise<EconomyResult> {const c=this.econCharacter(accountId,id);return structuredClone({inventory:this.inventories.get(id)!,gold:c.gold,claimedLevelRewards:c.upgradedLevelRewards??[],legacyLevelRewards:c.claimedLevelRewards??[],consumableBuffs:c.consumableBuffs??{}});}
+ private accountRewards(accountId:string){
+  const all=[...this.chars.values()].filter(c=>c.accountId===accountId),claimed=[...new Set([...(this.accountClaims.get(accountId)??[]),...all.flatMap(c=>c.upgradedLevelRewards??[])])].sort((a,b)=>a-b);
+  return {claimed,legacy:[...new Set(all.flatMap(c=>c.claimedLevelRewards??[]))].sort((a,b)=>a-b)};
+ }
+ async inventory(accountId:string,id:string):Promise<EconomyResult> {const c=this.econCharacter(accountId,id),rewards=this.accountRewards(accountId);return structuredClone({inventory:this.inventories.get(id)!,gold:c.gold,claimedLevelRewards:rewards.claimed,legacyLevelRewards:rewards.legacy,consumableBuffs:c.consumableBuffs??{}});}
  async inventoryOp(accountId:string,id:string,req:string,op:InventoryOp,context:EconomyContext):Promise<EconomyResult> {
   checkRequest(req);if(context.leaseOwner&&this.leases.get(id)!==context.leaseOwner)throw Error('Lease lost');const c=this.econCharacter(accountId,id),key=id+':'+req,previous=this.requests.get(key);
   if(previous&&Date.now()-previous.at<86400000)return {...structuredClone(previous.result),duplicate:true};
   let result:EconomyResult;
-  try{const claimed=levelRewardClaims(c,op),buffs=consumedBuffs(c,op,this.inventories.get(id)!),progress=questProgress(c,context);const out=applyInventory({gold:c.gold,inventory:this.inventories.get(id)!},{...op,legacyLevels:c.claimedLevelRewards??[]},op.op==='levelReward'?{...context.profile,level:c.level}:context.profile,economyData,randomUUID);if(progress)Object.assign(c,progress);if(claimed)c.upgradedLevelRewards=claimed;if(buffs)c.consumableBuffs=buffs;this.inventories.set(id,out.state.inventory);c.gold=out.state.gold;if(context.bossLoot){if(context.bossLoot===true||context.bossLoot==='king_jelly')c.bossReadyAt=Date.now()+600000;else c.bossCooldowns={...c.bossCooldowns,[context.bossLoot]:Date.now()+600000};}this.ledger.push(...out.ledger.map(entry=>({character:id,entry,at:Date.now(),req})));result={...out.state,effect:out.effect,claimedLevelRewards:c.upgradedLevelRewards??[],legacyLevelRewards:c.claimedLevelRewards??[],consumableBuffs:c.consumableBuffs??{}};}
-  catch(e){result={inventory:this.inventories.get(id)!,gold:c.gold,claimedLevelRewards:c.upgradedLevelRewards??[],legacyLevelRewards:c.claimedLevelRewards??[],consumableBuffs:c.consumableBuffs??{},error:(e as Error).message};}
+  const rewards=this.accountRewards(accountId);
+  try{const claimed=levelRewardClaims({...c,upgradedLevelRewards:rewards.claimed},op),buffs=consumedBuffs(c,op,this.inventories.get(id)!),progress=questProgress(c,context);const out=applyInventory({gold:c.gold,inventory:this.inventories.get(id)!},{...op,legacyLevels:rewards.legacy},op.op==='levelReward'?{...context.profile,level:c.level}:context.profile,economyData,randomUUID);if(progress)Object.assign(c,progress);if(claimed){c.upgradedLevelRewards=claimed;this.accountClaims.set(accountId,claimed);}if(buffs)c.consumableBuffs=buffs;this.inventories.set(id,out.state.inventory);c.gold=out.state.gold;if(context.bossLoot){if(context.bossLoot===true||context.bossLoot==='king_jelly')c.bossReadyAt=Date.now()+600000;else c.bossCooldowns={...c.bossCooldowns,[context.bossLoot]:Date.now()+600000};}this.ledger.push(...out.ledger.map(entry=>({character:id,entry,at:Date.now(),req})));result={...out.state,effect:out.effect,claimedLevelRewards:this.accountRewards(accountId).claimed,legacyLevelRewards:this.accountRewards(accountId).legacy,consumableBuffs:c.consumableBuffs??{}};}
+  catch(e){result={inventory:this.inventories.get(id)!,gold:c.gold,claimedLevelRewards:this.accountRewards(accountId).claimed,legacyLevelRewards:this.accountRewards(accountId).legacy,consumableBuffs:c.consumableBuffs??{},error:(e as Error).message};}
   this.requests.set(key,{at:Date.now(),result:structuredClone(result)});
   for(const[k,r]of this.requests)if(Date.now()-r.at>86400000)this.requests.delete(k);
   return structuredClone(result);

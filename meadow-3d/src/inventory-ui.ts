@@ -213,7 +213,7 @@ export function mountInventory(send: (m: any) => void, onOpen: () => void) {
 			b.append(itemIcon(t), document.createTextNode(`${x.refine ? `+${x.refine} ` : ""}${t.nameTh}${x.location === "equip" ? " (สวมอยู่)" : ""} · ${x.cards.length}/${cardSlots(x, data)}`));
 			b.onclick = () => {
 				if (confirm(`ใส่ ${template(card).nameTh} ลงใน ${t.nameTh}?
-ใส่แล้วถอดออกไม่ได้`)) request("card", { card: card.id, id: x.id });
+ใส่แล้วถอดออกไม่ได้${card.bound?" · การ์ดผูกตัวจะทำให้อุปกรณ์ผูกตัว ขาย/เทรดไม่ได้":""}`)) request("card", { card: card.id, id: x.id });
 			};
 			btns.append(b);
 		}
@@ -277,6 +277,7 @@ export function mountInventory(send: (m: any) => void, onOpen: () => void) {
 				add(`เจาะช่องการ์ด`, () => {
 					if (confirm(`ให้ช่างตีเหล็กเจาะช่องการ์ด 1 ช่องใน ${t.nameTh}?
 ค่าเจาะ ${price.gold.toLocaleString()} ทอง + ${mat} ×${price.qty}
+ใช้วัสดุผูกตัวแล้วอุปกรณ์จะผูกตัวด้วย
 (ต้องยืนคุยกับช่างตีเหล็กในเมือง)`)) request("socket", { id: i.id });
 				}).title = `${price.gold.toLocaleString()} ทอง + ${mat} ×${price.qty} · ที่ช่างตีเหล็ก`;
 			}
@@ -316,7 +317,7 @@ export function mountInventory(send: (m: any) => void, onOpen: () => void) {
 			(i) => i.location === "equip" && i.slot === targetSlot,
 		);
 		const oldT = old && template(old);
-		text.textContent = `${(t.slot === "accessory1" ? (i.location === "equip" ? slotNames[i.slot!] : "แหวน") : slotNames[t.slot || ""]) || ({ consumable: "ของใช้", material: "วัตถุดิบ", refine: "หินตีบวก", card: "การ์ด" } as any)[t.type]} · ต้องการระดับ ${requiredEquipmentLevel(t.level,i)}\nน้ำหนัก ${fmtWeight(t.weight)} · ${shop && shopTab === "ซื้อ" ? "ซื้อ " + fmtGold(data.economy.shops[shop][t.id]) : "ขาย " + fmtGold(Math.floor(t.npcPrice * data.economy.sellMultiplier))} ทอง · ช่องการ์ด ${t.slots}\n${i.bound ? "ผูกมัดแล้ว" : t.bind === "equip" ? "ผูกมัดเมื่อสวมใส่" : t.bind === "account" ? "ผูกบัญชี" : "แลกเปลี่ยนได้"}`;
+		text.textContent = `${(t.slot === "accessory1" ? (i.location === "equip" ? slotNames[i.slot!] : "แหวน") : slotNames[t.slot || ""]) || ({ consumable: "ของใช้", material: "วัตถุดิบ", refine: "หินตีบวก", card: "การ์ด" } as any)[t.type]} · ต้องการระดับ ${requiredEquipmentLevel(t.level,i)}\nน้ำหนัก ${fmtWeight(t.weight)} · ${shop && shopTab === "ซื้อ" ? "ซื้อ " + fmtGold(data.economy.shops[shop][t.id]) : "ขาย " + fmtGold(Math.floor(t.npcPrice * data.economy.sellMultiplier))} ทอง · ช่องการ์ด ${t.slots}\n${i.bound ? "ผูกตัวละคร · ขาย/เทรดไม่ได้" : t.bind === "equip" ? "ผูกมัดเมื่อสวมใส่" : t.bind === "account" ? "ผูกบัญชี" : "แลกเปลี่ยนได้"}`;
 		detail.append(text);
 		appendRollGroups(detail,i);
 		if (t.slot === 'accessory1' && i.location === 'bag' && !shop && !storage && actions) {
@@ -576,7 +577,7 @@ export function mountInventory(send: (m: any) => void, onOpen: () => void) {
 		}
 		const foot = document.createElement("div");
 		foot.className = "tip-foot";
-		const bind = i?.bound ? "ผูกมัดแล้ว" : t.bind === "equip" ? "ผูกมัดเมื่อสวม" : t.bind === "account" ? "ผูกบัญชี" : "แลกเปลี่ยนได้";
+		const bind = i?.bound ? "ผูกตัวละคร · ขาย/เทรดไม่ได้" : t.bind === "equip" ? "ผูกมัดเมื่อสวม" : t.bind === "account" ? "ผูกบัญชี" : "แลกเปลี่ยนได้";
 		foot.textContent = [`น้ำหนัก ${fmtWeight(t.weight)}`, `ขาย ${fmtGold(Math.floor(t.npcPrice * data.economy.sellMultiplier))} ทอง`, t.slot ? `ช่องการ์ด ${i?.cards.length ?? 0}/${i ? cardSlots(i, data) : t.slots}` : "", t.slot ? bind : ""].filter(Boolean).join(" · ");
 		card.append(foot);
 		return card;
@@ -908,7 +909,7 @@ export function mountInventory(send: (m: any) => void, onOpen: () => void) {
 		if (refining) {
 			content.append(refine.root);
 			refine.update(inv, p?.gold ?? 0);
-			countBox.textContent = "หินตีบวก 1 ก้อน + ทอง ต่อครั้ง · +1 ถึง +4 ไม่มีทางล้มเหลว · ต้องยืนคุยกับช่างตีเหล็ก";
+			countBox.textContent = "หินตีบวก 1 ก้อน + ทอง ต่อครั้ง · ใช้หินผูกตัวแล้วอุปกรณ์จะผูกตัวด้วย · +1 ถึง +4 ไม่มีทางล้มเหลว · ต้องยืนคุยกับช่างตีเหล็ก";
 			return;
 		}
 		if(crafting){

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {randomUUID} from 'node:crypto';
 import {loadGameData,starterInventory,applyInventory,IntentSchema,type InventoryOp} from '../src/index.js';
 const data=loadGameData(),profile=data.stats.defaultBuild;
-function fixture(){let n=0;const inventory=starterInventory(10,()=>`item-${++n}`);return {inventory,gold:1000};}
+function fixture(){let n=0;const inventory=starterInventory(10,()=>`item-${++n}`);inventory.items=inventory.items.map(i=>({...i,id:i.id.replace("stack:bound:","stack:"),bound:false,source:"drop"}));return {inventory,gold:1000};}
 test('a mixed sale removes only chosen quantities and credits exact ledger values atomically',()=>{
  const before=fixture(),potion=before.inventory.items.find(i=>i.template==='red_small')!,weapon=before.inventory.items.find(i=>i.location==='bag'&&i.template==='training_sword')!;
  const items=[{id:potion.id,qty:3},{id:weapon.id,qty:1}];

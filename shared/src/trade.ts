@@ -66,7 +66,7 @@ export function applyTrade(a: TradeSide, b: TradeSide, data: GameData) {
 		const to = 1 - from, inv = next[to].inventory;
 		for (const item of moving[from]) {
 			const t = data.items.items.find((t) => t.id === item.template)!;
-			const stack = t.stackable ? inv.items.find((i) => i.template === item.template && i.location === "bag") : undefined;
+			const stack = t.stackable ? inv.items.find((i) => i.template === item.template && i.location === "bag" && !i.bound) : undefined;
 			if (stack) stack.qty += item.qty;
 			else inv.items.push({ ...item, id: t.stackable ? "stack:" + item.template : item.id, location: "bag", slot: null, source: "trade" });
 			ledgers[to].push({ kind: "trade_in", template: item.template, itemId: t.stackable ? undefined : item.id, qty: item.qty, goldDelta: 0 });

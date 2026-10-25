@@ -55,7 +55,7 @@ export const economyData = loadGameData();
 export function levelRewardClaims(character:Character,op:InventoryOp){
  if(op.op!=='levelReward')return;
  const levels=validateRewardLevels(op.levels,character.level,economyData.stats.maxLevel),claimed=character.upgradedLevelRewards??[];
- if(levels.some(level=>claimed.includes(level)))throw Error('รับรางวัลเลเวลนี้แล้ว');
+ if(levels.some(level=>claimed.includes(level)))throw Error('บัญชีนี้รับรางวัลเลเวลนี้แล้ว');
  return [...claimed,...levels].sort((a,b)=>a-b);
 }
 export function consumedBuffs(character:Character,op:InventoryOp,inv:Inventory,now=Date.now()){

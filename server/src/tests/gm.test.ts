@@ -210,7 +210,7 @@ test("give and gold go through the ledgered economy path", async (t) => {
 	assert.equal(other.p.gold, gold + 500);
 	await other.until((m) => m.t === "inv" && m.gold === gold + 500);
 	assert.match(await admin.gm("/gm give red_small 7"), /×7/);
-	assert.equal(admin.p.inventory!.items.find((i) => i.template === "red_small" && i.location === "bag")!.qty >= 7, true);
+	assert.equal(admin.p.inventory!.items.filter((i) => i.template === "red_small" && i.location === "bag").reduce((n,i)=>n+i.qty,0) >= 12, true);
 	assert.match(await admin.gm("/gm give not_an_item"), /ไม่พบไอเทม/);
 	assert.match(await admin.gm('/gm give field_sword 2'), /×2/);
 	const rolled=admin.p.inventory!.items.filter(i=>i.template==='field_sword');assert.equal(rolled.length,2);assert.ok(rolled.every(i=>i.roll?.affixes.length));assert.notEqual(rolled[0].id,rolled[1].id);

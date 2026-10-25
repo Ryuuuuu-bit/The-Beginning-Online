@@ -533,9 +533,9 @@ test('hotbar potion slots persist, use the bag through the server and survive mi
  const bad=p.hotbar.map((s,i)=>({...s,skill:i===8?'item:jelly_slime':s.skill}));const at=peer.messages.length;peer.send({t:'hotbar',slots:bad});
  await peer.until(m=>peer.messages.indexOf(m)>=at&&m.t==='ev'&&m.list.some((e:any)=>e.type==='skillsError'));assert.equal(p.hotbar[8].skill,slots[8].skill);
  const before=bagQty(p.inventory!,'red_small');p.hp=1;
- const req=crypto.randomUUID();peer.send({t:'inv',op:'use',req,id:'stack:red_small'});
+ const req=crypto.randomUUID();peer.send({t:'inv',op:'use',req,id:p.inventory!.items.find(i=>i.template==='red_small')!.id});
  const used=await peer.until(m=>m.t==='inv'&&m.req===req);assert.equal(used.error,undefined);assert.equal(bagQty(used.inventory,'red_small'),before-1);assert.ok(p.hp>1);assert.ok(p.cd.potion>0);
- const second=crypto.randomUUID();peer.send({t:'inv',op:'use',req:second,id:'stack:red_small'});assert.ok((await peer.until(m=>m.t==='inv'&&m.req===second)).error,'potion cooldown');
+ const second=crypto.randomUUID();peer.send({t:'inv',op:'use',req:second,id:p.inventory!.items.find(i=>i.template==='red_small')!.id});assert.ok((await peer.until(m=>m.t==='inv'&&m.req===second)).error,'potion cooldown');
  peer.ws.close();await peer.closed;for(let i=0;i<100&&room.game.players.has(p.id);i++)await wait(20);await room.saveQueue;
  // An older save naming a retired item keeps its other slots; the stale item slot is cleared on load.
  const saved=(await f.store.character(user.character.accountId,p.id))!;

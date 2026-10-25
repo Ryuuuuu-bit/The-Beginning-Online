@@ -18,7 +18,8 @@ async function fixture() {
 }
 test('partial shop sale persists current stock and gold once when its request is retried',async()=>{
  const {store,a,c,run}=await fixture();
- const before=await store.inventory(a.id,c.id),potion=before.inventory.items.find(i=>i.template==='red_small')!;
+ await run({op:'pickup',loot:[{template:'red_small',qty:5}]});
+ const before=await store.inventory(a.id,c.id),potion=before.inventory.items.find(i=>i.template==='red_small'&&!i.bound)!;
  const req=randomUUID(),op={op:'sell',shop:'market',items:[{id:potion.id,qty:2}]};
  const first=await run(op,req);assert.ok(!first.error);
  const retried=await run(op,req);assert.ok(retried.duplicate);

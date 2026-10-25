@@ -123,14 +123,14 @@ test("quests: accept at the giver, kills count, turn-in pays through the ledger 
 test("storage keeper: range-checked deposit counts for the storage quest", async (t) => {
 	const f = await fixture(t), { peer, p } = await join(f, "StoreHero");
 	const keeper = CITY_BUILDINGS.find(b => b.id === "storage")!.talk;
-	peer.send({ t: "inv", op: "store", req: randomUUID(), id: "stack:red_small", qty: 1 });
+	peer.send({ t: "inv", op: "store", req: randomUUID(), id: "stack:bound:red_small", qty: 1 });
 	assert.match((await peer.until((m: any) => m.t === "inv" && m.error)).error, /คนเฝ้าคลัง/);
 	p.x = keeper.x; p.z = keeper.z + 1;
 	peer.send({ t: "quest", op: "accept", id: "storage_ledger" });
 	await peer.until((m: any) => m.t === "quests" && m.state.active.storage_ledger);
-	peer.send({ t: "inv", op: "store", req: randomUUID(), id: "stack:red_small", qty: 2 });
+	peer.send({ t: "inv", op: "store", req: randomUUID(), id: "stack:bound:red_small", qty: 2 });
 	await peer.until((m: any) => m.t === "quests" && m.state.active.storage_ledger?.progress[0] === 1);
-	assert.equal(p.inventory!.items.find((i: any) => i.id === "stack:storage:red_small")!.qty, 2);
+	assert.equal(p.inventory!.items.find((i: any) => i.id === "stack:storage:bound:red_small")!.qty, 2);
 	peer.send({ t: "quest", op: "turnIn", id: "storage_ledger" });
 	await peer.until((m: any) => m.t === "quests" && m.state.done.storage_ledger);
 });

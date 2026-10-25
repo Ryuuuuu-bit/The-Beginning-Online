@@ -840,7 +840,7 @@ export function mountRealtime(server: Server, options: RealtimeOptions) {
                     p.audioSettings = character.audioSettings;
                     p.autoPotion = normalizeAutoPotion(character.autoPotion);
                  p.titleId=character.titleId??null;p.unlockedTitles=character.unlockedTitles??[];p.titleRecords=normalizeTitleRecords(character.titleRecords);
- p.claimedLevelRewards=[...(character.upgradedLevelRewards??[])];p.legacyLevelRewards=[...(character.claimedLevelRewards??[])];p.consumableBuffs=structuredClone(character.consumableBuffs??{});p.quests=normalizeQuests(character.quests,data);p.bossReadyAt=character.bossReadyAt||0;p.bossCooldowns={...(character.bossCooldowns??{})};p.returnReadyAt=character.returnReadyAt||0;p.healerReadyAt=character.healerReadyAt||0;p.autoSeconds=character.autoSeconds||0;
+ p.claimedLevelRewards=[...(economyState.claimedLevelRewards??[])];p.legacyLevelRewards=[...(economyState.legacyLevelRewards??[])];p.consumableBuffs=structuredClone(character.consumableBuffs??{});p.quests=normalizeQuests(character.quests,data);p.bossReadyAt=character.bossReadyAt||0;p.bossCooldowns={...(character.bossCooldowns??{})};p.returnReadyAt=character.returnReadyAt||0;p.healerReadyAt=character.healerReadyAt||0;p.autoSeconds=character.autoSeconds||0;
 					p.profile.classId = p.jobId;
 					p.name = character.name;p.gender=character.gender??'male';
 					p.xp = character.xp;

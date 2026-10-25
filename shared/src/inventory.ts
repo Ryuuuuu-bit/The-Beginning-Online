@@ -122,7 +122,8 @@ export function storageSlots(inv: Inventory, data: GameData) {
 		.filter((i) => i.location === "storage")
 		.reduce((n, i) => n + Math.ceil(i.qty / (knownTemplate(data, i.template)?.maxStack ?? Infinity)), 0);
 }
-export const storageStackId = (template: string) => "stack:storage:" + template;
+export const stackItemId = (template: string, location: ItemLocation = "bag", bound = false) => "stack:" + (location === "bag" ? "" : location + ":") + (bound ? "bound:" : "") + template;
+export const storageStackId = (template: string, bound = false) => stackItemId(template, "storage", bound);
 export function equipped(inv: Inventory) {
 	return inv.items.filter((i) => i.location === "equip").map((i) => i.template);
 }
@@ -209,24 +210,24 @@ export function starterInventory(
 				slot: "body",
 				refine: 0,
 				cards: [],
-				bound: false,
+				bound: true,
 				source: "migration",
 			},
 			...['training_sword', 'training_greatsword', 'reed_dagger', 'wood_staff', 'bamboo_bow', 'training_knuckles'].map((template): OwnedItem => ({
 				id: uuid(), template, qty: 1, location: 'bag', slot: null,
-				refine: 0, cards: [], bound: false, source: 'migration',
+				refine: 0, cards: [], bound: true, source: 'migration',
 			})),
 			...(potions > 0
 				? [
 						{
-							id: "stack:red_small",
+							id: stackItemId("red_small", "bag", true),
 							template: "red_small",
 							qty: potions,
 							location: "bag" as const,
 							slot: null,
 							refine: 0,
 							cards: [],
-							bound: false,
+							bound: true,
 							source: "migration",
 						},
 					]
@@ -291,14 +292,15 @@ export function applyInventory(
 		if(roll){validateItemRoll(id,roll,data);if(qty!==1||t.stackable)throw Error('อุปกรณ์สุ่มออฟต้องเป็นรายชิ้น');}
 		if (!Number.isSafeInteger(qty) || qty < 1 || qty > 9999)
 			throw Error("จำนวนไม่ถูกต้อง");
+		bound ||= t.bind === "account";
 		let i = t.stackable
-			? inv.items.find((i) => i.template === id && i.location === "bag")
+			? inv.items.find((i) => i.template === id && i.location === "bag" && i.bound === bound)
 			: undefined;
 		if (i) i.qty += qty;
 		else
 			for (let n = 0; n < (t.stackable ? 1 : qty); n++)
 				inv.items.push({
-					id: t.stackable ? "stack:" + id : uuid(),
+					id: t.stackable ? stackItemId(id, "bag", bound) : uuid(),
 					template: id,
 					qty: t.stackable ? qty : 1,
 					location: "bag",
@@ -387,30 +389,33 @@ export function applyInventory(
 		log("unequip", i, 1);
 	}
 	let effect: { kind: string; amount: number; duration?:number } | undefined;
+	const takeMaterial = (id:string,qty:number) => {
+	 const stacks=inv.items.filter(i=>i.template===id&&i.location==='bag').sort((a,b)=>Number(b.bound)-Number(a.bound));
+	 if(stacks.reduce((n,i)=>n+i.qty,0)<qty)throw Error(`ต้องใช้ ${template(id).nameTh} ×${qty}`);
+	 let bound=false;
+	 for(const item of stacks){const take=Math.min(qty,item.qty);bound ||= item.bound;remove(item,take);log('use',item,take);qty-=take;if(!qty)break;}
+	 return bound;
+	};
 	if (op.op === "socket") {
 		const target = owned(op.id), price = socketPrice(target, data);
 		if (typeof price === "string") throw Error(price);
 		if (next.gold < price.gold) throw Error("ทองไม่พอ");
-		const stack = inv.items.find((i) => i.template === price.material && i.location === "bag");
-		if (!stack || stack.qty < price.qty) throw Error(`ต้องใช้ ${template(price.material).nameTh} ×${price.qty}`);
-		remove(stack, price.qty);
-		log("use", stack, price.qty);
+		const bound=takeMaterial(price.material,price.qty);
 		next.gold -= price.gold;
 		log("npc_buy", target, 0, -price.gold);
 		target.sockets = (target.sockets ?? 0) + 1;
+		target.bound ||= bound;
 	}
 	if (op.op === "refine") {
 		const target = owned(op.id), quote = refineQuote(target, data);
 		if (typeof quote === "string") throw Error(quote);
 		if (typeof op.roll !== "number" || !(op.roll >= 0 && op.roll < 1)) throw Error("การตีบวกต้องสุ่มจากเซิร์ฟเวอร์");
 		if (next.gold < quote.gold) throw Error("ทองไม่พอ");
-		const stack = inv.items.find((i) => i.template === quote.stone && i.location === "bag");
-		if (!stack) throw Error(`ต้องใช้ ${template(quote.stone).nameTh} ×1`);
-		remove(stack, 1);
-		log("use", stack, 1);
+		const bound=takeMaterial(quote.stone,1);
 		next.gold -= quote.gold;
 		log("npc_buy", target, 0, -quote.gold);
 		target.refine = op.roll < quote.chance ? quote.next : quote.failTo;
+		target.bound ||= bound;
 		if (target.location === "equip") deriveStats(inventoryProfile(profile,inv,data), data);
 	}
 	if (op.op === "card") {
@@ -419,6 +424,7 @@ export function applyInventory(
 		if (problem) throw Error(problem);
 		remove(card, 1);
 		target.cards = [...target.cards, card.template];
+		target.bound ||= card.bound;
 		log("use", card, 1);
 		// Worn equipment changes stats right away; make sure they still derive.
 		if (target.location === "equip") deriveStats(inventoryProfile(profile,inv,data), data);
@@ -457,10 +463,10 @@ export function applyInventory(
 		if (t.stackable) {
 			i.qty -= count;
 			if (!i.qty) inv.items.splice(inv.items.indexOf(i), 1);
-			const target = inv.items.find((s) => s.template === t.id && s.location === to);
+			const target = inv.items.find((s) => s.template === t.id && s.location === to && s.bound === i.bound);
 			if (target) target.qty += count;
 			else
-				inv.items.push({ ...i, id: to === "storage" ? storageStackId(t.id) : "stack:" + t.id, qty: count, location: to, slot: null });
+				inv.items.push({ ...i, id: stackItemId(t.id, to, i.bound), qty: count, location: to, slot: null });
 		} else {
 			if (count !== 1) throw Error("จำนวนไม่ถูกต้อง");
 			i.location = to;
@@ -482,7 +488,7 @@ export function applyInventory(
 			if (left > 0) throw Error(`ต้องมี ${template(need.template).nameTh} ×${need.qty}`);
 		}
 		for (const reward of op.reward ?? []) {
-			add(reward.template, reward.qty, "quest");
+			add(reward.template, reward.qty, "quest", undefined, true);
 			ledger.push({ kind: "quest", template: reward.template, qty: reward.qty, goldDelta: 0 });
 		}
 		const gold = op.gold ?? 0;
@@ -505,12 +511,12 @@ export function applyInventory(
 	 const fragments=inv.items.find(i=>i.location==='bag'&&i.template===FORGE_FRAGMENT);
 	 if(!fragments||fragments.qty<recipe.fragments)throw Error(`ต้องใช้เศษผลึกช่าง ×${recipe.fragments}`);
 	 remove(fragments,recipe.fragments);log('craft',fragments,-recipe.fragments);
-	 next.gold-=recipe.gold;add(recipe.template,1,'craft');
+	 next.gold-=recipe.gold;add(recipe.template,1,'craft',undefined,fragments.bound);
 	 ledger.push({kind:'craft',template:recipe.template,qty:1,goldDelta:-recipe.gold});
 	}
 	if(op.op==='levelReward')for(const level of validateRewardLevels(op.levels,profile.level,data.stats.maxLevel)){
  const reward=levelReward(level,data,op.legacyLevels?.includes(level),profile.level);
-	 for(const item of reward.items){add(item.template,item.qty,'level_reward',undefined,!!template(item.template).slot);ledger.push({kind:'level_reward',template:item.template,qty:item.qty,goldDelta:0});}
+	 for(const item of reward.items){add(item.template,item.qty,'level_reward',undefined,true);ledger.push({kind:'level_reward',template:item.template,qty:item.qty,goldDelta:0});}
 	 next.gold+=reward.gold;ledger.push({kind:'level_reward',qty:0,goldDelta:reward.gold});
 	}
 	if (
