@@ -627,7 +627,7 @@ export function mountSkills(
 		$("#skills-status").textContent = "ยกเลิกตัวอย่างแล้ว";
 	};
 	$("#skills-close").onclick = () => panel.close();
-	$("#angel-close").onclick = () => angel.close();
+
 	$("#skills-more").onclick = () => {
 		more = !more;
 		document.body.classList.toggle("more-skills", more);
@@ -644,58 +644,6 @@ export function mountSkills(
 				})),
 			});
 	};
-	$("#angel-talk").onclick = () => {
-		clear();
-		choosing = null;
-		angel.showModal();
-		play("ui_open");
-		drawAngel();
-	};
-	// Second-job branches the angel offers; the server re-checks job, level and distance.
-	const BRANCH_NOTES: Record<string, string> = {
-		guardian: "แนวหน้าโล่เหล็ก · ทนทาน ดึงศัตรู สะท้อนความเสียหาย",
-		berserker: "ดาบคลั่งไม่ถอย · ตีแรง โจมตีหลายครั้ง ดูดเลือดจากศัตรู",
-	};
-	let choosing: string | null = null;
-	function drawAngel() {
-		if (!job) return;
-		const current = jobsData.jobs.find((j) => j.id === job!.jobId);
-		const branches = jobsData.jobs.filter((j) => j.tier === 2 && j.parent === job!.jobId);
-		if (current?.tier === 2) {
-			$("#angel-note").textContent = `เจ้าก้าวสู่เส้นทาง${current.nameTh}แล้ว ขอพรให้ดาบของเจ้าไม่สั่นคลอน`;
-			$("#job-cards").innerHTML = "";
-			return;
-		}
-		const ready = job.jobLevel >= 40;
-		$("#angel-note").textContent = !branches.some((j) => j.available)
-			? "เส้นทางอาชีพขั้นสองของเจ้ายังไม่เปิด"
-			: !ready
-				? `ข้าจะนำทางเจ้าสู่อาชีพขั้นสองที่ระดับอาชีพ 40 · ตอนนี้ ${job.jobLevel}`
-				: choosing
-					? `แน่ใจหรือไม่? เมื่อเป็น${branches.find((j) => j.id === choosing)?.nameTh}แล้วจะเปลี่ยนกลับไม่ได้ · กดอีกครั้งเพื่อยืนยัน`
-					: "เลือกเส้นทางของเจ้า สกิลนักดาบทั้งหมดยังติดตัวไป";
-		$("#job-cards").innerHTML = branches
-			.map((j) => {
-				const open = j.available && ready;
-				const note = !j.available ? "ยังไม่เปิด" : !ready ? "ต้องการระดับอาชีพ 40" : choosing === j.id ? "กดเพื่อยืนยัน" : BRANCH_NOTES[j.id] || "";
-				return `<button data-job="${j.id}" ${open ? "" : "disabled"} class="${choosing === j.id ? "choosing" : ""}"><b>${j.nameTh}</b><small>${note}</small></button>`;
-			})
-			.join("");
-		$("#job-cards").querySelectorAll<HTMLButtonElement>("button[data-job]").forEach((b) => {
-			b.onclick = () => {
-				const id = b.dataset.job!;
-				if (choosing !== id) {
-					choosing = id;
-					play("ui_open");
-					drawAngel();
-					return;
-				}
-				choosing = null;
-				$("#angel-note").textContent = "ทูตสวรรค์กำลังประทานพร…";
-				send({ t: "jobChange", job: id });
-			};
-		});
-	}
 	return {
 		get open() {
 			return panel.open || angel.open;
@@ -723,7 +671,7 @@ export function mountSkills(
 		receive(e: any) {
 			if (e.type === "skillsError") {
 				$("#skills-status").textContent = e.text;
-				$("#angel-note").textContent = e.text;
+
 				return;
 			}
 			if (e.type === "stats" && e.derived) {
@@ -744,7 +692,7 @@ export function mountSkills(
 			const ks = document.querySelector("#key-status");
 			if (ks?.textContent === "กำลังบันทึกปุ่ม…") ks.textContent = "บันทึกแล้ว";
 			if (panel.open) draw();
-			if (angel.open) drawAngel();
+
 		},
 		/** Briefly highlights the bar slots holding this potion (auto-potion fired). */
 		flash(template: string) {
@@ -790,10 +738,7 @@ export function mountSkills(
                 el.classList.toggle("cooling", cd > 0.05);
 				el.querySelector("em")!.textContent = cd > 0.05 ? cd.toFixed(1) : "";
 			});
-			const near =
-				p.mapId === "city_plaza" && !p.dead && Math.hypot(p.x - jobsData.angel.x, p.z - jobsData.angel.z) <=
-				jobsData.angel.range;
-			$("#angel-talk").hidden = !near;
+
 
 		},
 	};

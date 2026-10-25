@@ -10,7 +10,7 @@ export const TOWN_NPCS:TownNpc[]=CITY.empty?[]:[
     line:b.id==='forge'?'ค้อนพร้อม เตาพร้อม! ซื้ออุปกรณ์หรือใส่การ์ดให้ของชิ้นโปรดได้ที่นี่ เตรียมอาวุธให้พร้อมก่อนออกประตูเมือง':b.id==='market'?'ก่อนออกประตูเมือง แวะซื้อยาและตรวจอุปกรณ์ก่อนนะ ของที่ไม่ใช้ก็นำมาขายได้':'ฝากสัมภาระไว้ในคลังได้เลย แล้วออกเดินทางเบา ๆ เมื่อต้องการฟื้นพลัง ให้ไปหาผู้รักษาข้างสวน'})),
   {...HEALER,id:'healer',kind:'heal',art:'healer',name:'ริน · ผู้รักษา',role:'ฟื้น HP / MP',icon:'+',color:'#ace1b7',line:'พักหายใจใต้ร่มไม้ก่อนนะ ฉันฟื้นพลังชีวิตและพลังสกิลให้เต็มได้ทุก 60 วินาที'},
   {...GATE_CAPTAIN,id:'captain',kind:'guard',art:'guard',name:'กานต์ · หัวหน้าทหารยาม',role:'แนะนำเส้นทางออกเมือง',icon:'◇',color:'#d8c598',line:'ใต้ไปทุ่งวุ้นจิ๋ว ตะวันออกไปป่าหมอก แล้วเดินทางต่อสู่ซากนครและหุบเขาหินได้จากแผนที่โลก เริ่มล่าใกล้เมืองก่อนแล้วค่อยออกไปให้ไกลขึ้น'},
-  {...jobs.angel,...cityNpcPlacement('angel'),id:'angel',kind:'angel',art:'angel',name:'ทูตสวรรค์',role:'เปลี่ยนอาชีพ',icon:'✦',color:'#e9d3f4',line:'การเดินทางของเจ้ากำลังเริ่มต้น เมื่อพร้อมแล้ว จงเลือกเส้นทางอาชีพที่เป็นตัวเอง'},
+  {...jobs.angel,...cityNpcPlacement('angel'),id:'angel',kind:'angel',art:'angel',name:'ทูตสวรรค์',role:'ผู้ดูแลเส้นทางนักผจญภัย',icon:'✦',color:'#e9d3f4',line:'ไม่ว่าเจ้าจะเพิ่งเริ่มต้นหรือกลับมาจากการเดินทางไกล ข้าจะช่วยแนะนำก้าวถัดไปและนำทางเจ้าต่อจาก Guide ที่บันทึกไว้'},
 ];
 export function nearbyTownNpc(x:number,z:number){return TOWN_NPCS.filter(n=>Math.hypot(n.x-x,n.z-z)<3).sort((a,b)=>Math.hypot(a.x-x,a.z-z)-Math.hypot(b.x-x,b.z-z))[0];}
 

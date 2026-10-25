@@ -4,6 +4,7 @@ import {GATES,GATE_CAPTAIN,CITY_BUILDINGS,LAYOUTS,gateRoute,type MapId} from '@t
 import {readGuideProgress,readGuideCache,createGuideSync} from './guide-progress';
 import {api,ApiError} from './web/api';
 import type {GuideState} from '@the-beginning-online/shared';
+import type {GuideLesson} from './adventure-advice';
 import './tutorial-guide.css';
 
 /**
@@ -179,6 +180,9 @@ export function mountTutorialGuide(o:GuideOptions){
   ctx.restore();
  }
  return {
+  current():GuideLesson {const c=ctx(),s=STEPS[step];return {ready:sync.ready,step,total:STEPS.length,title:s?.title??'ผ่านคู่มือเบื้องต้นแล้ว',text:s?.text(c)??'เลือกทบทวนบทเรียนได้จากคู่มือนักผจญภัย',canNavigate:!!s?.target?.(c)};},
+  open:openLibrary,
+  resume(){if(!sync.ready)return;if(step>=STEPS.length){openLibrary();return;}off=false;min=false;save();if(STEPS[step].target?.(ctx()))go(step);else if(STEPS[step].focus)openAction(step);},
   /** Own-player events (main.ts forwards e.playerId===you). */
   event(e:any){if(!state)return;if(e.type==='skill')state.cast=true;if(e.type==='autoPotion')state.drank=true;},
   update(){

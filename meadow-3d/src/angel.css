@@ -1,0 +1,37 @@
+#angel-window{width:min(760px,calc(100vw - 40px));max-height:calc(100dvh - 40px);overflow:auto;scrollbar-width:thin;padding:26px;border:1px solid #a79565;border-radius:18px;background:radial-gradient(ellipse at 0 0,#394c3755,transparent 55%),#102028;color:#e3ece1;box-shadow:0 24px 100px #000b;font:14px/1.6 var(--font-ui,Tahoma)}
+#angel-window::backdrop{background:#06121a99;backdrop-filter:blur(4px)}
+#angel-window header{display:flex;align-items:center;gap:17px;margin-bottom:16px}
+#angel-window .angel-seal{display:grid;place-items:center;flex:none;width:64px;height:64px;border:1px solid #cbb87577;border-radius:50%;background:radial-gradient(circle,#d2bd7033,#193633);color:#f1d7a1;font-size:33px!important;box-shadow:0 0 0 5px #c4b97c09,inset 0 0 18px #d3c18a19}
+#angel-window header small{font-size:10px!important;letter-spacing:.16em;color:#b7aa7f}
+#angel-window h2{font:600 27px/1.35 var(--font-ui);color:#eed5a0;margin:2px 0}
+#angel-window #angel-note{margin:2px 0 0;color:#a7beb1;font-size:12px!important}
+#angel-window #angel-close{margin-left:auto;align-self:flex-start;width:34px;min-height:34px;border:1px solid #68817066;border-radius:8px;background:transparent;color:#c3d5c9;font-size:22px}
+#angel-window .angel-welcome{margin:0 0 16px;color:#b6c9bd;font-size:13px!important;line-height:1.8}
+.angel-summary{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:17px}
+#angel-window .angel-summary span{padding:4px 10px;border-radius:6px;border:1px solid #607e6b55;background:#26413855;color:#bcd4bf;font-size:11px!important}
+.angel-recommendation{padding:20px 22px;border:1px solid #a28e566f;border-radius:12px;background:linear-gradient(125deg,#3b3e2777,#1c363077)}
+.angel-card-top{display:flex;justify-content:space-between;gap:14px;color:#b8af82}
+#angel-window .angel-card-top span{font-size:10px!important}
+#angel-window h3{margin:8px 0 18px;color:#e3dfb8;font-size:18px}
+#angel-window .angel-goal{margin:0 0 7px;color:#f4dda7;font-size:19px;line-height:1.5}
+#angel-window .angel-detail{margin:0;color:#c0d1c2;line-height:1.8;font-size:13px!important}
+#angel-window .angel-destination{margin:11px 0 0;color:#9cbdad;font-size:11px!important}
+#angel-window .angel-destination:empty{display:none}
+#angel-window button{font:inherit;cursor:pointer;transition:background .15s,border-color .15s}
+#angel-window .angel-next{display:block;width:100%;min-height:43px;margin-top:17px;padding:9px 14px;border:1px solid #e1cc95;border-radius:8px;background:linear-gradient(110deg,#e5d19a,#c3a36a);color:#1c3026;font-weight:600}
+#angel-window button:focus-visible{outline:2px solid #f2d7a0;outline-offset:3px}
+#angel-window button:disabled{cursor:default;background:#1c3335;border-color:#486357;color:#8ba396;filter:none}
+.angel-tools{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:9px;margin-top:15px}
+#angel-window .angel-tools button{display:flex;align-items:center;gap:12px;padding:13px;border:1px solid #50725d66;border-radius:9px;background:#192f30;color:#c6dacf;text-align:left;min-width:0}
+#angel-window .angel-tools button>span:first-child{display:grid;place-items:center;width:33px;height:35px;flex:none;border-radius:7px;background:#bcb76d12;color:#d2c68f;font-size:23px!important}
+#angel-window .angel-tools button>span:nth-child(2){flex:1;min-width:0}
+#angel-window .angel-tools b{display:block;font-size:13px;font-weight:600}
+#angel-window .angel-tools small{display:block;margin-top:2px;color:#95afa3;font-size:10px!important;line-height:1.6}
+.angel-tools i{font-style:normal;color:#98b19e}
+#angel-window .angel-tools button:not(:disabled):hover{border-color:#a7b77d;background:#274537}
+#angel-window footer{display:grid;grid-template-columns:1fr 140px;align-items:center;gap:6px 15px;margin-top:18px;padding-top:13px;border-top:1px solid #51705b44;color:#9eb6a7}
+#angel-window .angel-progress-label{font-size:11px!important}
+.angel-progress{width:100%;height:6px;accent-color:#c8ba7d}
+#angel-window footer small{grid-column:1/-1;font-size:10px!important;color:#92a99c}
+@media(max-height:760px){#angel-window{padding:18px 22px}#angel-window header{margin-bottom:10px}.angel-summary{margin-bottom:12px}.angel-recommendation{padding:14px 18px}#angel-window h3{margin-bottom:11px}#angel-window .angel-tools button{padding:9px 11px}}
+@media(prefers-reduced-motion:reduce){#angel-window button{transition:none}}
