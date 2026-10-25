@@ -46,3 +46,5 @@ export * from './level-rewards.js';
 export * from './consumable-buffs.js';
 export * from './crafting.js';
 export * from './guide.js';
+
+export * from './map-discovery.js';

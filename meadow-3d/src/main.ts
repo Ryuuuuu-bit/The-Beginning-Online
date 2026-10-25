@@ -1,3 +1,4 @@
+import {normalizeDiscoveredMaps} from '@the-beginning-online/shared';
 import {mountCombatBar} from './combat-bar';
 import {bestPotion} from '@the-beginning-online/shared';
 import {masteryTarget} from '@the-beginning-online/shared';
@@ -90,9 +91,11 @@ let titles:ReturnType<typeof mountTitles>|undefined;
 let levelUp:ReturnType<typeof mountLevelUp>|undefined;
 let mailbox:ReturnType<typeof mountMailbox>|undefined;
 let trade:ReturnType<typeof mountTrade>|undefined,social:ReturnType<typeof mountSocial>|undefined,quests:ReturnType<typeof mountQuests>|undefined;
+let discoveredMaps:MapId[]=[];
 let sceneReady=false,netOverlay=false;const net=new GameSocket({message(message){
  // Job 2 skills borrow a Job 1 skill's motion, VFX and sound until they get their own art; keep the real id as learnedSkill.
  if(message.t==='ev')message.list=message.list.map(preferOwnArt);
+ if(message.t==='mapDiscovery'){discoveredMaps=normalizeDiscoveredMaps(message.maps);worldMap?.refresh();return;}
   if(mailbox?.receive(message)||titles?.receive(message)||trade?.receive(message)||social?.receive(message)||quests?.receive(message))return;
  audioUI.receive(message);autoPotionUI.receive(message);inventoryUI.receive(message);autoUI.receive(message);if(message.t==='uiSettings')pendingUI=message;qol?.receive(message);
  if(message.t==='ev')for(const e of message.list)if(e.playerId===net.you){if(e.type==='stats')game.p.stats=e.derived;audioUI.receive(e);autoPotionUI.receive(e);}
@@ -401,7 +404,7 @@ social=mountSocial({send:m=>net.send(m),you:()=>net.you,enabled:()=>started,onOp
 levelUp=mountLevelUp({stats:()=>({maxHp:game.p.maxHp,maxMp:game.p.maxMp}),hero:()=>{if(!started||paused||document.hidden)return null;const feet=renderer.screen(game.p.x,game.p.z),head=renderer.screen(game.p.x,game.p.z,2.1);return feet.x>=-50&&feet.x<=innerWidth+50&&feet.y>=-50&&feet.y<=innerHeight+50?{feet,head}:null;}});
 quests=mountQuests({send:m=>net.send(m),player:()=>game.p,map:()=>activeMap,navigate:p=>{if(!started||paused||game.p.dead||!net.connected)return;qol?.goToMap(p);},notice:tell});
 qol=mountHUDQOL({send:m=>net.send(m),map:()=>activeMap,player:()=>game.p,notice,stop:()=>{clearInput();stopAuto();},release:()=>clearInput(),arrived:name=>notice(`✦ ถึง${name}แล้ว`),settings:()=>settingsUI?.open(),party:()=>social?.openParty(),talk:kind=>{if(kind==='angel'){$('#angel-talk').click();return;}if(nearNpc&&nearNpc.kind===kind){npcTalk.click();return;}if(['market','forge','storage'].includes(kind))inventoryUI.shop(kind);}});settingsUI=mountSettingsWindow({onOpen:()=>clearInput(),keysChanged:()=>skillsUI.drawKeys()});launcher.adopt($('#qol-controls'));mountMenuAccount(selected.account);
-worldMap=mountWorldMap({map:()=>activeMap,level:()=>game.p.level,points:()=>qol!.points(),goTo:p=>qol!.goTo(p),travelTo:m=>qol!.travelTo(m),goal:()=>qol?.goal??null,notice,onOpen:()=>clearInput(),toggleMinimap:()=>qol?.toggleMap()});
+worldMap=mountWorldMap({discovered:()=>discoveredMaps,warpTo:mapId=>{clearInput();qol?.cancel();net.send({t:'cityWarp',mapId});},map:()=>activeMap,level:()=>game.p.level,points:()=>qol!.points(),goTo:p=>qol!.goTo(p),travelTo:m=>qol!.travelTo(m),goal:()=>qol?.goal??null,notice,onOpen:()=>clearInput(),toggleMinimap:()=>qol?.toggleMap()});
 mailbox=mountMailbox({send:m=>net.send(m),onOpen:()=>clearInput(),you:()=>net.you});
 titles=mountTitles({send:m=>net.send(m),onOpen:()=>clearInput(),notice,you:()=>net.you,profile:()=>({name:selected.character.name,level:game.p.level??1,kills:(game.p as any).kills??0})});
 

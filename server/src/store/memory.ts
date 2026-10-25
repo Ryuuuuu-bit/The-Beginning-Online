@@ -1,3 +1,4 @@
+import {normalizeDiscoveredMaps} from '@the-beginning-online/shared';
 import {GuideWriteSchema} from '@the-beginning-online/shared';
 import {CITY_SPAWN} from '@the-beginning-online/shared/maps';
 import {applyInventory,applyTrade,starterInventory,economyData,checkRequest,alertIntegrity,questProgress,levelRewardClaims,consumedBuffs,type Inventory,type LedgerEntry,type EconomyContext,type EconomyResult,type TradeParty,type TradeResult} from './economy.js';
@@ -8,6 +9,11 @@ import{randomUUID}from'node:crypto';import type{Account,AuditEntry,Character,Goo
 const now=()=>new Date().toISOString();
 import {makeEconomyReport,EXTERNAL_GOLD_KINDS,type EconomyFlow,type EconomyHour,type EconomyMaterial} from '../economy-report.js';
 export class MemoryStore implements Store {
+ async discoverMap(accountId:string,id:string,mapId:import('@the-beginning-online/shared').MapId,leaseOwner?:string){
+  const c=this.chars.get(id);if(!c||c.accountId!==accountId||c.deletedAt)throw missing();
+  if(leaseOwner&&this.leases.get(id)!==leaseOwner)throw Error('Lease lost');
+  c.discoveredMaps=normalizeDiscoveredMaps(c.discoveredMaps,mapId);return [...c.discoveredMaps];
+ }
  async guide(accountId:string,id:string){const c=this.chars.get(id);if(!c||c.accountId!==accountId||c.deletedAt)throw missing();return structuredClone(c.guideProgress??null);}
  async saveGuide(accountId:string,id:string,progress:import('@the-beginning-online/shared').GuideProgress,revision:number){
   const input=GuideWriteSchema.parse({progress,revision}),c=this.chars.get(id);if(!c||c.accountId!==accountId||c.deletedAt)throw missing();

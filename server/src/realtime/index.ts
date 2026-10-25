@@ -1,3 +1,4 @@
+import {normalizeDiscoveredMaps,cityWarpDestination} from '@the-beginning-online/shared';
 import {canEnterConfluence} from '@the-beginning-online/shared';
 import {consumableBuffValue,applyPotionEffect,partyAidTarget,sunScrollTarget,castSunScroll} from '@the-beginning-online/shared';
 import { createTrades } from './trade.js';
@@ -5,7 +6,7 @@ import {TITLES,titleDefinition,normalizeTitleRecords,earnTitles,canWearTitle,tit
 import {createRankings} from './rankings.js';
 import {monsterKnockbackFor} from './monster-knockback.js';
 import {applyInventory,equipped,equippedCards,inventoryWeight,type InventoryOp,normalizeAuto,DEFAULT_UI,resolveKeys,reservedKeys,bindingProblem} from '@the-beginning-online/shared';
-import { CITY_BUILDINGS, CITY_SPAWN, travelDestination, healerHeal, isField, BOSS_RESPAWN_MS, bossTimer, setBossTimer, type MapId } from "@the-beginning-online/shared";
+import { CITY_BUILDINGS, CITY_SPAWN, MAP_INFO, travelDestination, healerHeal, isField, BOSS_RESPAWN_MS, bossTimer, setBossTimer, type MapId } from "@the-beginning-online/shared";
 import { normalizeQuests, acceptQuest, questStatus, questTurnInItems, completeQuest, recordKill, recordStore, giverPosition, QUEST_TALK_RANGE, grantExp } from "@the-beginning-online/shared";
 import {needsJob} from '../store/progress.js';
 import type { Server } from "node:http";
@@ -54,6 +55,7 @@ import { createGm } from "./gm.js";
 import { adminAccess } from "../admin.js";
 import type { EconomyContext, QuestProgress } from '../store/economy.js';
 interface Peer {
+ discoveredMaps:MapId[]; discovering?:boolean;
  titleSaving?:boolean;
  leaseOwner?:string; busy?:number; deferred?:Intent[]; uiLoading?:boolean;
  ui?:import('@the-beginning-online/shared').UISettings;
@@ -349,6 +351,21 @@ export function mountRealtime(server: Server, options: RealtimeOptions) {
   }
   return room;
  }
+ function sendMapDiscovery(peer:Peer){send(peer.ws,{t:'mapDiscovery',maps:peer.discoveredMaps});}
+ async function discoverAndTravel(peer:Peer,gate:string,destination:{mapId:MapId;x:number;z:number}){
+  const source=peer.room,p=source.game.players.get(peer.id)!;
+  if(peer.discoveredMaps.includes(destination.mapId)){transfer(peer,destination);return;}
+  peer.discovering=true;peer.input={x:0,z:0};
+  try{
+   const maps=await store.discoverMap(peer.accountId,peer.id,destination.mapId,peer.leaseOwner);
+   if(live.get(peer.id)!==peer||peer.room!==source||p.dead||peer.ws.readyState!==WebSocket.OPEN)return;
+   peer.discoveredMaps=maps;
+   if(!travelDestination(source.game.mapId,gate,p)){sendMapDiscovery(peer);return;}
+   transfer(peer,destination);
+   send(peer.ws,{t:'ev',list:[{type:'notice',playerId:peer.id,text:'เปิดจุดวาร์ป '+MAP_INFO[destination.mapId].name+' แล้ว · วาร์ปได้จากแผนที่โลกในเมือง'}]});
+  }catch(error){console.error('Map discovery failed',error instanceof Error?error.message:error);send(peer.ws,{t:'ev',list:[{type:'notice',playerId:peer.id,text:'บันทึกจุดวาร์ปไม่สำเร็จ กรุณาลองใหม่'}]});}
+  finally{peer.discovering=false;}
+ }
  function transfer(peer: Peer, destination: {mapId:MapId;x:number;z:number}) {
   const source=peer.room,p=source.game.players.get(peer.id)!;
   removeSummon(source.game,p,'transfer');removeWisp(source.game,p,'transfer');clearMasteryPoisons(source.game,p.id);clearMasteryHeals(source.game,p.id);clearAdvancedMastery(p);
@@ -362,7 +379,7 @@ export function mountRealtime(server: Server, options: RealtimeOptions) {
   target.game.players.set(p.id,p);target.peers.set(p.id,peer);target.accounts.set(p.id,peer.accountId);(target.leases??=new Map()).set(p.id,peer.leaseOwner!);
   target.saveQueue=Promise.all([source.saveQueue,target.saveQueue]).then(()=>{});
   void save(target,p.id);
-  send(peer.ws,snapshotFrame(target,peer));
+  send(peer.ws,snapshotFrame(target,peer));sendMapDiscovery(peer);
  }
 	function save(room: Room, id: string, strict = false, override:Partial<Progress> = {}) {
 		const p = room.game.players.get(id),
@@ -497,11 +514,11 @@ export function mountRealtime(server: Server, options: RealtimeOptions) {
 			{const p=g.players.get(peer.id);if(p)titleState(peer,p);}
 			send(peer.ws, snapshotFrame(room, peer));
 			sendStats(peer, g.players.get(peer.id)!);
-						social.ready(peer);void gm.ready(peer);
+						social.ready(peer);void gm.ready(peer);sendMapDiscovery(peer);
 			{const qp=g.players.get(peer.id);if(qp){sendQuests(peer,qp);mailboxState(peer,qp);}}
 			return;
 		}
-		if (!peer.ready) return;
+		if (!peer.ready || peer.discovering) return;
         if(message.t==='titles'){titleState(peer,g.players.get(peer.id)!);return;}
         if(message.t==='rankings'){
          void rankings.refresh().then(()=>{if(live.get(peer.id)===peer)send(peer.ws,rankings.board(message.board,peer.id));}).catch(()=>send(peer.ws,{t:'rankingError',text:'โหลดอันดับไม่สำเร็จ กรุณาลองใหม่'}));return;
@@ -529,7 +546,7 @@ export function mountRealtime(server: Server, options: RealtimeOptions) {
         }
 
         if(!player.autoCfg&&peer.ui?.auto)player.autoCfg=normalizeAuto(peer.ui.auto);
-        if(peer.busy&&(['travel','revive','returnCity'].includes(message.t)||(message.t==='inv'&&message.op==='use'))){(peer.deferred??=[]).push(message);return;}
+        if(peer.busy&&(['travel','cityWarp','revive','returnCity'].includes(message.t)||(message.t==='inv'&&message.op==='use'))){(peer.deferred??=[]).push(message);return;}
         if(message.t==='inv'){
          const reject=(error:string)=>send(peer.ws,{t:'inv',req:message.req,error});
          if(player.dead){reject('รอฟื้นตัวก่อน');return;}
@@ -564,10 +581,16 @@ export function mountRealtime(server: Server, options: RealtimeOptions) {
  }
  if(player.returnRemaining&&(['move','target','act','travel','auto'].includes(message.t)||(message.t==='steer'&&Math.hypot(message.dx,message.dz)>.05)))player.returnRemaining=0;
 
+        if(message.t==='cityWarp'){
+         const destination=cityWarpDestination(g.mapId,message.mapId,peer.discoveredMaps,player.dead);
+         if(!destination){send(peer.ws,{t:'ev',list:[{type:'notice',playerId:peer.id,text:player.dead?'วาร์ปไม่ได้ขณะหมดสติ':g.mapId!=='city_plaza'?'วาร์ปได้จากในเมืองเท่านั้น':'ต้องเดินทางไปเปิดแมพนี้ครั้งแรกก่อน'}]});return;}
+         if(destination.mapId==='confluence'&&!canEnterConfluence(player)){send(peer.ws,{t:'ev',list:[{type:'notice',playerId:peer.id,text:'รอยต่อพิภพต้อง Lv.100 และผ่านเควสต์คำเชิญก่อน'}]});return;}
+         transfer(peer,destination);return;
+        }
         if(message.t==='travel'){
          const destination=travelDestination(g.mapId,message.gate,player);
          if(destination?.mapId==='confluence'&&!canEnterConfluence(player)){send(peer.ws,{t:'ev',list:[{type:'notice',playerId:peer.id,text:'รอยต่อพิภพต้อง Lv.100 และผ่านเควสต์คำเชิญจากหัวหน้าทหารก่อน'}]});return;}
-         if(destination)transfer(peer,destination);
+         if(destination)void discoverAndTravel(peer,message.gate,destination);
          else send(peer.ws,{t:'ev',list:[{type:'notice',playerId:peer.id,text:'หมอกหนาเกินไป ยังผ่านไม่ได้'}]});
          return;
         }
@@ -821,6 +844,9 @@ export function mountRealtime(server: Server, options: RealtimeOptions) {
                 const refreshed=await store.character(session.accountId,character.id);if(!refreshed)throw Error('Character disappeared');character=refreshed;
                 if(ws.readyState!==WebSocket.OPEN||closing)return;
                 if(character.mapId==='confluence'&&!canEnterConfluence(character))character={...character,mapId:'city_plaza',posX:CITY_SPAWN.x,posZ:CITY_SPAWN.z};
+                const discoveredMaps=normalizeDiscoveredMaps(character.discoveredMaps,character.mapId||'city_plaza');
+                if(JSON.stringify(discoveredMaps)!==JSON.stringify(character.discoveredMaps))await store.discoverMap(session.accountId,character.id,character.mapId||'city_plaza',claimed);
+
                 const characterId=character.id,desiredMap=character.mapId||'city_plaza';let room=[...rooms.values()].find(r=>r.key===roomKey(desiredMap,characterId)&&r.accounts.has(characterId)&&(r.game.players.has(characterId)||pending.has(characterId)))||getRoom(character.mapId||'city_plaza',character.id);
                 joiningRoom=room;room.joining=(room.joining??0)+1;const mapId=room.game.mapId;
 
@@ -879,7 +905,7 @@ export function mountRealtime(server: Server, options: RealtimeOptions) {
                 const leaseOwner=claimed;
                 if(ws.readyState!==WebSocket.OPEN||closing){await store.releaseLease(character.id,leaseOwner);pending.delete(character.id);return;}
                 const peer: Peer = {
-                    leaseOwner,
+                    leaseOwner,discoveredMaps,
 					ws,
 					id: character.id,
 					accountId: session.accountId,
