@@ -1,5 +1,6 @@
 export * from "./schema.js";
 export * from './crafting.js';
+export * from './guide.js';
 export * from './game/maps.js';
 export * from "./validate.js";
 export * from "./derive.js";

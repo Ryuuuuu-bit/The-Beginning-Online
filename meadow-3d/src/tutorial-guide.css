@@ -96,3 +96,6 @@
 #ui #travel-status button{min-height:28px;font-size:10px;padding:4px 10px;border-color:#799a7d66;color:#cad8c1;background:#102a22}
 @media(prefers-reduced-motion:reduce){#guide-nav,#guide-arrow i,.guide-focus,#guide-step-toast.show{animation:none}#guide-step-toast.show{opacity:1}#guide-nav .gn-track i{transition:none}}
 #adventure-guide nav{scrollbar-width:thin;scrollbar-color:#829575 #10251e}
+#adventure-guide .ag-sync{flex:none;margin:0 0 10px;color:#9fbea5;font-size:11px;line-height:1.7}
+#adventure-guide .ag-sync button{padding:3px 9px;margin-left:5px;border:1px solid #b8a66e66;border-radius:5px;background:#2e4532;color:#e7d6a7;font:inherit;cursor:pointer}
+#adventure-guide .ag-actions button:disabled,#adventure-guide .ag-resume:disabled{opacity:.4;cursor:wait}

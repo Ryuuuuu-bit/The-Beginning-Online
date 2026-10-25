@@ -395,7 +395,7 @@ worldMap=mountWorldMap({map:()=>activeMap,level:()=>game.p.level,points:()=>qol!
 mailbox=mountMailbox({send:m=>net.send(m),onOpen:()=>clearInput(),you:()=>net.you});
 titles=mountTitles({send:m=>net.send(m),onOpen:()=>clearInput(),notice,you:()=>net.you,profile:()=>({name:selected.character.name,level:game.p.level??1,kills:(game.p as any).kills??0})});
 
-guide=mountTutorialGuide({characterId:selected.character.id,started:()=>started&&!paused,map:()=>activeMap,game:()=>game,autoPotionOn:()=>autoPotionUI.settings.hp.on||autoPotionUI.settings.mp.on,quests:()=>quests?.state,project:(x,z,y)=>renderer.screen(x,z,y),onOpen:()=>{qol?.cancel();clearInput();net.send({t:'auto',on:false});},navigate:p=>{if(started&&!paused&&!game.p.dead&&net.connected)qol?.goTo(p);}});
+guide=mountTutorialGuide({characterId:selected.character.id,level:selected.character.level,notice,started:()=>started&&!paused,map:()=>activeMap,game:()=>game,autoPotionOn:()=>autoPotionUI.settings.hp.on||autoPotionUI.settings.mp.on,quests:()=>quests?.state,project:(x,z,y)=>renderer.screen(x,z,y),onOpen:()=>{qol?.cancel();clearInput();net.send({t:'auto',on:false});},navigate:p=>{if(started&&!paused&&!game.p.dead&&net.connected)qol?.goTo(p);}});
 if(pendingUI)qol.receive(pendingUI);
 (window as any).__FIELDS__={snapshot:()=>({renderer:'Canvas2D',mapId:activeMap,transitioning:switching,network:{connected:net.connected,tick:worldState.lastTick,you:net.you},started,paused,p:{...game.p},enemies:game.enemies.map(e=>({...e})),target:game.target,kills:game.kills,others:worldState.others,environment:renderer.snapshot()}),project:(x:number,z:number,y=0)=>renderer.screen(x,z,y),
  // Dev only: replay a skill event at the local player to preview its VFX without the server.

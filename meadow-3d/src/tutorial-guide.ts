@@ -1,18 +1,20 @@
 import {keyLabel,loadGameData} from '@the-beginning-online/shared';
 import {KEYS} from './keys';
 import {GATES,GATE_CAPTAIN,CITY_BUILDINGS,LAYOUTS,gateRoute,type MapId} from '@the-beginning-online/shared/maps';
-import {readGuideProgress} from './guide-progress';
+import {readGuideProgress,readGuideCache,createGuideSync} from './guide-progress';
+import {api,ApiError} from './web/api';
+import type {GuideState} from '@the-beginning-online/shared';
 import './tutorial-guide.css';
 
 /**
  * Early-game navigator: one small glass card that teaches the first steps one at a time, an arrow on screen
  * toward the next goal and a ring on the minimap. It never pauses the game or takes clicks away from the world.
- * Progress is kept per character in localStorage (tn-guide:<characterId>), so it does not repeat.
+ * Progress is saved per character on the server; browser storage only migrates legacy data and retries unsaved changes.
  */
 type Point={x:number;z:number;label:string;kind?:string};
 interface Ctx{map:MapId;p:any;game:any;mobile:boolean;quests:{active:Record<string,{progress:number[]}>;done:Record<string,number>}}
 interface Step{id:string;title:string;text:(c:Ctx)=>string;target?:(c:Ctx)=>Point|null;focus?:string;start?:(c:Ctx,s:any)=>void;done:(c:Ctx,s:any)=>boolean}
-export interface GuideOptions{characterId:string;started:()=>boolean;map:()=>MapId;game:()=>any;project:(x:number,z:number,y:number)=>{x:number;y:number};autoPotionOn:()=>boolean;quests:()=>Ctx['quests']|undefined;onOpen:()=>void;navigate:(point:{x:number;z:number;kind:string;name:string})=>void}
+export interface GuideOptions{characterId:string;level:number;started:()=>boolean;map:()=>MapId;game:()=>any;project:(x:number,z:number,y:number)=>{x:number;y:number};autoPotionOn:()=>boolean;quests:()=>Ctx['quests']|undefined;notice:(text:string)=>void;onOpen:()=>void;navigate:(point:{x:number;z:number;kind:string;name:string})=>void}
 
 const learnedTotal=(p:any)=>Object.values(p.skills||{}).reduce((a:number,b:any)=>a+(Number(b)||0),0);
 /** The gate on the current map that leads toward `dest` (city sits between the meadow and the forest). */
@@ -64,8 +66,9 @@ export function mountTutorialGuide(o:GuideOptions){
  const key='tn-guide:'+o.characterId;
  let saved:{step:number;off?:boolean;min?:boolean}|null=null;
  try{saved=readGuideProgress(localStorage.getItem(key),STEPS.length);}catch{}
- let step=saved?.step??0,off=!!saved?.off,min=!!saved?.min,state:any=null,decided=!!saved;
- const save=()=>{try{localStorage.setItem(key,JSON.stringify({step,off,min}));}catch{}};
+ const initial={version:1 as const,step:saved?.step??0,off:saved?.off??(o.level>=8),min:!!saved?.min};
+ let step=initial.step,off=initial.off,min=initial.min,state:any=null;
+ const save=()=>sync.update({version:1,step,off,min});
  const mobile=()=>false; // PC gameplay only; window width does not select touch instructions.
 
  const panel=document.createElement('aside');panel.id='guide-nav';panel.hidden=true;panel.setAttribute('aria-label','คู่มือขั้นตอนปัจจุบัน');
@@ -95,7 +98,7 @@ export function mountTutorialGuide(o:GuideOptions){
  library.querySelector<HTMLButtonElement>('.ag-close')!.onclick=()=>library.close();
  library.querySelector<HTMLButtonElement>('.ag-go')!.onclick=()=>go(selected);
  library.querySelector<HTMLButtonElement>('.ag-open')!.onclick=()=>openAction(selected);
- const track=(index:number)=>{step=index;off=false;min=false;decided=true;state=null;save();library.close();};
+ const track=(index:number)=>{if(!sync.ready)return;step=index;off=false;min=false;state=null;save();library.close();};
  library.querySelector<HTMLButtonElement>('.ag-track')!.onclick=()=>track(selected);
  library.querySelector<HTMLButtonElement>('.ag-resume')!.onclick=()=>track(Math.min(step,STEPS.length-1));
  for(const [index,s] of STEPS.entries()){
@@ -111,6 +114,25 @@ export function mountTutorialGuide(o:GuideOptions){
  restart.onclick=()=>{(document.querySelector('#settings-window') as HTMLDialogElement|null)?.close();openLibrary();};
  restart.className='settings-action';restart.textContent='เปิดคู่มือนำทางมือใหม่';
  document.querySelector('#settings-window .settings-help-host')?.append(restart);
+
+ const syncNotice=document.createElement('p');syncNotice.className='ag-sync';syncNotice.setAttribute('role','status');syncNotice.innerHTML='<span></span> <button type="button" hidden>ลองอีกครั้ง</button>';library.querySelector('footer')!.before(syncNotice);
+ const retry=syncNotice.querySelector<HTMLButtonElement>('button')!,cacheKey='tn-guide-server:'+o.characterId;
+ let lastSyncStatus='';
+ let cached=null;try{cached=readGuideCache(localStorage.getItem(cacheKey));}catch{}
+ const endpoint='/characters/'+encodeURIComponent(o.characterId)+'/guide';
+ const sync=createGuideSync({initial,cached,
+  read:async()=>(await api<{guide:GuideState|null}>(endpoint)).guide,
+  write:async(progress,revision)=>{try{return await api<{guide:GuideState|null;conflict:boolean}>(endpoint,{method:'PUT',keepalive:true,body:JSON.stringify({progress,revision})});}catch(error){if(error instanceof ApiError&&error.status===409)return {guide:null,conflict:true};throw error;}},
+  cache:value=>{try{localStorage.setItem(cacheKey,JSON.stringify(value));}catch{}},
+  apply:value=>{step=value.step;off=value.off;min=value.min;state=null;selected=Math.min(step,STEPS.length-1);lastLibrary='';},
+  status:value=>{
+   if(value==='error'&&lastSyncStatus!=='error')o.notice('Guide ยังไม่บันทึกหรือโหลดสำเร็จ · เปิดคู่มือแล้วกด “ลองอีกครั้ง”');
+   lastSyncStatus=value;launcher.querySelector('small')!.textContent=value==='error'?'ยังไม่บันทึก / โหลด · เปิดเพื่อลองอีกครั้ง':'เริ่มต้นเล่น · บทเรียน · นำทาง';
+   syncNotice.querySelector('span')!.textContent={loading:'กำลังโหลด Guide ของตัวละคร…',saving:'กำลังบันทึก Guide กับตัวละคร…',saved:'Guide บันทึกกับตัวละครแล้ว · เล่นต่อข้ามเครื่องได้',error:'Guide ยังบันทึกหรือโหลดจากเซิร์ฟเวอร์ไม่สำเร็จ · ลองอีกครั้ง',conflict:'โหลด Guide ล่าสุดจากอีกอุปกรณ์แล้ว'}[value];retry.hidden=value!=='error';
+   for(const button of library.querySelectorAll<HTMLButtonElement>('.ag-track,.ag-resume'))button.disabled=!sync.ready;
+  },
+ });
+ retry.onclick=()=>void sync.retry();window.addEventListener('online',()=>void sync.retry());void sync.start();
 
  function drawLibrary(c:Ctx){
   if(!c.p)return;
@@ -160,10 +182,9 @@ export function mountTutorialGuide(o:GuideOptions){
   /** Own-player events (main.ts forwards e.playerId===you). */
   event(e:any){if(!state)return;if(e.type==='skill')state.cast=true;if(e.type==='autoPotion')state.drank=true;},
   update(){
+   if(!sync.ready){panel.hidden=true;arrow.hidden=true;setFocus();return;}
    const c=ctx(),active=o.started()&&!off&&step<STEPS.length&&!!c.p;
    if(library.open)drawLibrary(c);
-   // Established characters opt in from the menu instead of being interrupted by the opening.
-   if(active&&!decided&&c.p.level>0){decided=true;if(c.p.level>=8){off=true;save();panel.hidden=true;arrow.hidden=true;return;}}
    if(!active||step>=STEPS.length){panel.hidden=true;arrow.hidden=true;setFocus();return;}
    const ctl=document.querySelector<HTMLElement>('#control-hints');if(ctl)ctl.hidden=true;
    if(!state)begin();
