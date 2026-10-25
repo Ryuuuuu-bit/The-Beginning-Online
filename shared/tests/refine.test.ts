@@ -8,10 +8,10 @@ const bag = (...items: OwnedItem[]): Inventory => ({ version: 1, autoPickup: tru
 const refine = (inv: Inventory, target: OwnedItem, gold: number, roll?: number) => applyInventory({ gold, inventory: inv }, { op: "refine", id: target.id, roll }, profile, data, () => "uuid");
 const tpl = (id: string) => data.items.items.find((t) => t.id === id)!;
 
-test("refine rates: safe up to +4, riskier within each progression band, capped at +15", () => {
+test("refine rates: safe up to +4, strictly decreasing afterwards including +10 to +11, capped at +15", () => {
 	assert.equal(REFINE_TABLE.length, REFINE_MAX);
 	assert.ok(REFINE_TABLE.slice(0, 4).every((r) => r.chance === 1));
-	for (let i = 4; i < REFINE_MAX; i++) if(i!==10) assert.ok(REFINE_TABLE[i].chance < REFINE_TABLE[i - 1].chance && REFINE_TABLE[i].gold > REFINE_TABLE[i - 1].gold);
+	for (let i = 4; i < REFINE_MAX; i++) assert.ok(REFINE_TABLE[i].chance > 0 && REFINE_TABLE[i].chance < REFINE_TABLE[i - 1].chance && REFINE_TABLE[i].gold > REFINE_TABLE[i - 1].gold);
 	assert.match(String(refineQuote(item("training_sword", { refine: 15 }), data)), /\+15/);
 	assert.match(String(refineQuote(item("jade_ring"), data)), /ตีบวกได้เฉพาะ/);
 	assert.match(String(refineQuote(item("red_small"), data)), /ตีบวกได้เฉพาะ/);
@@ -27,6 +27,33 @@ test("a successful refine spends one stone and gold and raises the level", () =>
 	assert.equal(after.find((i) => i.id === stones.id)!.qty, 2);
 	assert.equal(out.state.gold, 5000 - REFINE_TABLE[6].gold);
 	assert.equal(out.ledger.reduce((s, l) => s + l.goldDelta, 0), -REFINE_TABLE[6].gold, "gold change is on the ledger");
+});
+
+test("refine budget includes repairs after failures and keeps the protected final band affordable",()=>{
+ const gold:number[]=[],stones:number[]=[];
+ for(let level=0;level<REFINE_MAX;level++){
+  const q=refineQuote(item('training_sword',{refine:level}),data);assert.notEqual(typeof q,'string');if(typeof q==='string')throw Error(q);
+  // First-passage cost: failed attempts must recover every lost level before retrying.
+  gold[level]=(q.gold+(1-q.chance)*gold.slice(q.failTo,level).reduce((a,b)=>a+b,0))/q.chance;
+  stones[level]=(1+(1-q.chance)*stones.slice(q.failTo,level).reduce((a,b)=>a+b,0))/q.chance;
+ }
+ assert.ok(gold.slice(0,10).reduce((a,b)=>a+b,0)<=80000,'+0 to +10 mean forge fee');
+ assert.ok(stones.slice(0,10).reduce((a,b)=>a+b,0)<=25,'+0 to +10 mean stones');
+ assert.ok(gold.slice(10).reduce((a,b)=>a+b,0)<=1000000,'+10 to +15 mean forge fee');
+ assert.ok(stones.slice(10).reduce((a,b)=>a+b,0)<=100,'+10 to +15 mean stones');
+});
+
+test("every weapon/armour refine step uses the quoted probability boundary and spends resources on either result",()=>{
+ for(const [template,stone] of [['training_sword','weapon_stone'],['traveler_clothes','armour_stone']])for(let level=0;level<REFINE_MAX;level++){
+  const gear=item(template,{refine:level}),q=refineQuote(gear,data);if(typeof q==='string')throw Error(q);
+  for(const roll of [q.chance-1e-9,...(q.chance<1?[q.chance]:[])]){
+   const material=item(stone,{qty:2}),before=bag(gear,material),out=refine(before,gear,100000,roll);
+   assert.equal(out.state.inventory.items.find(i=>i.id===gear.id)!.refine,roll<q.chance?q.next:q.failTo);
+   assert.equal(out.state.inventory.items.find(i=>i.id===material.id)!.qty,1);
+   assert.equal(out.state.gold,100000-q.gold);
+   assert.equal(gear.refine,level,'input inventory is not mutated');
+  }
+ }
 });
 
 test("a failed refine above +4 drops one level; +1..+4 cannot fail", () => {

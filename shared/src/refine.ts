@@ -7,11 +7,11 @@ export const REFINE_SAFE_LEVEL = 10;
 /** Index = target level - 1. +1..+4 never fail; reaching +10 establishes a permanent floor. */
 export const REFINE_TABLE: readonly { chance: number; gold: number }[] = [
 	{ chance: 1, gold: 200 }, { chance: 1, gold: 400 }, { chance: 1, gold: 700 }, { chance: 1, gold: 1000 },
-	{ chance: 0.75, gold: 1500 }, { chance: 0.6, gold: 2200 }, { chance: 0.45, gold: 3000 },
-	{ chance: 0.3, gold: 4000 }, { chance: 0.2, gold: 5500 }, { chance: 0.12, gold: 7500 },
-	// The protected +10 floor starts a new progression band.
-	{ chance: 0.55, gold: 10000 }, { chance: 0.45, gold: 14000 }, { chance: 0.35, gold: 19000 },
-	{ chance: 0.25, gold: 25000 }, { chance: 0.15, gold: 32000 },
+	{ chance: 0.8, gold: 1500 }, { chance: 0.75, gold: 2200 }, { chance: 0.7, gold: 3000 },
+	{ chance: 0.65, gold: 4000 }, { chance: 0.6, gold: 5500 }, { chance: 0.55, gold: 7500 },
+	// Keep odds falling across +10; fees include the expected cost of recovering failed levels.
+	{ chance: 0.5, gold: 8000 }, { chance: 0.45, gold: 10000 }, { chance: 0.4, gold: 13000 },
+	{ chance: 0.35, gold: 17000 }, { chance: 0.3, gold: 22000 },
 ];
 /** Per refine level: weapons gain their primary ATK/MATK, other armour pieces gain hard DEF, as a share of the item's base value. */
 export const REFINE_WEAPON_SHARE = 0.05;

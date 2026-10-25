@@ -66,7 +66,7 @@ test('every refine step improves gear and high bands are worth substantially mor
  const t=data.items.items.find(t=>t.id==='crystal_sword')!;
  assert.ok(refineBonusValue(t,10)>=Math.round(t.atk!*.04*10)*2);
  assert.ok(refineBonusValue(t,15)>=Math.round(t.atk!*.04*15)*2);
- assert.equal(REFINE_TABLE[9].chance,.12);assert.equal(REFINE_TABLE[14].chance,.15);
+ assert.equal(REFINE_TABLE[9].chance,.55);assert.equal(REFINE_TABLE[14].chance,.3);
  for(const level of [10,15])assert.ok(refineModifiers({refine:level},t).length>1);
 });
 
