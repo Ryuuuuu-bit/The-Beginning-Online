@@ -17,8 +17,8 @@ body #ui .map.expanded #map{width:min(256px,calc(100vw - 40px))!important;height
  body #ui .tools{position:absolute;top:120px;right:56px;width:44px;height:44px;visibility:visible!important}
  body #ui .tools #audio{top:0;right:0}
  body #ui .tools :is(#quality,#help,#pause){display:none}
- body #ui #guide-nav,body #ui #guide-nav.min{--guide-top:176px;left:8px;width:min(288px,calc((100vw - 32px) / 2));max-width:none;padding:6px;transform:none;max-height:max(52px,calc(var(--combat-top,100dvh) - 84px - 176px))}
- body #ui .quest:not(.collapsed),body #ui .quest.collapsed{--journal-top:176px;right:8px;width:min(288px,calc((100vw - 32px) / 2));padding:4px 6px;transform:none;visibility:visible!important;max-height:max(44px,calc(var(--combat-top,100dvh) - 84px - 176px))}
+ body #ui #guide-nav,body #ui #guide-nav.min{--guide-top:168px;left:8px;width:min(288px,calc((100vw - 32px) / 2));max-width:none;padding:6px;transform:none;max-height:max(52px,calc(var(--combat-top,100dvh) - 84px - 168px))}
+ body #ui .quest:not(.collapsed),body #ui .quest.collapsed{--journal-top:168px;right:8px;width:min(288px,calc((100vw - 32px) / 2));padding:4px 6px;transform:none;visibility:visible!important;max-height:max(44px,calc(var(--combat-top,100dvh) - 84px - 168px))}
  body #ui #journal-toggle{min-height:44px}
  body #joystick{display:none}
 }
