@@ -95,6 +95,26 @@ test("AUTO casts the skills its settings allow, and skips switched-off ones", ()
 });
 
 import { resolveKeys, actionKeys, reservedKeys, bindingProblem, DEFAULT_KEYS, UISettingsSchema, validateHotbar, newJob, loadGameData as loadData } from "../src/index.node.js";
+test('F talk and T AUTO migrate old profiles without stealing custom actions or hotbar keys',()=>{
+ const legacy=resolveKeys({...DEFAULT_KEYS,auto:'KeyF',talk:undefined});
+ assert.equal(legacy.auto,'KeyT');assert.equal(legacy.talk,'KeyF');
+ for(const [saved,bar] of [
+  [{auto:'KeyF',skills:'KeyT'},[]],
+  [{attack:'KeyF',auto:'KeyZ'},[]],
+  [{auto:'KeyZ'},['KeyF','KeyT']],
+ ] as const){
+  const keys=resolveKeys(saved,bar);
+  for(const [action,code]of Object.entries(saved))if(!(action==='auto'&&code==='KeyF'))assert.equal(keys[action as keyof typeof keys],code);
+  assert.equal(bindingProblem(keys,bar),null);
+  assert.deepEqual(resolveKeys(keys,bar),keys);
+ }
+ const remapped=resolveKeys({...DEFAULT_KEYS,talk:'KeyG',auto:'KeyF'});
+ assert.equal(remapped.talk,'KeyG');assert.equal(remapped.auto,'KeyF');
+ assert.match(bindingProblem({...DEFAULT_KEYS,auto:'KeyF'})!,/ใช้อยู่/);
+ assert.ok(UISettingsSchema.safeParse({scale:100,windows:{},keys:{returnCity:'KeyH',talk:'KeyF',auto:'KeyT'}}).success);
+ const job=newJob();
+ assert.throws(()=>validateHotbar(job,job.hotbar.map((s,i)=>i===9?{...s,key:'KeyF'}:s),loadData(),reservedKeys(DEFAULT_KEYS)),/ปุ่ม/);
+});
 test('HP/MP defaults preserve saved actions and every existing hotbar binding',()=>{
  assert.equal(resolveKeys().potion,'KeyQ');assert.equal(resolveKeys().manaPotion,'KeyE');
  assert.equal(resolveKeys({potion:'KeyR'}).potion,'KeyR');
@@ -116,7 +136,8 @@ test("action keys: defaults with old alternates, rebinding frees the old key, co
 	const d = resolveKeys(undefined);
 	assert.equal(d.attack, "Space");
 	assert.deepEqual(actionKeys(d).attack, ["Space", "KeyJ"]);
-	assert.deepEqual(actionKeys(d).auto, ["KeyF", "KeyT"]);
+	assert.deepEqual(actionKeys(d).auto, ["KeyT"]);
+	assert.deepEqual(actionKeys(d).talk, ["KeyF"]);
 	// Saved settings from before this change (only two keys) still resolve to full defaults.
 	assert.deepEqual(resolveKeys({ returnCity: "KeyB", pickupAll: "KeyZ" }), { ...DEFAULT_KEYS, returnCity: "KeyB" });
 	assert.ok(!reservedKeys(d).includes("KeyZ"));

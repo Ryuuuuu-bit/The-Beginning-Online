@@ -9,6 +9,7 @@ export const KEY_ACTIONS = [
 	"potion",
 	"manaPotion",
 	"auto",
+	"talk",
 	"nextTarget",
 	"inventory",
 	"skills",
@@ -23,7 +24,8 @@ export const DEFAULT_KEYS: KeyBindings = {
 	dash: "ShiftLeft",
 	potion: "KeyQ",
 	manaPotion: "KeyE",
-	auto: "KeyF",
+	auto: "KeyT",
+	talk: "KeyF",
 	nextTarget: "Tab",
 	inventory: "KeyI",
 	skills: "KeyK",
@@ -31,7 +33,7 @@ export const DEFAULT_KEYS: KeyBindings = {
 	returnCity: "KeyH",
 };
 /** Second keys kept from the old fixed layout; live only while the action still has its default key. */
-export const ALT_KEYS: Partial<KeyBindings> = { attack: "KeyJ", auto: "KeyT", dash: "ShiftRight" };
+export const ALT_KEYS: Partial<KeyBindings> = { attack: "KeyJ", dash: "ShiftRight" };
 export const FIXED_KEYS = ["KeyW", "KeyA", "KeyS", "KeyD", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Escape", "KeyM"] as const;
 export const BINDABLE_KEY =
 	/^(Key[A-Z]|Digit[0-9]|F([1-9]|1[0-2])|Space|Tab|ShiftLeft|ShiftRight|Backquote|Minus|Equal|BracketLeft|BracketRight|Semicolon|Quote|Comma|Period|Slash|Backslash|Numpad[0-9])$/;
@@ -42,11 +44,13 @@ export function resolveKeys(saved?: Partial<Record<string, string>> | null, hotb
 	const explicit = new Set<KeyAction>();
 	for (const action of KEY_ACTIONS) {
 		const code = saved?.[action];
+		// Old profiles used F for AUTO before a separate talk binding existed.
+		if (action === 'auto' && code === 'KeyF' && saved?.talk === undefined) continue;
 		if (typeof code === "string" && BINDABLE_KEY.test(code) && !(FIXED_KEYS as readonly string[]).includes(code)) {out[action] = code;explicit.add(action);}
 	}
-	// New potion defaults must never take a saved action or hotbar key.
-	for (const action of ['potion','manaPotion'] as const) {
-		if (explicit.has(action) && !hotbarKeys.includes(out[action])) continue;
+	// New defaults must not take a saved action/hotbar key; explicit conflicts remain invalid.
+	for (const action of KEY_ACTIONS) {
+		if (explicit.has(action) && ((action !== 'potion' && action !== 'manaPotion') || !hotbarKeys.includes(out[action]))) continue;
 		const occupied = new Set([...hotbarKeys,...FIXED_KEYS,...KEY_ACTIONS.filter(a=>a!==action).flatMap(a=>[out[a],...(ALT_KEYS[a]?[ALT_KEYS[a]!]:[])])]);
 		out[action] = [DEFAULT_KEYS[action],'KeyR',...'QVBGZXEUYOPLNF'.split('').map(k=>'Key'+k),...Array.from({length:12},(_,i)=>'F'+(i+1))].find(code=>!occupied.has(code))!;
 	}

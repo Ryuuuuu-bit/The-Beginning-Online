@@ -1,0 +1,37 @@
+/* Opaque painted backing keeps the first-run guide legible without a live blur. */
+#ui #control-hints{
+ width:min(560px,calc(100vw - 40px));max-height:calc(100dvh - 56px);overflow:auto;box-sizing:border-box;
+ top:46%;padding:27px 30px 22px;border:1px solid #bfa57880;border-radius:16px;
+ background:radial-gradient(ellipse at 0 0,#36564a55,transparent 65%),linear-gradient(145deg,#192d29,#10201e);
+ color:#eae9d8;box-shadow:inset 0 0 0 4px #11211e,inset 0 0 0 5px #bfa57820,0 20px 65px #040e0c80;
+ backdrop-filter:none;-webkit-backdrop-filter:none;font:14px/1.65 var(--font-ui);
+}
+#ui #control-hints .hints-heading{display:flex;align-items:center;gap:15px}
+#ui #control-hints .hints-emblem{display:grid;place-items:center;width:50px;height:50px;flex:none;border:1px solid #bfa57855;border-radius:13px;background:#d9ba7b0b;color:#dfc28c}
+#ui #control-hints svg{width:32px;height:32px;stroke:currentColor;stroke-width:1.3}
+#ui #control-hints .hints-eyebrow{margin:0 0 3px;font-size:11px;letter-spacing:.07em;color:#c8af7f}
+#ui #control-hints h2{margin:0;font-size:23px;font-weight:600;line-height:1.5;letter-spacing:-.03em;color:#f4ecd7}
+#ui #control-hints .hints-intro{margin:13px 0 19px;color:#a8bbb0;font-size:13px}
+#ui #control-hints .hints-basics{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+#ui #control-hints .hints-basics section{padding:15px 12px 13px;border:1px solid #b5c9b21a;border-radius:10px;background:#09191666;text-align:center}
+#ui #control-hints h3{margin:0 0 12px;font-size:13px;font-weight:500;color:#e1dbc5}
+#ui #control-hints h3 span{margin-right:5px;color:#8fae9d;font:10px var(--font-ui)}
+#ui #control-hints kbd{display:inline-grid;place-items:center;min-width:27px;height:27px;box-sizing:border-box;padding:0 7px;border:1px solid #9db8a24d;border-bottom-width:3px;border-radius:5px;background:linear-gradient(#30473b,#21382f);color:#f2edd8;font:500 12px var(--font-ui);white-space:nowrap}
+#ui #control-hints .hints-wasd{height:62px;display:flex;flex-direction:column;align-items:center;gap:4px}
+#ui #control-hints .hints-wasd>div{display:flex;gap:4px}
+#ui #control-hints .hints-mouse{height:62px;display:grid;place-items:center;color:#bbd8c4}
+#ui #control-hints .hints-mouse svg{height:51px;width:41px}
+#ui #control-hints .hints-basics p{margin:11px 0 0;font-size:12px;color:#b5c5b9;line-height:1.8}
+#ui #control-hints .hints-basics b{font-weight:500;color:#e4e7d6}
+#ui #control-hints .hints-shortcuts{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;margin:20px 0 12px}
+#ui #control-hints .hints-shortcuts>div{text-align:center}
+#ui #control-hints dt{margin:0 0 5px}
+#ui #control-hints dd{margin:0;font-size:11px;color:#c6cbb6}
+#ui #control-hints .hints-skill-note{display:flex;align-items:center;justify-content:center;gap:9px;padding:10px 0 15px;font-size:12px;color:#9cb3a4}
+#ui #control-hints .hints-skill-note kbd{height:24px;font-size:10px;min-width:39px}
+#ui #control-hints .hints-basics p kbd{min-width:20px;height:21px;padding:0 4px;font-size:10px;vertical-align:baseline}
+#ui #control-hints .hints-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid #c3ac7d26;padding-top:16px}
+#ui #control-hints .hints-footer small{font-size:11px;color:#8fa69a}
+#ui #control-hints button{display:inline-flex;align-items:center;justify-content:center;gap:22px;min-height:43px;padding:9px 19px;border:1px solid #ead5a3;border-radius:7px;background:linear-gradient(135deg,#e4cf9c,#c5a367);color:#1e3228;font:600 13px var(--font-ui);box-shadow:inset 0 1px #fff5d94d;cursor:pointer}
+#ui #control-hints button:hover{background:linear-gradient(135deg,#efddb5,#d2b67e)}
+#ui #control-hints button:focus-visible{outline:2px solid #e4d6a6;outline-offset:4px}

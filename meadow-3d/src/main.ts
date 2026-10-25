@@ -14,7 +14,7 @@ import {CombatFeel,AutoQuality} from './combat-feel';
 import {mountInventory} from './inventory-ui';
 import {mountAutoSettings} from './auto-ui';
 import {mountSettingsWindow} from './settings-ui';
-import {loadGameData,rarityColors} from '@the-beginning-online/shared';
+import {loadGameData,rarityColors,keyLabel} from '@the-beginning-online/shared';
 import { CITY, MAP_INFO, isField, CITY_BUILDINGS, CITY_HOUSES, NEW_BUILDINGS, CITY_FOUNTAIN, HEALER, GATE_CAPTAIN, GATES, GATE_LINKS, LAYOUTS, FIELD_BOSS, type MapId } from '@the-beginning-online/shared/maps';
 import jobs from '../../shared/data/jobs.json' with {type:'json'};
 import { playEventAudio } from './audio-events';
@@ -139,7 +139,7 @@ async function switchMap(id:MapId){
  }finally{switching=false;fade.hidden=failedMap!==id;}
 }
 const npcTalk=document.createElement('button');npcTalk.id='npc-talk';npcTalk.hidden=true;$('#ui').append(npcTalk);
-const npcDialog=document.createElement('dialog');npcDialog.id='npc-dialog';npcDialog.innerHTML='<h2></h2><p></p><div class="npc-extra"></div><button class="npc-close">ปิด</button>';document.body.append(npcDialog);npcDialog.querySelector<HTMLButtonElement>('.npc-close')!.onclick=()=>npcDialog.close();npcDialog.addEventListener('close',()=>quests?.unmount());
+const npcDialog=document.createElement('dialog');npcDialog.id='npc-dialog';npcDialog.setAttribute('aria-labelledby','npc-dialog-title');npcDialog.innerHTML='<header class="npc-dialog-head"><span>พูดคุยและเควส</span><h2 id="npc-dialog-title"></h2></header><div class="npc-dialog-body"><p class="npc-intro"></p><div class="npc-extra"></div></div><footer class="npc-dialog-foot"><span>Esc เพื่อปิด</span><button type="button" class="npc-close">ปิดหน้าต่าง</button></footer>';document.body.append(npcDialog);npcDialog.querySelector<HTMLButtonElement>('.npc-close')!.onclick=()=>npcDialog.close();npcDialog.addEventListener('close',()=>quests?.unmount());
 let nearNpc: {name:string;kind:string;text:string}|null=null;
 npcTalk.onclick=()=>{if(!nearNpc)return;clearInput();const kind=nearNpc.kind,shopKind=['market','forge','storage'].includes(kind);if(shopKind&&!quests?.pending(kind)){inventoryUI.shop(kind);return;}if(kind==='heal')net.send({t:'heal'});npcDialog.querySelector('h2')!.textContent=nearNpc.name;npcDialog.querySelector('p')!.textContent=shopKind?(kind==='storage'?'ฝากของไว้ที่นี่ได้ ของในคลังปลอดภัยเสมอ':'มาดูของก่อนสิ'):nearNpc.text;const extra=npcDialog.querySelector<HTMLElement>('.npc-extra')!;extra.replaceChildren();if(shopKind){const open=document.createElement('button');open.className='npc-shop-open primary';open.textContent=kind==='storage'?'เปิดคลังเก็บของ':'เปิดร้าน';open.onclick=()=>{npcDialog.close();inventoryUI.shop(kind);};extra.append(open);}quests?.mount(kind,extra);if(!npcDialog.open)npcDialog.showModal();};
 function mapInteractions(){
@@ -149,7 +149,7 @@ function mapInteractions(){
   const n=nearbyTownNpc(p.x,p.z);
   if(n&&n.kind!=='angel')nearNpc={name:n.name,kind:n.kind,text:n.line};
  }
- npcTalk.hidden=!nearNpc;npcTalk.textContent=nearNpc?'คุย · '+nearNpc.name:'';
+ npcTalk.hidden=!nearNpc;npcTalk.textContent=nearNpc?`คุย [${keyLabel(KEYS.talk[0])}] · ${nearNpc.name}`:'';
  const gates=GATES[activeMap];let closed='';
  for(const [gate,point]of Object.entries(gates))if(Math.hypot(p.x-point.x,p.z-point.z)<3){
   const open=!!GATE_LINKS[activeMap][gate];
@@ -252,6 +252,14 @@ window.addEventListener('keydown',e=>{
  if(isKey('stats',e.code)&&started&&!e.repeat){e.preventDefault();statsUI.toggle();return;}
  if(statsUI.open)return;
  if(!started||paused||game.p.dead||$<HTMLDialogElement>('#guide').open)return;
+ if(isKey('talk',e.code)){
+  e.preventDefault();
+  if(!e.repeat&&activeMap==='city_plaza'&&!switching){
+   const npc=nearbyTownNpc(game.p.x,game.p.z);
+   if(npc){mapInteractions();const button=npc.kind==='angel'?$('#angel-talk'):npcTalk;if(!button.hidden)button.click();}
+  }
+  return;
+ }
  if(Object.values(KEYS).some(codes=>(codes as readonly string[]).includes(e.code)))e.preventDefault();
  if(['up','down','left','right'].some(a=>isKey(a as keyof typeof KEYS,e.code))){qol?.cancel();stopAuto();}
  keys.add(e.code);if(e.repeat)return;

@@ -12,6 +12,7 @@ interface PlayerView { level: number; x: number; z: number; inventory?: Inventor
 /** NPC quest dialogs and the journal tracker. The server validates every accept/turn-in. */
 export function mountQuests(options: { send: (m: unknown) => void; player: () => PlayerView; map: () => MapId; navigate: (point: QuestDestination) => void; notice: (text: string, chat?: 'system' | 'loot') => void }) {
 	let state: QuestState = emptyQuests(), ready = new Set<string>(), openGiver: QuestGiver | null = null, onChange: (() => void) | null = null;
+	let submittedFocus: HTMLButtonElement | null = null;
 	let category: 'story'|'daily'|'weekly' = 'story';
 	const tracker = document.createElement('ol');
 	tracker.id = 'quest-tracker';
@@ -71,18 +72,25 @@ export function mountQuests(options: { send: (m: unknown) => void; player: () =>
 		 const b=document.createElement('button');b.type='button';b.textContent=label;b.setAttribute('aria-pressed',String(category===id));
 		 b.onclick=()=>{category=id;const next=section(giver);box.replaceWith(next);next.querySelector<HTMLButtonElement>('[aria-pressed=true]')?.focus();};categories.append(b);
 		}box.append(categories);
+		const priority = { ready: 0, active: 1, available: 2, cooldown: 3, done: 4, locked: 5 };
 		const list = questsFor(giver, data).map(q => ({ q, status: questStatus(q, state, p.level, now, p.inventory) }))
 			.filter(({q,status})=>(q.repeatPeriod??'story')===category &&
-			 (q.repeatPeriod ? ['active','ready'].includes(status)||(p.level>=q.level&&p.level<=(q.maxLevel??100)) : status!=='locked'||(q.requires.every(r=>state.done[r]!==undefined)&&p.level<q.level&&q.level<=p.level+5)));
+			 (q.repeatPeriod ? ['active','ready'].includes(status)||(p.level>=q.level&&p.level<=(q.maxLevel??100)) : status!=='locked'||(q.requires.every(r=>state.done[r]!==undefined)&&p.level<q.level&&q.level<=p.level+5))).sort((a, b) => priority[a.status] - priority[b.status]);
+		const locked = document.createElement('details');
+		locked.className = 'npc-locked';
+		const summary = document.createElement('summary');
+		summary.textContent = `เควสที่ยังล็อก · ${list.filter(q => q.status === 'locked').length}`;
+		locked.append(summary);
 		for (const { q, status } of list) {
 			const card = document.createElement('article');
 			card.className = 'npc-quest';
 			card.dataset.status = status;
+			card.dataset.quest = q.id;
 			const head = document.createElement('h3');
 			head.textContent = q.nameTh;
 			const badge = document.createElement('span');
 			badge.className = 'quest-badge';
-			badge.textContent = { available: 'ใหม่', active: 'กำลังทำ', ready: 'ส่งได้', done: 'สำเร็จแล้ว', cooldown: 'รอรอบใหม่', locked: `ต้องการระดับ ${q.level}` }[status];
+			badge.textContent = { available: 'รับได้', active: 'กำลังทำ', ready: 'ส่งได้', done: 'สำเร็จแล้ว', cooldown: 'รอรอบใหม่', locked: `ต้องการระดับ ${q.level}` }[status];
 			head.append(badge);
 			const text = document.createElement('p');
 			text.textContent = status === 'done' || status === 'cooldown' ? q.complete : q.offer;
@@ -115,17 +123,19 @@ export function mountQuests(options: { send: (m: unknown) => void; player: () =>
 			const button = (label: string, op: string, primary = false) => {
 				const b = document.createElement('button');
 				b.type = 'button';
+				b.dataset.op = op;
 				b.textContent = label;
 				if (primary) b.className = 'primary';
-				b.onclick = () => { b.disabled = true; options.send({ t: 'quest', op, id: q.id }); };
+				b.onclick = () => { submittedFocus = document.activeElement === b ? b : null; b.disabled = true; options.send({ t: 'quest', op, id: q.id }); };
 				actions.append(b);
 			};
 			if (status === 'available') button('รับเควสต์', 'accept', true);
 			if (status === 'ready') button('ส่งเควสต์', 'turnIn', true);
 			if (status === 'active' || status === 'ready') button('ละทิ้ง', 'abandon');
 			if (actions.children.length) card.append(actions);
-			box.append(card);
+			(status === 'locked' ? locked : box).append(card);
 		}
+		if (locked.querySelector('.npc-quest')) box.append(locked);
 		if (!list.length) {
 			const empty = document.createElement('p');
 			empty.className = 'quest-rewards';
@@ -140,7 +150,7 @@ export function mountQuests(options: { send: (m: unknown) => void; player: () =>
 		pending(kind: string) {
 			if (!isGiver(kind)) return false;
 			const p = options.player();
-			return questsFor(kind, data).some(q => ['available', 'ready'].includes(questStatus(q, state, p.level, Date.now(), p.inventory)));
+			return questsFor(kind, data).some(q => ['available', 'active', 'ready'].includes(questStatus(q, state, p.level, Date.now(), p.inventory)));
 		},
 		hasQuests: (kind: string) => isGiver(kind),
 		/** Renders the quest section into a container; re-renders on quest updates while open. */
@@ -148,11 +158,25 @@ export function mountQuests(options: { send: (m: unknown) => void; player: () =>
 			if (!isGiver(kind)) return;
 			if(openGiver!==kind)category='story';
 			openGiver = kind;
-			const draw = () => { container.querySelector('.npc-quests')?.remove(); container.append(section(kind)); };
+			const draw = () => {
+				const old = container.querySelector('.npc-quests');
+				const focused = document.activeElement instanceof HTMLElement && old?.contains(document.activeElement) ? document.activeElement : document.activeElement === document.body ? submittedFocus : null;
+				submittedFocus = null;
+				const next = section(kind);
+				const locked = next.querySelector<HTMLDetailsElement>('.npc-locked');
+				if (locked) locked.open = old?.querySelector<HTMLDetailsElement>('.npc-locked')?.open ?? false;
+				old?.remove(); container.append(next);
+				if (focused) {
+					const id = focused.closest<HTMLElement>('[data-quest]')?.dataset.quest;
+					const card = id ? next.querySelector(`[data-quest="${CSS.escape(id)}"]`) : null;
+					const target = card?.querySelector<HTMLElement>(`[data-op="${focused.dataset.op}"]`) ?? card?.querySelector<HTMLElement>('button') ?? next.querySelector<HTMLElement>('summary') ?? container.closest('dialog')?.querySelector<HTMLElement>('.npc-close');
+					target?.focus({ preventScroll: true });
+				}
+			};
 			onChange = draw;
 			draw();
 		},
-		unmount() { openGiver = null; onChange = null; },
+		unmount() { openGiver = null; onChange = null; submittedFocus = null; },
 		receive(m: any) {
 			if (m.t === 'quests') { state = m.state; checkReady(); renderTracker(); onChange?.(); return true; }
 			if (m.t === 'questError') { options.notice(m.text); onChange?.(); return true; }

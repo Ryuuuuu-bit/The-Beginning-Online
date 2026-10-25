@@ -1,5 +1,27 @@
 /* NPC quest cards and journal tracker. */
-#npc-dialog{max-width:min(460px,92vw)}
+#npc-dialog{box-sizing:border-box;width:560px;max-width:calc(100vw - 40px);max-height:calc(100dvh - 40px);padding:0;overflow:hidden}
+#npc-dialog[open]{display:flex;flex-direction:column}
+#npc-dialog .npc-dialog-head,#npc-dialog .npc-dialog-foot{flex:none;padding:16px 22px;background:rgba(8,23,34,.5)}
+#npc-dialog .npc-dialog-head{border-bottom:1px solid var(--g-line)}
+#npc-dialog .npc-dialog-head>span{font-size:12px;color:var(--g-gold)}
+#npc-dialog .npc-dialog-head h2{margin:4px 0 0;font-size:22px}
+#npc-dialog .npc-dialog-body{min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:16px 22px;scrollbar-gutter:stable}
+#npc-dialog .npc-intro{margin:0 0 14px;font-size:14px;line-height:1.65}
+#npc-dialog .npc-dialog-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid var(--g-line)}
+#npc-dialog .npc-dialog-foot>span{font-size:12px;color:var(--g-muted)}
+#npc-dialog .npc-quest{min-width:0;padding:15px;overflow-wrap:anywhere}
+#npc-dialog .npc-quest h3{flex-wrap:wrap;justify-content:space-between;line-height:1.5;gap:4px 10px;margin-bottom:8px}
+#npc-dialog .quest-badge{flex:none;white-space:nowrap}
+#npc-dialog .npc-quest[data-status=ready]{border-color:#89d7b080;background:rgba(43,92,65,.2)}
+#npc-dialog .npc-quest[data-status=available]{border-color:var(--g-line-strong)}
+#npc-dialog .quest-actions{margin-top:12px;gap:10px}
+#npc-dialog .quest-actions button{min-height:44px;white-space:normal}
+#npc-dialog .quest-actions button.primary{flex:1 1 160px;background:var(--g-gold);border-color:var(--g-gold);color:#18251f;font-weight:700}
+#npc-dialog .quest-actions button:not(.primary){font-size:13px;color:var(--g-muted)}
+#npc-dialog .npc-locked{border-top:1px solid var(--g-line);padding-top:10px}
+#npc-dialog .npc-locked summary{padding:8px 2px;color:var(--g-muted);font-size:14px;cursor:pointer}
+#npc-dialog .npc-locked .npc-quest{margin-top:10px}
+#npc-dialog :is(button,summary):focus-visible{outline:2px solid var(--g-gold);outline-offset:3px}
 #npc-dialog .npc-extra{display:grid;gap:10px;margin:8px 0}
 #npc-dialog .npc-shop-open{justify-self:start}
 .npc-quests{display:grid;gap:10px}

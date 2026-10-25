@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 2,
+  "purpose": "Isometric teleport VFX, independent top-down floor and upright cyan/white/violet column",
+  "created": "2026-10-25",
+  "generator": "OpenAI built-in image_gen; transparent_background=true; edits referenced the original generated portal",
+  "source": "../Ai Studio/working/The-Beginning-Online/output/warp-portal-celestial-v1",
+  "prompts": [
+    "prompt.md",
+    "layers-prompts.md"
+  ],
+  "reference": "Owner-provided fuzzy classic MMORPG teleport direction; original generated art, no external sprite imported",
+  "status": "selected for local in-game QA; awaiting owner visual acceptance; not published",
+  "original": {
+    "file": "source.png",
+    "sha256": "7082ff6faf603b1a88922d278052e46638bf4e0851e63ae536b6c5b746efe948",
+    "retainedOutsideGame": true
+  },
+  "layers": [
+    {
+      "file": "column.png",
+      "width": 1217,
+      "height": 1293,
+      "bytes": 1203369,
+      "sha256": "839d30cdbbd7c199c4d0b4b63adaa0a0523102b4f2ebb71267dd54a6977ba4b4",
+      "alpha": {
+        "min": 0,
+        "max": 254,
+        "transparentPixels": 989136,
+        "partialPixels": 584445
+      }
+    },
+    {
+      "file": "floor.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 2180708,
+      "sha256": "ba05dcf3688e75b6409c75699cc896aa2f0d60e2c03ff8176c61800b47fffe1b",
+      "alpha": {
+        "min": 0,
+        "max": 254,
+        "transparentPixels": 519827,
+        "partialPixels": 1052689
+      }
+    }
+  ],
+  "render": {
+    "columnAnchor": [
+      0.5,
+      0.96
+    ],
+    "columnHeight": 5.2,
+    "floorWidth": 5.4,
+    "floorProjectionY": 0.7071067811865476,
+    "cachedMaxSide": 512,
+    "contactAtlas": [
+      128,
+      64
+    ],
+    "collision": "none; existing shared gate center/server trigger unchanged"
+  },
+  "edits": "Source PNG pixels preserved. Runtime caches each layer at <=512px, projects/rotates the top-down floor, depth-sorts the upright column, adds contact light, breathing and eight rising sparkles."
+}

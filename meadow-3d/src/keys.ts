@@ -9,5 +9,5 @@ type Binding=keyof typeof FIXED|keyof KeyBindings;
 export const KEYS:Record<Binding,string[]>={...FIXED,...actionKeys(resolveKeys(undefined))};
 export function setKeyBindings(saved?:Partial<Record<string,string>>|null){Object.assign(KEYS,actionKeys(resolveKeys(saved)));}
 /** Codes a hotbar slot may not take right now: movement, Escape, map and every live action key. */
-export const takenByActions=()=>[...FIXED.up,...FIXED.down,...FIXED.left,...FIXED.right,...FIXED.pause,...FIXED.map,...(['attack','dash','potion','manaPotion','auto','nextTarget','inventory','skills','stats','returnCity'] as const).flatMap(a=>KEYS[a])];
+export const takenByActions=()=>[...FIXED.up,...FIXED.down,...FIXED.left,...FIXED.right,...FIXED.pause,...FIXED.map,...(['attack','dash','potion','manaPotion','auto','talk','nextTarget','inventory','skills','stats','returnCity'] as const).flatMap(a=>KEYS[a])];
 export const isKey=(binding:Binding,code:string)=>KEYS[binding].includes(code);
