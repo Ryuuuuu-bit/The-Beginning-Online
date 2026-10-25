@@ -1,5 +1,5 @@
 import './loot-art-review.css';
-import {loadGameData,STARTER_UNIQUES,consumableBuffText} from '@the-beginning-online/shared';
+import {loadGameData,STARTER_UNIQUES,consumableBuffText,CRAFT_RECIPES,FORGE_FRAGMENT} from '@the-beginning-online/shared';
 import {cardEffects,modifierText} from '../card-text';
 import {dropOwners} from './world-catalog';
 import {itemIconCell} from '../item-icon';
@@ -48,11 +48,13 @@ function showItem(id:string){
  const lines=document.createElement('ul');for(const effect of effects.filter(Boolean)){const line=document.createElement('li');line.textContent=effect;lines.append(line);}content.append(lines);
  const prices=document.createElement('p'),offers=Object.entries(data.economy.shops).filter(([,shop])=>shop[id]!==undefined);
  const shopNames:Record<string,string>={market:'ร้านเบ็ดเตล็ด',forge:'ร้านตีเหล็ก'};
- prices.textContent=offers.map(([shop,stock])=>`${shopNames[shop]??shop}: ซื้อ ${stock[id].toLocaleString('en-US')} ทอง`).concat(`ราคาขายคืนฐาน ${Math.floor(item.npcPrice*data.economy.sellMultiplier).toLocaleString('en-US')} ทอง`).join(' · ');content.append(prices);
+ prices.textContent=offers.map(([shop,stock])=>`${shopNames[shop]??shop}: ซื้อ ${stock[id].toLocaleString('en-US')} ทอง`).concat(item.bind==='account'?'ผูกบัญชี · ขายหรือแลกเปลี่ยนไม่ได้':`ราคาขายคืนฐาน ${Math.floor(item.npcPrice*data.economy.sellMultiplier).toLocaleString('en-US')} ทอง`).join(' · ');content.append(prices);
  const heading=document.createElement('h3');heading.textContent='พบได้จาก';content.append(heading);
  const owners=dropOwners(id);
  for(const monster of owners){const a=document.createElement('a');a.href='/monsters.html#'+encodeURIComponent(monster.id);a.textContent=monster.nameTh+' · Lv.'+monster.level;a.className='item-drop-owner';content.append(a);}
- if(!owners.length){const note=document.createElement('p');note.textContent=['exp_boost_scroll','drop_boost_scroll'].includes(id)?'กล่องจดหมายรางวัล Lv.1, 30, 60 และ 90':offers.length?'ซื้อได้จากร้านในนครที่ถูกลืมเลือน':'ไม่มีรายชื่อมอนสเตอร์ที่ดรอปโดยตรงในข้อมูลปัจจุบัน';content.append(note);}
+ const recipe=CRAFT_RECIPES.find(r=>r.template===id);
+ if(recipe){const note=document.createElement('p');note.textContent=`คราฟต์ที่ศิลา · ช่างตีเหล็ก: เศษผลึกช่าง ${recipe.fragments} ชิ้น + ${recipe.gold} ทอง ต่อ 1 ก้อน`;content.append(note);}
+ if(!owners.length){const note=document.createElement('p');note.textContent=id===FORGE_FRAGMENT?'รางวัลเควสต์เส้นทาง Daily / Weekly หรือย่อยอุปกรณ์ดรอปและอุปกรณ์ซื้อจากร้านที่ศิลา · ของเริ่มต้นและของแจกย่อยไม่ได้':['exp_boost_scroll','drop_boost_scroll'].includes(id)?'กล่องจดหมายรางวัล Lv.1, 30, 60 และ 90':offers.length?'ซื้อได้จากร้านในนครที่ถูกลืมเลือน':'ไม่มีรายชื่อมอนสเตอร์ที่ดรอปโดยตรงในข้อมูลปัจจุบัน';content.append(note);}
  dialog.querySelector<HTMLButtonElement>('.item-detail-close')!.onclick=()=>dialog.close();if(!dialog.open)dialog.showModal();
 }
 if(publicCatalog){

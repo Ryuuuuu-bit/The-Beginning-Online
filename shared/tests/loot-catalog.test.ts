@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {loadGameData,validateGameData,rollDrops,applyInventory,LAYOUTS,FIELD_BOSS,THORN_NEST} from '../src/index.node.js';
+import {loadGameData,validateGameData,rollDrops,applyInventory,LAYOUTS,FIELD_BOSS,THORN_NEST,FORGE_FRAGMENT} from '../src/index.node.js';
 const data=loadGameData();
 
 test('drop references require physical items, and card items require effects in both directions',()=>{
@@ -15,7 +15,7 @@ test('drop references require physical items, and card items require effects in 
  assert.throws(()=>validateGameData(wrongType),/cards.json: card_king_jelly: missing card item/);
 });
 
-test('every material and card has a live drop source; every monster table rolls and can be picked up intact',()=>{
+test('every material and card has a live drop or earned source; every monster table rolls and can be picked up intact',()=>{
  const live=new Set([...Object.values(LAYOUTS).flatMap(m=>m.spawns.map(s=>s.dataId)),...Object.values(FIELD_BOSS).map(b=>b.dataId),THORN_NEST.dataId]);
  const dropped=new Set<string>();let id=0;
  for(const m of data.monsters.monsters){
@@ -29,7 +29,12 @@ test('every material and card has a live drop source; every monster table rolls 
   for(const template of new Set(loot.map(d=>d.template)))assert.equal(out.state.inventory.items.filter(i=>i.template===template).reduce((n,i)=>n+i.qty,0),loot.filter(d=>d.template===template).reduce((n,d)=>n+d.qty,0),`${m.id}/${template}: pickup`);
   assert.deepEqual(state.inventory.items,[],`${m.id}: input state unchanged`);
  }
- for(const i of data.items.items.filter(i=>i.type==='material'||i.type==='card'))assert.ok(dropped.has(i.id),`${i.id}: no drop source`);
+ for(const i of data.items.items.filter(i=>i.type==='material'||i.type==='card')){
+  if(i.id===FORGE_FRAGMENT){
+   assert.equal(i.bind,'account');assert.equal(dropped.has(i.id),false);
+   assert.ok(data.quests.quests.some(q=>q.rewards.items.some(reward=>reward.template===i.id&&reward.qty>0)),`${i.id}: no earned source`);
+  }else assert.ok(dropped.has(i.id),`${i.id}: no drop source`);
+ }
 });
 
 test('material and card drop thresholds include bonuses, auto penalties and inclusive quantity bounds',()=>{
