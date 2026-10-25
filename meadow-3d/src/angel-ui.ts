@@ -9,7 +9,7 @@ const data=loadGameData();
 interface AngelPlayer {level:number;x:number;z:number;hp:number;maxHp:number;dead?:boolean;inventory?:Inventory}
 export function mountAngel(o:{player:()=>AngelPlayer;map:()=>MapId;guide:()=>GuideLesson;quests:()=>QuestState|undefined;onOpen:()=>void;resumeGuide:()=>void;openGuide:()=>void;openMap:()=>void;navigate:(point:QuestDestination)=>void}){
  const panel=document.querySelector<HTMLDialogElement>('#angel-window')!,talk=document.querySelector<HTMLButtonElement>('#angel-talk')!;
- panel.innerHTML=`<header><span class="angel-seal" aria-hidden="true">✦</span><div><small>THE GUIDING LIGHT</small><h2 id="angel-title">ทูตสวรรค์</h2><p id="angel-note">ผู้ดูแลเส้นทางนักผจญภัย</p></div><button type="button" id="angel-close" aria-label="ปิดบทสนทนา">×</button></header>
+ panel.innerHTML=`<header><span class="angel-seal" aria-hidden="true">✦</span><div><small>THE GUIDING LIGHT</small><h2 id="angel-title">เซราฟ · ทูตสวรรค์</h2><p id="angel-note">ผู้ดูแลเส้นทางนักผจญภัย</p></div><button type="button" id="angel-close" aria-label="ปิดบทสนทนา">×</button></header>
 <p class="angel-welcome">ไม่ว่าเจ้าจะเพิ่งเริ่มต้น หรือกลับมาจากการเดินทางไกล ข้าจะช่วยหาก้าวถัดไปให้เจ้า</p>
 <div class="angel-summary"><span class="angel-level"></span><span class="angel-weapon"></span><span class="angel-guide-count"></span></div>
 <section class="angel-recommendation" aria-labelledby="angel-question"><div class="angel-card-top"><span>เป้าหมายแนะนำ</span><span class="angel-kind"></span></div><h3 id="angel-question">ตอนนี้ฉันควรทำอะไรต่อ?</h3><h4 class="angel-goal"></h4><p class="angel-detail" aria-live="polite"></p><p class="angel-destination"></p><button type="button" class="angel-next"></button></section>
@@ -41,5 +41,5 @@ export function mountAngel(o:{player:()=>AngelPlayer;map:()=>MapId;guide:()=>Gui
  panel.querySelectorAll<HTMLButtonElement>('[data-angel]').forEach(button=>button.onclick=()=>{
   panel.close();if(button.dataset.angel==='guide')o.resumeGuide();else if(button.dataset.angel==='handbook')o.openGuide();else if(button.dataset.angel==='map')o.openMap();else document.querySelector<HTMLButtonElement>('#skills-button')!.click();
  });
- return {update(){const nearby=near();talk.hidden=!nearby;const label=`✧ คุย [${keyLabel(KEYS.talk[0])}] · ทูตสวรรค์`;if(talk.textContent!==label)talk.textContent=label;if(panel.open&&!nearby){panel.close();return;}if(panel.open&&performance.now()>=nextDraw){draw();nextDraw=performance.now()+500;}}};
+ return {update(){const nearby=near();talk.hidden=!nearby;const label=`✧ คุย [${keyLabel(KEYS.talk[0])}] · เซราฟ`;if(talk.textContent!==label)talk.textContent=label;if(panel.open&&!nearby){panel.close();return;}if(panel.open&&performance.now()>=nextDraw){draw();nextDraw=performance.now()+500;}}};
 }

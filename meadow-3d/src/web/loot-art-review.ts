@@ -53,8 +53,8 @@ function showItem(id:string){
  const owners=dropOwners(id);
  for(const monster of owners){const a=document.createElement('a');a.href='/monsters.html#'+encodeURIComponent(monster.id);a.textContent=monster.nameTh+' · Lv.'+monster.level;a.className='item-drop-owner';content.append(a);}
  const recipe=CRAFT_RECIPES.find(r=>r.template===id);
- if(recipe){const note=document.createElement('p');note.textContent=`คราฟต์ที่ศิลา · ช่างตีเหล็ก: เศษผลึกช่าง ${recipe.fragments} ชิ้น + ${recipe.gold} ทอง ต่อ 1 ก้อน`;content.append(note);}
- if(!owners.length){const note=document.createElement('p');note.textContent=id===FORGE_FRAGMENT?'รางวัลเควสต์เส้นทาง Daily / Weekly หรือย่อยอุปกรณ์ดรอปและอุปกรณ์ซื้อจากร้านที่ศิลา · ของเริ่มต้นและของแจกย่อยไม่ได้':['exp_boost_scroll','drop_boost_scroll'].includes(id)?'กล่องจดหมายรางวัล Lv.1, 30, 60 และ 90':offers.length?'ซื้อได้จากร้านในนครที่ถูกลืมเลือน':'ไม่มีรายชื่อมอนสเตอร์ที่ดรอปโดยตรงในข้อมูลปัจจุบัน';content.append(note);}
+ if(recipe){const note=document.createElement('p');note.textContent=`คราฟต์ที่เอเลียส · ช่างตีเหล็ก: เศษผลึกช่าง ${recipe.fragments} ชิ้น + ${recipe.gold} ทอง ต่อ 1 ก้อน`;content.append(note);}
+ if(!owners.length){const note=document.createElement('p');note.textContent=id===FORGE_FRAGMENT?'รางวัลเควสต์เส้นทาง Daily / Weekly หรือย่อยอุปกรณ์ดรอปและอุปกรณ์ซื้อจากร้านที่เอเลียส · ของเริ่มต้นและของแจกย่อยไม่ได้':['exp_boost_scroll','drop_boost_scroll'].includes(id)?'กล่องจดหมายรางวัล Lv.1, 30, 60 และ 90':offers.length?'ซื้อได้จากร้านในนครที่ถูกลืมเลือน':'ไม่มีรายชื่อมอนสเตอร์ที่ดรอปโดยตรงในข้อมูลปัจจุบัน';content.append(note);}
  dialog.querySelector<HTMLButtonElement>('.item-detail-close')!.onclick=()=>dialog.close();if(!dialog.open)dialog.showModal();
 }
 if(publicCatalog){

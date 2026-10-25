@@ -24,6 +24,7 @@ export function mountRefine(o: {
 	/** Sends the refine request; resolves with the server's reply (new inventory or an error). */
 	request: (id: string) => void;
 	say: (text: string) => void;
+	sound: (id: 'refine_hammer' | 'refine_success' | 'refine_fail') => void;
 }) {
 	const { data } = o;
 	const root = document.createElement("div");
@@ -183,6 +184,7 @@ export function mountRefine(o: {
 				await anim(hammer, [{ transform: "scale(1.35) rotate(0deg)" }, { transform: `scale(1.35) rotate(${last ? -85 : -50}deg)`, offset: 0.6 }, { transform: "scale(1.35) rotate(20deg)" }], { duration: last ? 520 : 300, easing: "cubic-bezier(.5,0,.9,.4)" }).finished;
 				if (skipped) return;
 				anim(put("rf-flash", sx, sy), [{ opacity: 1, transform: "scale(.4)" }, { opacity: 0, transform: `scale(${1 + power * 0.4})` }], { duration: 300 + power * 80, easing: "ease-out" });
+				o.sound('refine_hammer');
 				for (let w = 0; w < (last ? 3 : 1); w++) anim(put("rf-wave", sx, sy), [{ opacity: 0.95, transform: "scale(.3)" }, { opacity: 0, transform: `scale(${1.2 + power * 0.7 + w * 0.5})` }], { duration: 520 + w * 140, delay: w * 70, easing: "cubic-bezier(.1,.7,.3,1)" });
 				for (let i = 0; i < Math.round(12 * power); i++) {
 					const a = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 1.6, d = 70 + Math.random() * 110 * power, sp = put("rf-spark", sx - 12, sy + 8);
@@ -223,6 +225,7 @@ export function mountRefine(o: {
 		row.append(again, close);
 		box.append(slot, el("h3", "", r.ok ? `สำเร็จ! +${r.to}` : "ล้มเหลว…"), p, row);
 		anv.append(box);
+		o.sound(r.ok ? 'refine_success' : 'refine_fail');
 		o.say(r.ok ? SAY.ok : SAY.fail);
 		const rb = box.getBoundingClientRect(), sb = slot.getBoundingClientRect(), scale = rb.width / box.offsetWidth || 1;
 		const x = (sb.left + sb.width / 2 - rb.left) / scale, y = (sb.top + sb.height / 2 - rb.top) / scale, win = root.closest<HTMLElement>("dialog") ?? root;

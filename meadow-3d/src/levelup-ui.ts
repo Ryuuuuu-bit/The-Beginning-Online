@@ -87,7 +87,7 @@ export function mountLevelUp(options: { hero: HeroScreen; stats: () => Stats }) 
 		$('.lu-num').textContent = String(level ? level.level : job!.jobLevel);
 		const sub = $('.lu-sub');
 		sub.hidden = !milestone;
-		sub.textContent = milestone ? 'พัฒนาสายการเล่นต่อได้ในสมุดสกิล · ทูตสวรรค์ช่วยแนะนำเป้าหมายถัดไปได้' : '';
+		sub.textContent = milestone ? 'พัฒนาสายการเล่นต่อได้ในสมุดสกิล · เซราฟช่วยแนะนำเป้าหมายถัดไปได้' : '';
 		const gains = $('.lu-gains');
 		gains.replaceChildren();
 		if (level) {

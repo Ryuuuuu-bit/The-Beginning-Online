@@ -53,5 +53,14 @@
   "mon_wood_death": "monster-v1/mon_wood_death.wav",
   "mon_wisp_attack": "monster-v1/mon_wisp_attack.wav",
   "mon_wisp_hurt": "monster-v1/mon_wisp_hurt.wav",
-  "mon_wisp_death": "monster-v1/mon_wisp_death.wav"
+  "mon_wisp_death": "monster-v1/mon_wisp_death.wav",
+  "npc_market_greet": "town-v1/npc_market_greet.wav",
+  "npc_forge_greet": "town-v1/npc_forge_greet.wav",
+  "npc_storage_greet": "town-v1/npc_storage_greet.wav",
+  "npc_heal_greet": "town-v1/npc_heal_greet.wav",
+  "npc_guard_greet": "town-v1/npc_guard_greet.wav",
+  "npc_angel_greet": "town-v1/npc_angel_greet.wav",
+  "refine_hammer": "town-v1/refine_hammer.wav",
+  "refine_success": "town-v1/refine_success.wav",
+  "refine_fail": "town-v1/refine_fail.wav"
 }

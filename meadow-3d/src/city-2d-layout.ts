@@ -3,7 +3,7 @@ export {DECOR,NEW_BUILDINGS,GARDEN_TREES,FORTIFICATION_SOLIDS,CITY_HOUSES,CITY_A
 export type {Decoration} from '@the-beginning-online/shared/maps';
 export const city2dWalkable=(x:number,z:number,r=.38)=>cityWalkable(x,z,r);
 export const DISTRICTS = [
-  {id:'plaza',name:'ลานดารารุ่ง',subtitle:'หอนาฬิกา · ทูตสวรรค์ · จุดรวมปาร์ตี้',x:0,z:8,color:'#d1b77a'},
+  {id:'plaza',name:'ลานดารารุ่ง',subtitle:'หอนาฬิกา · เซราฟ · จุดรวมปาร์ตี้',x:0,z:8,color:'#d1b77a'},
   {id:'market',name:'ตลาดคาราวานสีคราม',subtitle:'ซื้อขายอุปกรณ์ · ร้านเสบียง · ลานพ่อค้า',x:28,z:13,color:'#6aafad'},
   {id:'craft',name:'ย่านค้อนเพลิง',subtitle:'ช่างตีเหล็ก · โรงงานไม้ · ลานฝึกนักผจญภัย',x:-27,z:-10,color:'#c99364'},
   {id:'civic',name:'เขตสมาคมแสงอรุณ',subtitle:'สมาคมนักผจญภัย · วิหาร · คลังเก็บของ',x:0,z:-27,color:'#9b9dc1'},

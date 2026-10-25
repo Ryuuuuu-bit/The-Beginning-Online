@@ -1,7 +1,7 @@
 import { AudioSettingsSchema, DEFAULT_AUDIO, type AudioSettings } from '@the-beginning-online/shared';
-import { assetFetch, reportDeferred } from './asset-request';
-import { MAP_MUSIC, MusicSelection, musicDuckGain, type MusicState } from './music-state';
-import { MusicPlayer } from './music';
+import { assetFetch, reportDeferred } from './asset-request.ts';
+import { MAP_MUSIC, MusicSelection, musicDuckGain, type MusicState } from './music-state.ts';
+import { MusicPlayer } from './music.ts';
 type Position = { x: number; z: number };
 type Sprite = { group: string; start: number; duration: number; pitch: number; cooldown: number; voices: number };
 type Manifest = { sounds: Record<string, Sprite>; groups: Record<string, { opus: { url: string }; aac: { url: string } }> };
@@ -30,6 +30,8 @@ export class AudioEngine {
   private musicState: MusicState = { mapId: '', dead: false, bossAlive: false, bossTargeted: false, bossBarActive: false, bossAggro: false };
   private impactUntil = 0;
   private impactTimer?: ReturnType<typeof setTimeout>;
+  private greeting?: AudioBufferSourceNode;
+  private stopGreeting() { const source = this.greeting; this.greeting = undefined; source?.stop(); }
   updateMusic(state: MusicState) {
     const deathChanged = this.musicState.dead !== state.dead;
     this.musicState = state;
@@ -49,7 +51,7 @@ export class AudioEngine {
     clearTimeout(this.impactTimer); this.apply();
     this.impactTimer = setTimeout(() => this.apply(), 260);
   }
-  setMap(mapId: string) { this.mapId = mapId; this.syncAmbience(); }
+  setMap(mapId: string) { if (mapId !== this.mapId) { this.stopGreeting(); this.apply(); } this.mapId = mapId; this.syncAmbience(); }
   private ambient?: MusicPlayer;
   private syncAmbience() {
     if (!this.playable || !this.ctx) return;
@@ -102,12 +104,14 @@ export class AudioEngine {
       this.ambient?.gesture();
     } catch { /* Unsupported audio remains silent. */ }
   }
-  private apply() {
+  private apply(releaseGreeting = false) {
     if (!this.ctx || !this.master) return;
+    if (document.hidden || this.settings.muted || !this.settings.sfx || this.musicState.dead) this.stopGreeting();
     this.master.gain.setTargetAtTime(this.settings.muted || document.hidden ? 0 : 1, this.ctx.currentTime, .08);
     for (const bus of ['sfx', 'music', 'ambience'] as const)
             this.buses[bus].gain.setTargetAtTime(this.settings[bus] * SOFT_TRIM[bus] *
-        (bus === 'music' ? musicDuckGain(this.musicState.dead, this.ctx.currentTime < this.impactUntil) : 1), this.ctx.currentTime, .02);
+        (bus === 'music' ? musicDuckGain(this.musicState.dead, this.ctx.currentTime < this.impactUntil) : 1) *
+        (this.greeting ? bus === 'music' ? .5 : bus === 'ambience' ? .7 : 1 : 1), this.ctx.currentTime, this.greeting ? .06 : releaseGreeting ? .25 : .02);
   }
   setListener(position: Position) { this.listener = { x: position.x, z: position.z }; }
   private getManifest() {
@@ -139,7 +143,7 @@ export class AudioEngine {
     this.playable = true;
     this.syncMusic();
     this.syncAmbience();
-    void this.load('sfx-core').then(() => Promise.all([this.load('sfx-skills'), this.load('sfx-monsters')]));
+    void this.load('sfx-core').then(() => Promise.all([this.load('sfx-skills'), this.load('sfx-monsters'), this.load('sfx-town')]));
   }
     play(id: string, position?: Position, bus: Bus = 'sfx', other = false) {
     const ctx = this.ctx, sprite = this.manifest?.sounds[id], buffer = sprite && this.buffers.get(sprite.group);
@@ -148,11 +152,13 @@ export class AudioEngine {
     if (now - (this.last.get(id) ?? -Infinity) < sprite.cooldown || this.voices.size >= 12 || [...this.voices.values()].filter(v => v === id).length >= sprite.voices) return;
     const dx = position ? position.x - this.listener.x : 0, dz = position ? position.z - this.listener.z : 0;
     const distance = Math.hypot(dx, dz); if (distance >= 24) return;
+    const speech = id.startsWith('npc_');
+    if (speech) { if (!this.settings.sfx || this.musicState.dead) return; this.stopGreeting(); }
     const source = ctx.createBufferSource(), gain = ctx.createGain(), air = ctx.createBiquadFilter(), pan = ctx.createStereoPanner();
     source.buffer = buffer; source.playbackRate.value = 1 + (Math.random() * 2 - 1) * sprite.pitch;
     // Rapid repeats of one sound (Whirlwind, crowds) blend: each extra play inside 250 ms sits a little lower.
     const recent = (this.recent.get(id) ?? []).filter(t => now - t < .25); recent.push(now); this.recent.set(id, recent);
-    const level = Math.pow(10, (Math.random() * 2 - 1) / 20) * Math.pow(1 - distance / 24, 2) / (1 + .35 * (recent.length - 1))
+    const level = (speech ? 1 : Math.pow(10, (Math.random() * 2 - 1) / 20)) * Math.pow(1 - distance / 24, 2) / (1 + .35 * (recent.length - 1))
       // Other players' combat sits well behind your own so a busy map stays calm.
       * (other ? .45 : 1);
     // A 5 ms swell instead of a hard start keeps sprite edges click-free.
@@ -161,9 +167,10 @@ export class AudioEngine {
     air.type = 'lowpass'; air.Q.value = .5; air.frequency.value = (2400 + 15600 * Math.pow(1 - distance / 24, 2)) * (other ? .6 : 1);
     pan.pan.value = Math.max(-1, Math.min(1, (dx * .822 - dz * .569) / 10));
     source.connect(gain); gain.connect(air); air.connect(pan); pan.connect(this.buses[bus]);
-    source.onended = () => { this.voices.delete(source); source.disconnect(); gain.disconnect(); air.disconnect(); pan.disconnect(); };
+    source.onended = () => { this.voices.delete(source); source.disconnect(); gain.disconnect(); air.disconnect(); pan.disconnect(); if (this.greeting === source) { this.greeting = undefined; this.apply(true); } };
     source.start(now, sprite.start, sprite.duration); this.last.set(id, now); this.voices.set(source, id);
-    if (import.meta.env.DEV) {
+    if (speech) { this.greeting = source; this.apply(); }
+    if (import.meta.env?.DEV) {
       const log = ((window as any).__sfxLog ??= []); log.push({ id, time: now, position, bus }); if (log.length > 256) log.shift();
     }
   }

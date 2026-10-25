@@ -1308,5 +1308,193 @@
    "prompt": "One small forest wisp gently disperses: a warm hollow breath releasing, a fine soft airy swirl and a low felt-muted resonance dissolving into silence. Peaceful restrained magic, no musical notes. Single isolated game one-shot near the beginning, natural warm organic texture, soft rounded onset and gentle dry decay. Quiet, restrained, non-distressing. No speech, music, shrill squeal, metallic ring, sharp crack, huge bass or cinematic processing.",
    "processing": "Decode approved MP3 to 48kHz mono PCM16; pack-audio aligns/limits duration, gain only, boundary fades. No EQ or new generation."
   }
+ },
+ "npc_market_greet": {
+  "lufs": -21,
+  "target": 4,
+  "approved": {
+   "id": "npc_market_greet",
+   "label": "มิรา · พ่อค้าเบ็ดเตล็ด",
+   "raw": "art/sfx-source/town-v1/npc_market_greet.mp3",
+   "rawSha256": "37af2278393a26a24332123fac4207f47b6b91b6ee56dd9c8dbe26205b454068",
+   "wav": "art/sfx-source/town-v1/npc_market_greet.wav",
+   "wavSha256": "946c2a816d96ff96151664daac55a0a453a50dc53124b532af30c9925d639036",
+   "approvedSource": "outputs/audio-production-20261025/npc-game-acting-v3/npc_mali_greet_001.mp3",
+   "take": 1,
+   "model": "eleven_v3",
+   "text": "ยินดีต้อนรับ! แวะดูของก่อนไหมคะ?",
+   "voice": "Sarah",
+   "timing": {
+    "lufs": -21,
+    "target": 4
+   }
+  }
+ },
+ "npc_forge_greet": {
+  "lufs": -21,
+  "target": 4,
+  "approved": {
+   "id": "npc_forge_greet",
+   "label": "เอเลียส · ช่างตีเหล็ก",
+   "raw": "art/sfx-source/town-v1/npc_forge_greet.mp3",
+   "rawSha256": "93c43d5807a306dd147baeefbf859a951111b4f1b35a46876e3fbe12d9a84ef4",
+   "wav": "art/sfx-source/town-v1/npc_forge_greet.wav",
+   "wavSha256": "cac6807508792ce75491313cdd85ca83ab089ec9c6d7ba68c37313f578dd1fef",
+   "approvedSource": "outputs/audio-production-20261025/npc-elias-seraph-v4/npc_sila_greet_001.mp3",
+   "take": 1,
+   "model": "eleven_v3",
+   "text": "อาวุธพร้อมหรือยัง? ส่งมาให้ข้าดูสิ!",
+   "voice": "Bill",
+   "timing": {
+    "lufs": -21,
+    "target": 4
+   }
+  }
+ },
+ "npc_storage_greet": {
+  "lufs": -21,
+  "target": 4,
+  "approved": {
+   "id": "npc_storage_greet",
+   "label": "โนอาห์ · คนเฝ้าคลัง",
+   "raw": "art/sfx-source/town-v1/npc_storage_greet.mp3",
+   "rawSha256": "5d627544ad783f0ab0d5fe20167c93de567523edd36b282671ec1f368ce99542",
+   "wav": "art/sfx-source/town-v1/npc_storage_greet.wav",
+   "wavSha256": "e47b84ba2de676e53930d26fabd960812902fea889d2f694aad62c67ccad2ada",
+   "approvedSource": "outputs/audio-production-20261025/npc-game-acting-v3/npc_natee_greet_001.mp3",
+   "take": 1,
+   "model": "eleven_v3",
+   "text": "ฝากของไว้กับผมได้เลยครับ!",
+   "voice": "Liam",
+   "timing": {
+    "lufs": -21,
+    "target": 4
+   }
+  }
+ },
+ "npc_heal_greet": {
+  "lufs": -21,
+  "target": 4,
+  "approved": {
+   "id": "npc_heal_greet",
+   "label": "ไลรา · ผู้รักษา",
+   "raw": "art/sfx-source/town-v1/npc_heal_greet.mp3",
+   "rawSha256": "8379fe5ffb1a87f74783cb1134b299cd52c765828e336bf2c5937512bfb8ba9f",
+   "wav": "art/sfx-source/town-v1/npc_heal_greet.wav",
+   "wavSha256": "3f5fc6da31c4dacbca9d5425de1d40d382138fb5c5077d98801d566f8d563ac9",
+   "approvedSource": "outputs/audio-production-20261025/npc-game-acting-v3/npc_rin_greet_001.mp3",
+   "take": 1,
+   "model": "eleven_v3",
+   "text": "เหนื่อยแล้วหรือคะ? มาพักตรงนี้สิ",
+   "voice": "Laura",
+   "timing": {
+    "lufs": -21,
+    "target": 4
+   }
+  }
+ },
+ "npc_guard_greet": {
+  "lufs": -21,
+  "target": 4,
+  "approved": {
+   "id": "npc_guard_greet",
+   "label": "ลีออน · หัวหน้าทหารยาม",
+   "raw": "art/sfx-source/town-v1/npc_guard_greet.mp3",
+   "rawSha256": "027e68fdc814874de4b9c984e53e5c29eafc0a797436da8b12a16cb0b5cab83e",
+   "wav": "art/sfx-source/town-v1/npc_guard_greet.wav",
+   "wavSha256": "6dc26868a3814977efc475e67488140359935237bfae55e711855c28d0fc556f",
+   "approvedSource": "outputs/audio-production-20261025/npc-game-acting-v3/npc_kan_greet_001.mp3",
+   "take": 1,
+   "model": "eleven_v3",
+   "text": "พร้อมออกเดินทางหรือยัง? ระวังตัวด้วยล่ะ!",
+   "voice": "Harry",
+   "timing": {
+    "lufs": -21,
+    "target": 4
+   }
+  }
+ },
+ "npc_angel_greet": {
+  "lufs": -21,
+  "target": 4,
+  "approved": {
+   "id": "npc_angel_greet",
+   "label": "เซราฟ · ทูตสวรรค์",
+   "raw": "art/sfx-source/town-v1/npc_angel_greet.mp3",
+   "rawSha256": "38829f35daff522aeff4111c0b10445749b1fa54638bb1fc5412f9830abe6754",
+   "wav": "art/sfx-source/town-v1/npc_angel_greet.wav",
+   "wavSha256": "e48cd0b493eff7d299c3bbf215b51319d22626e4c24ec12e2c3466d24cc8308d",
+   "approvedSource": "outputs/audio-production-20261025/npc-elias-seraph-v4/npc_angel_greet_001.mp3",
+   "take": 1,
+   "model": "eleven_v3",
+   "text": "กลับมาแล้วสินะ... ข้าจะนำทางเจ้าเอง",
+   "voice": "Eric",
+   "timing": {
+    "lufs": -21,
+    "target": 4
+   }
+  }
+ },
+ "refine_hammer": {
+  "lufs": -26,
+  "lead": 0.008,
+  "max": 0.38,
+  "approved": {
+   "id": "refine_hammer",
+   "label": "ตีบวก — ค้อนกระทบทั่ง",
+   "raw": "art/sfx-source/town-v1/refine_hammer.mp3",
+   "rawSha256": "620b5c24c68e034605ba0fbab21d74cd5e9ae2a085ccc38fbbe4c41f0b9ff5dc",
+   "wav": "art/sfx-source/town-v1/refine_hammer.wav",
+   "wavSha256": "b3f0b0182e7e54192542f98a02c3b4f06853a59f34ae9e75070e866667de630e",
+   "approvedSource": "outputs/audio-production-20261025/npc-refine-soft-v1/refine_hammer_001.mp3",
+   "take": 1,
+   "model": "eleven_text_to_sound_v2",
+   "prompt": "One restrained blacksmith hammer strike on a small steel blade resting on a solid anvil. A warm rounded metallic thonk with a short muted low resonance, quiet close workshop Foley. Soft natural onset and dry decay. No shrill ringing, sharp clank, brittle crack, heavy bass, repeated strikes, music or speech.",
+   "timing": {
+    "lufs": -26,
+    "lead": 0.008,
+    "max": 0.38
+   }
+  }
+ },
+ "refine_success": {
+  "lufs": -25,
+  "max": 2.6,
+  "approved": {
+   "id": "refine_success",
+   "label": "ตีบวก — สำเร็จ",
+   "raw": "art/sfx-source/town-v1/refine_success.mp3",
+   "rawSha256": "4a452d82a47c0e061476ee70a22d4c7b9a0be30e8e455e0eb95044c18e0377b5",
+   "wav": "art/sfx-source/town-v1/refine_success.wav",
+   "wavSha256": "475e883f8a41357317cedd2d9385638d8babb435b07d681b667997c47f30239a",
+   "approvedSource": "outputs/audio-production-20261025/npc-refine-soft-v1/refine_success_001.mp3",
+   "take": 1,
+   "model": "eleven_text_to_sound_v2",
+   "prompt": "One small successful magical equipment upgrade. A soft warm bell bloom and delicate airy sparkle rise briefly into a reassuring rounded resolution, then gently fade. Tactile handmade fantasy texture, restrained volume and felt-muted high tones. No loud fanfare, music bed, harsh chime, metallic ringing, voice or heavy bass.",
+   "timing": {
+    "lufs": -25,
+    "max": 2.6
+   }
+  }
+ },
+ "refine_fail": {
+  "lufs": -26,
+  "max": 2.2,
+  "approved": {
+   "id": "refine_fail",
+   "label": "ตีบวก — ไม่สำเร็จ",
+   "raw": "art/sfx-source/town-v1/refine_fail.mp3",
+   "rawSha256": "a4d9bb04bc3e21dc890a095df9835bd4ba491acc678238fb2c5b42d46dd8ca72",
+   "wav": "art/sfx-source/town-v1/refine_fail.wav",
+   "wavSha256": "397c0c1ff2e41b5fd898074e373878af5e9d62ac0d73e56669528f6615ba4920",
+   "approvedSource": "outputs/audio-production-20261025/npc-refine-soft-v1/refine_fail_001.mp3",
+   "take": 1,
+   "model": "eleven_text_to_sound_v2",
+   "prompt": "One gentle unsuccessful magical equipment upgrade. A short low warm descending wooden chime with a tiny soft breath of magic fading away, restrained and sympathetic. Natural rounded onset and dry decay. Equipment remains intact. No smashing, shattering, sharp clicks, loud buzzer, alarm, dramatic sting, music bed or speech.",
+   "timing": {
+    "lufs": -26,
+    "max": 2.2
+   }
+  }
  }
 }

@@ -56,6 +56,17 @@
         "bytes": 105684
       },
       "duration": 10.848041666666667
+    },
+    "sfx-town": {
+      "opus": {
+        "url": "/assets/audio/sfx-town-f545385e2d17.ogg",
+        "bytes": 187509
+      },
+      "aac": {
+        "url": "/assets/audio/sfx-town-3ed874e9855c.m4a",
+        "bytes": 171350
+      },
+      "duration": 19.95875
     }
   },
   "sounds": {
@@ -575,6 +586,78 @@
       "cooldown": 0.35,
       "voices": 2
     },
+    "npc_angel_greet": {
+      "group": "sfx-town",
+      "start": 0,
+      "duration": 2.8678958333333333,
+      "source": "art/sfx-source/town-v1/npc_angel_greet.wav",
+      "targetDuration": 4,
+      "lufs": -21,
+      "crossfade": 0,
+      "pitch": 0,
+      "cooldown": 8,
+      "voices": 1
+    },
+    "npc_forge_greet": {
+      "group": "sfx-town",
+      "start": 2.9878958333333334,
+      "duration": 2.6382708333333333,
+      "source": "art/sfx-source/town-v1/npc_forge_greet.wav",
+      "targetDuration": 4,
+      "lufs": -21,
+      "crossfade": 0,
+      "pitch": 0,
+      "cooldown": 8,
+      "voices": 1
+    },
+    "npc_guard_greet": {
+      "group": "sfx-town",
+      "start": 5.746166666666666,
+      "duration": 2.964166666666667,
+      "source": "art/sfx-source/town-v1/npc_guard_greet.wav",
+      "targetDuration": 4,
+      "lufs": -21,
+      "crossfade": 0,
+      "pitch": 0,
+      "cooldown": 8,
+      "voices": 1
+    },
+    "npc_heal_greet": {
+      "group": "sfx-town",
+      "start": 8.830333333333334,
+      "duration": 2.55,
+      "source": "art/sfx-source/town-v1/npc_heal_greet.wav",
+      "targetDuration": 4,
+      "lufs": -21,
+      "crossfade": 0,
+      "pitch": 0,
+      "cooldown": 8,
+      "voices": 1
+    },
+    "npc_market_greet": {
+      "group": "sfx-town",
+      "start": 11.500333333333334,
+      "duration": 2.2928333333333333,
+      "source": "art/sfx-source/town-v1/npc_market_greet.wav",
+      "targetDuration": 4,
+      "lufs": -21,
+      "crossfade": 0,
+      "pitch": 0,
+      "cooldown": 8,
+      "voices": 1
+    },
+    "npc_storage_greet": {
+      "group": "sfx-town",
+      "start": 13.913166666666667,
+      "duration": 2.2097291666666665,
+      "source": "art/sfx-source/town-v1/npc_storage_greet.wav",
+      "targetDuration": 4,
+      "lufs": -21,
+      "crossfade": 0,
+      "pitch": 0,
+      "cooldown": 8,
+      "voices": 1
+    },
     "pickup": {
       "group": "sfx-core",
       "start": 8.814520833333333,
@@ -646,6 +729,42 @@
       "pitch": 0.04,
       "cooldown": 0.04,
       "voices": 4
+    },
+    "refine_fail": {
+      "group": "sfx-town",
+      "start": 16.242895833333332,
+      "duration": 1.61225,
+      "source": "art/sfx-source/town-v1/refine_fail.wav",
+      "targetDuration": 2.2,
+      "lufs": -26,
+      "crossfade": 0,
+      "pitch": 0,
+      "cooldown": 0.15,
+      "voices": 1
+    },
+    "refine_hammer": {
+      "group": "sfx-town",
+      "start": 17.975145833333332,
+      "duration": 0.38,
+      "source": "art/sfx-source/town-v1/refine_hammer.wav",
+      "targetDuration": 0.38,
+      "lufs": -26,
+      "crossfade": 0,
+      "pitch": 0,
+      "cooldown": 0.15,
+      "voices": 1
+    },
+    "refine_success": {
+      "group": "sfx-town",
+      "start": 18.475145833333332,
+      "duration": 1.3636041666666667,
+      "source": "art/sfx-source/town-v1/refine_success.wav",
+      "targetDuration": 2.6,
+      "lufs": -25,
+      "crossfade": 0,
+      "pitch": 0,
+      "cooldown": 0.15,
+      "voices": 1
     },
     "reflect": {
       "group": "sfx-skills",

@@ -58,8 +58,8 @@ const STEPS:Step[]=[
   done:c=>c.quests.done[FIRST]!==undefined},
  {id:'mail',title:'รางวัลทุกเลเวล',text:()=>'เปิดกล่องจดหมายจากเมนู รับยาและรางวัลเลเวลย้อนหลังได้ · รับครั้งเดียวต่อบัญชี · ของผูกตัวละคร ขาย/เทรดไม่ได้ · ขนาดยาตามเลเวลตอนรับ · ทองพิเศษทุก 5 เลเวล',focus:'#mailbox-button',done:()=>!!document.querySelector('#mailbox-window[open]')},
  {id:'explore',title:'พร้อมออกเดินทาง',text:()=> 'กด M เปิดแผนที่โลก · Lv.1–5 ทุ่งวุ้นจิ๋ว → Lv.5–10 ป่าหมอก → Lv.10–15 ซากนคร → Lv.15–20 หุบเขาหิน · รับเควสต์และกดนำทางไปเป้าหมายได้จากบันทึกการเดินทาง',focus:'#quest-button',done:(_c,s)=>!!s.opened||!!document.querySelector('#world-map[open]')},
- {id:'forge',title:'ย่อยของและคราฟต์',text:()=> 'สะสมเศษผลึกช่างจากเควสต์หรือย่อยอุปกรณ์เหลือใช้ แล้วคราฟต์หินตีบวกที่ศิลา · เปิดแท็บ “คราฟต์” หรือ “ย่อยของ” · ของเริ่มต้นและของแจกย่อยไม่ได้',
-  target:c=>c.map==='city_plaza'?{...CITY_BUILDINGS.find(b=>b.id==='forge')!.talk,kind:'forge',label:'ศิลา · ช่างตีเหล็ก'}:gateToward(c.map,'city_plaza'),
+ {id:'forge',title:'ย่อยของและคราฟต์',text:()=> 'สะสมเศษผลึกช่างจากเควสต์หรือย่อยอุปกรณ์เหลือใช้ แล้วคราฟต์หินตีบวกที่เอเลียส · เปิดแท็บ “คราฟต์” หรือ “ย่อยของ” · ของเริ่มต้นและของแจกย่อยไม่ได้',
+  target:c=>c.map==='city_plaza'?{...CITY_BUILDINGS.find(b=>b.id==='forge')!.talk,kind:'forge',label:'เอเลียส · ช่างตีเหล็ก'}:gateToward(c.map,'city_plaza'),
   done:()=>!!document.querySelector('#inventory-window[open][data-tab=craft],#inventory-window[open][data-tab=salvage]')},
 ];
 

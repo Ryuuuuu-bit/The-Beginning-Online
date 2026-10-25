@@ -37,7 +37,7 @@ const slotNames: Record<string, string> = {
 /** Weights are decimals now (materials 0.1, potions 0.2): show at most one decimal, no float noise. */
 const fmtGold = (n: number) => n.toLocaleString("en-US");
 const fmtWeight = (w: number) => String(Math.round(w * 10) / 10);
-export function mountInventory(send: (m: any) => void, onOpen: () => void) {
+export function mountInventory(send: (m: any) => void, onOpen: () => void, audio: (id: string) => void = () => {}) {
 	const button = document.createElement("button");
 	button.id = "inventory-button";
 	button.textContent = "กระเป๋า I";
@@ -58,9 +58,9 @@ export function mountInventory(send: (m: any) => void, onOpen: () => void) {
 		cartBox = panel.querySelector<HTMLElement>(".inv-cart")!,
 		countBox = panel.querySelector<HTMLElement>(".inv-count")!;
 	const NPCS: Record<string, [string, string, string]> = {
-		market: ["พ่อค้าเบ็ดเตล็ด", "ตลาด · นครที่ถูกลืมเลือน", "ยาสดใหม่เพิ่งต้มเมื่อเช้า ของจำเป็นก่อนออกประตูใต้มีครบ"],
-		forge: ["ช่างตีเหล็ก", "โรงตีเหล็ก · นครที่ถูกลืมเลือน", "อาวุธดีต้องเหมาะกับมือ เลือกให้ดี แล้วค่อยกลับมาหาข้า"],
-		storage: ["คนเฝ้าคลัง", "คลังเก็บของ · นครที่ถูกลืมเลือน", "ฝากไว้กับข้า ของในคลังปลอดภัยเสมอ"],
+		market: ["มิรา · พ่อค้าเบ็ดเตล็ด", "ตลาด · นครที่ถูกลืมเลือน", "ยาสดใหม่เพิ่งต้มเมื่อเช้า ของจำเป็นก่อนออกประตูใต้มีครบ"],
+		forge: ["เอเลียส · ช่างตีเหล็ก", "โรงตีเหล็ก · นครที่ถูกลืมเลือน", "อาวุธดีต้องเหมาะกับมือ เลือกให้ดี แล้วค่อยกลับมาหาข้า"],
+		storage: ["โนอาห์ · คนเฝ้าคลัง", "คลังเก็บของ · นครที่ถูกลืมเลือน", "ฝากไว้กับข้า ของในคลังปลอดภัยเสมอ"],
 	};
 	const cart = new Map<string, number>();
 	/** Quantity typed on a shop card before it goes into the cart. */
@@ -136,6 +136,7 @@ export function mountInventory(send: (m: any) => void, onOpen: () => void) {
 	let refineReq = "";
 	const refine = mountRefine({
 		data,
+		sound: id => { if (panel.open && panel.dataset.tab === 'refine') audio(id); },
 		itemIcon: (t) => itemIcon(t),
 		request: (id) => { request("refine", { id }); refineReq = pending?.req ?? ""; if (!refineReq) refine.failed("กำลังบันทึก กรุณารอสักครู่"); },
 		say: (text) => { const say = summary.querySelector(".shop-say"); if (say) say.textContent = text; },
@@ -984,6 +985,7 @@ export function mountInventory(send: (m: any) => void, onOpen: () => void) {
 	}
 		function open(nextShop: string | null = null) {
 		onOpen();
+		if (nextShop) audio(`npc_${nextShop}_greet`);
 		storage = nextShop === "storage";
 		if (storage) storageTab = "ฝากของ";
 		shop = storage ? null : nextShop;
