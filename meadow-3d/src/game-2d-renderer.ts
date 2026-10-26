@@ -14,6 +14,7 @@ import {drawFountainWater} from './city-2d-fountain';
 import {loadField2D} from './game-2d-fields';
 import {loadMapBackdrop} from './game-2d-backdrop';
 import {project2D,unproject2D} from './game-2d-projection';
+import {followCamera} from './camera-follow';
 import {MOTION_DURATION,motionFor,facingFor,facing8For,WALK_DIRECTIONS} from './sprite-animation';
 import {BORROWED_MOTION,shownMotion,SKILL_DURATION,SKILL_FRAMES,SKILL_V2,skillFrame,isSkillMotion,type SkillMotion} from './skill-motions';
 import {monsterSpecies,monsterVisual,monsterCell,monsterOpacity,monsterHue,SPECIES_SCALE} from './monster-animation';
@@ -55,7 +56,7 @@ export class GameCanvas2D{
  /** Static ground (backdrop, roads, map plane) rendered once with a margin, then blitted; redrawn on zoom, resize or after the camera moves past the margin. */
  private groundCache:{canvas:HTMLCanvasElement;ctx:CanvasRenderingContext2D;key:string;ox:number;oy:number}|null=null;
  /** Hue-shifted copies of slime atlases (canvas filters are far too slow to run per sprite per frame). */
- private tints=new WeakMap<CanvasImageSource,Map<string,HTMLCanvasElement>>();private focus={x:0,y:0};private map:MapId='city_plaza';
+ private tints=new WeakMap<CanvasImageSource,Map<string,HTMLCanvasElement>>();private focus={x:0,y:0};private focusReady=false;private wasOverview=false;private map:MapId='city_plaza';
  scale=30;zoomHeight=27.5;overview=false;highQuality=true;drawCalls=0;
  constructor(manifest:Record<string,{webp:string}>,private swordEffects:'canvas'|'pixi'='canvas'){this.assets=new CanvasAssets(manifest);this.canvas.setAttribute('aria-label','โลกเกม 2D');this.canvas.tabIndex=0;const context=this.canvas.getContext('2d');if(!context)throw Error('เบราว์เซอร์ไม่รองรับ Canvas 2D');this.ctx=context;this.resize();window.addEventListener('pagehide',e=>{if(!e.persisted)this.swordVfx?.destroy();});}
  resize(){this.width=innerWidth;this.height=innerHeight;const dpr=this.highQuality?Math.min(devicePixelRatio,this.map==='city_plaza'?2:1.5,Math.sqrt(3840*2160/(this.width*this.height))):1;this.dpr=dpr;this.canvas.width=Math.round(this.width*dpr);this.canvas.height=Math.round(this.height*dpr);this.canvas.style.width='100%';this.canvas.style.height='100%';this.ctx.setTransform(dpr,0,0,dpr,0,0);this.swordVfx?.resize(this.width,this.height,dpr);}
@@ -97,7 +98,7 @@ export class GameCanvas2D{
   // every previous-map monster (including meadow/forest, not just hunting art).
   for(const path of this.monsterImages)if(!neededMonsters.has(path)&&!this.companionImages.has(path))this.assets.release(path);
   this.monsterImages=neededMonsters;
-  const resized=this.map!==id;this.map=id;if(resized)this.resize();this.effects.length=0;this.swordVfx?.clear();this.skillVfx.clear();this.enemyData.clear();this.masteryVfx.clear();this.heroStates.clear();this.remoteHeroes.clear();this.monsterFrames.clear();
+  const resized=this.map!==id;this.map=id;this.focusReady=false;if(resized)this.resize();this.effects.length=0;this.swordVfx?.clear();this.skillVfx.clear();this.enemyData.clear();this.masteryVfx.clear();this.heroStates.clear();this.remoteHeroes.clear();this.monsterFrames.clear();
   // Each baked region plane is about 25–35 MB; retain only the current region
   // and two recent regions while travelling across the expanded world.
   for(const cache of [this.fields,this.backdrops])while(cache.size>3){const old=[...cache.keys()].find(key=>key!==id);if(old===undefined)break;cache.delete(old);}
@@ -214,8 +215,8 @@ export class GameCanvas2D{
   const visiblePlayers=new Set(others.map(p=>p.id));for(const id of this.remoteHeroes.keys())if(!visiblePlayers.has(id))this.remoteHeroes.delete(id);
   const c=this.ctx;this.drawCalls=0;this.paperShadowsDrawn=0;this.hits=[];this.scale=this.overview?Math.min(this.width/145,this.height/112):this.height/this.zoomHeight;
   const now=performance.now(),shake=(this.combatFeel?.camera(dt)??0)*this.scale;this.shakeOffset={x:Math.sin(time*113)*shake,y:Math.cos(time*97)*shake*.7};
-  // NetworkWorld already smooths movement; a second camera lag moves the hero off centre.
-  this.focus=this.overview?{x:0,y:0}:project2D(game.p.x,game.p.z,HERO_METRES/2);
+  this.focus=this.overview?{x:0,y:0}:followCamera(this.focus,project2D(game.p.x,game.p.z,HERO_METRES/2),dt,!this.focusReady||this.wasOverview);
+  this.focusReady=true;this.wasOverview=this.overview;
   c.clearRect(0,0,this.width,this.height);c.fillStyle=this.map==='forest'?'#223d35':'#364f36';c.fillRect(0,0,this.width,this.height);
   const draws:{depth:number;draw:()=>void}[]=[],s=this.scale,add=(x:number,z:number,draw:()=>void)=>draws.push({depth:project2D(x,z).y,draw});
   const visible=(q:{x:number;y:number},r=220)=>q.x>-r&&q.x<this.width+r&&q.y>-r&&q.y<this.height+r;
